@@ -15,14 +15,13 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class NetTrapBlock extends Block implements EntityBlock {
     public NetTrapBlock() {
-        super(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS));
+        super(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion());
     }
 
     @Override
