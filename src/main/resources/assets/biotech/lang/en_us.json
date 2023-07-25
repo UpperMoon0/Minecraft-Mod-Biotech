@@ -1,5 +1,14 @@
 {
   "block.biotech.net_trap": "Net Trap",
   "item.biotech.cow": "Cow",
-  "itemGroup.biotech.biotech": "Biotech"
+  "item.biotech.baby_cow": "Baby Cow",
+  "item.biotech.chicken": "Chicken",
+  "item.biotech.baby_chicken": "Baby Chicken",
+  "item.biotech.pig": "Pig",
+  "item.biotech.baby_pig": "Baby Pig",
+  "item.biotech.sheep": "Sheep",
+  "item.biotech.baby_sheep": "Baby Sheep",
+  "item.biotech.rabbit": "Rabbit",
+  "item.biotech.baby_rabbit": "Baby Rabbit",
+  "itemGroup.biotech": "Biotech"
 }

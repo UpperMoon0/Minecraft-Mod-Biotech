@@ -3,6 +3,7 @@ package com.nhat.biotech.CreativeTabs;
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.Items.ModItems;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.registries.DeferredRegister;
@@ -16,5 +17,16 @@ public class ModCreativeTabs {
             .displayItems((parameters, output) -> {
                 output.accept(ModItems.NET_TRAP_ITEM.get());
                 output.accept(ModItems.COW_ITEM.get());
-            }).build());
+                output.accept(ModItems.BABY_COW_ITEM.get());
+                output.accept(ModItems.CHICKEN_ITEM.get());
+                output.accept(ModItems.BABY_CHICKEN_ITEM.get());
+                output.accept(ModItems.PIG_ITEM.get());
+                output.accept(ModItems.BABY_PIG_ITEM.get());
+                output.accept(ModItems.SHEEP_ITEM.get());
+                output.accept(ModItems.BABY_SHEEP_ITEM.get());
+                output.accept(ModItems.RABBIT_ITEM.get());
+                output.accept(ModItems.BABY_RABBIT_ITEM.get());
+            })
+            .title(Component.translatable("itemGroup.biotech"))
+            .build());
 }
