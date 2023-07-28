@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "biotech:block/breeder_off",
+    "side": "biotech:block/breeder_side",
+    "top": "biotech:block/breeder_side"
+  }
+}

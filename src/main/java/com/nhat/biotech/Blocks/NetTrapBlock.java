@@ -1,6 +1,5 @@
 package com.nhat.biotech.Blocks;
 
-import com.nhat.biotech.Blocks.BlockEntities.NetTrapBlockEntity;
 import com.nhat.biotech.Items.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -11,15 +10,12 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 
-public class NetTrapBlock extends Block implements EntityBlock {
+public class NetTrapBlock extends Block {
     public NetTrapBlock() {
         super(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion());
     }
@@ -27,12 +23,6 @@ public class NetTrapBlock extends Block implements EntityBlock {
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         return Block.box(0,0,0,16,1,16);
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new NetTrapBlockEntity(blockPos, blockState);
     }
 
     @Override

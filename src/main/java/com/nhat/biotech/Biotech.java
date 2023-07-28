@@ -5,6 +5,7 @@ import com.nhat.biotech.Blocks.BlockEntities.ModBlockEntities;
 import com.nhat.biotech.Blocks.ModBlocks;
 import com.nhat.biotech.CreativeTabs.ModCreativeTabs;
 import com.nhat.biotech.Items.ModItems;
+import com.nhat.biotech.View.ModMenus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -53,6 +54,9 @@ public class Biotech
 
         // Register the Deferred Register to the mod event bus so tabs get registered
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+
+        // Register the Deferred Register to the mod event bus so menus get registered
+        ModMenus.MENUS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

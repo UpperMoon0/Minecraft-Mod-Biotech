@@ -9,4 +9,5 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Biotech.MODID);
     public static final RegistryObject<Block> NET_TRAP = BLOCKS.register("net_trap", NetTrapBlock::new);
+    public static final RegistryObject<Block> BREEDER = BLOCKS.register("breeder", BreederBlock::new);
 }
