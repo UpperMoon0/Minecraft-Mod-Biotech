@@ -50,19 +50,12 @@ public class BreederBlock extends BaseEntityBlock {
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new BreederBlockEntity(pos, state);
     }
-
-    @Nullable
-    @Override
-    public MenuProvider getMenuProvider(BlockState pState, Level pLevel, BlockPos pPos) {
-        return new SimpleMenuProvider((containerID, inventory, player) -> new BreederMenu(containerID, inventory, (Container) pLevel.getBlockEntity(pPos)), Component.literal("Breeder"));
-    }
     @Override
     public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof BreederBlockEntity) {
-                MenuProvider menuProvider = getMenuProvider(state, level, pos);
-                NetworkHooks.openScreen((ServerPlayer) player, menuProvider);
+                NetworkHooks.openScreen((ServerPlayer) player, (BreederBlockEntity) blockEntity, pos);
             }
             return InteractionResult.CONSUME;
         } else
@@ -71,14 +64,8 @@ public class BreederBlock extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pState.is(pNewState.getBlock())) {
-            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof BreederBlockEntity) {
-                if (pLevel instanceof ServerLevel) {
-                    Containers.dropContents(pLevel, pPos, (BreederBlockEntity)blockentity);
-                }
-                pLevel.updateNeighbourForOutputSignal(pPos, this);
-            }
-
+            BreederBlockEntity blockEntity = (BreederBlockEntity) pLevel.getBlockEntity(pPos);
+            blockEntity.drops();
             super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
         }
     }

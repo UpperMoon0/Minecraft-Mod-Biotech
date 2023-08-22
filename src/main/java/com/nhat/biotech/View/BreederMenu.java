@@ -1,26 +1,36 @@
 package com.nhat.biotech.View;
 
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
+import com.nhat.biotech.Blocks.BlockEntities.BreederBlockEntity;
+import com.nhat.biotech.Blocks.ModBlocks;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class BreederMenu extends AbstractContainerMenu
 {
-    private final Container container;
-    public BreederMenu(int i, Inventory inventory) {
-        this(i, inventory, new SimpleContainer(3));
+    private final BreederBlockEntity blockEntity;
+    private final Level level;
+    public BreederMenu(int i, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
+        this(i, inventory, inventory.player.level().getBlockEntity(friendlyByteBuf.readBlockPos()));
     }
-    public BreederMenu(int i, Inventory inventory, Container container) {
+    public BreederMenu(int i, Inventory inventory, BlockEntity blockEntity) {
         super(ModMenus.BREEDER.get(), i);
-        this.container = container;
+        this.blockEntity = (BreederBlockEntity) blockEntity;
+        this.level = inventory.player.level();
 
-        this.addSlot(new Slot(container, 0, 36, 35));
-        this.addSlot(new Slot(container, 1, 54, 35));
-        this.addSlot(new Slot(container, 2, 116, 35));
+        blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
+            this.addSlot(new SlotItemHandler(h, 0, 36, 35));
+            this.addSlot(new SlotItemHandler(h, 1, 54, 35));
+            this.addSlot(new SlotItemHandler(h, 2, 116, 35));
+        });
 
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
@@ -56,7 +66,7 @@ public class BreederMenu extends AbstractContainerMenu
         return itemstack;
     }
     @Override
-    public boolean stillValid(Player pPlayer) {
-        return this.container.stillValid(pPlayer);
+    public boolean stillValid(Player player) {
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ModBlocks.BREEDER.get());
     }
 }

@@ -5,73 +5,76 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
-import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class BreederBlockEntity extends BaseContainerBlockEntity {
-    protected NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
+public class BreederBlockEntity extends BlockEntity implements MenuProvider {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     public BreederBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BREEDER.get(), pos, state);
     }
     @Override
-    protected Component getDefaultName() {
+    public Component getDisplayName() {
         return Component.literal("Breeder");
     }
+    @Nullable
     @Override
-    protected AbstractContainerMenu createMenu(int pContainerId, Inventory pInventory) {
-        return new BreederMenu(pContainerId, pInventory, this);
+    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
+        return new BreederMenu(pContainerId, pPlayerInventory, this);
     }
-    public int getContainerSize() {
-        return this.items.size();
-    }
-    public boolean isEmpty() {
-        for(ItemStack itemstack : this.items) {
-            if (!itemstack.isEmpty()) {
-                return false;
-            }
-        }
-        return true;
-    }
-    public ItemStack getItem(int pIndex) {
-        return this.items.get(pIndex);
-    }
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return ContainerHelper.removeItem(this.items, pIndex, pCount);
+    public void onLoad() {
+        super.onLoad();
+        lazyItemHandler = LazyOptional.of(() -> itemHandler);
     }
     @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return ContainerHelper.takeItem(this.items, pIndex);
-    }
-    public void setItem(int pIndex, ItemStack pStack) {
-        this.items.set(pIndex, pStack);
-        if (pStack.getCount() > this.getMaxStackSize()) {
-            pStack.setCount(this.getMaxStackSize());
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap) {
+        if(cap == ForgeCapabilities.ITEM_HANDLER) {
+            return lazyItemHandler.cast();
         }
+
+        return super.getCapability(cap);
     }
-    public boolean stillValid(Player pPlayer) {
-        return Container.stillValidBlockEntity(this, pPlayer);
-    }
-    public void clearContent() {
-        this.items.clear();
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyItemHandler.invalidate();
     }
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(pTag, this.items);
+        itemHandler.deserializeNBT(pTag.getCompound("inventory"));
     }
     @Override
     protected void saveAdditional(CompoundTag pTag) {
+        pTag.put("inventory", itemHandler.serializeNBT());
         super.saveAdditional(pTag);
-        ContainerHelper.saveAllItems(pTag, this.items);
+    }
+    public void drops() {
+        SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            inventory.setItem(i, itemHandler.getStackInSlot(i));
+        }
+
+        Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 }
