@@ -14,6 +14,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
@@ -47,7 +48,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: mapping_channel, version: mapping_version
+    mappings channel: 'parchment', version: '2023.06.26-1.20.1'
 
     // When true, this property will have all Eclipse/IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
     // In most cases, it is not necessary to enable.
@@ -151,11 +152,13 @@ dependencies {
     // The "userdev" classifier will be requested and setup by ForgeGradle.
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft "net.minecraftforge:forge:1.20.1-47.1.42"
 
     implementation fg.deobf("curse.maven:jei-238222:4644453")
     implementation fg.deobf("curse.maven:pipez-443900:4629656")
     implementation fg.deobf("curse.maven:rubidium-574856:4573226")
+    implementation fg.deobf("curse.maven:journeymap-32274:4655325")
+    implementation fg.deobf("curse.maven:iron-chests-228756:4614852")
 
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

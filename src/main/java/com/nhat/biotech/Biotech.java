@@ -5,14 +5,11 @@ import com.nhat.biotech.Blocks.BlockEntities.ModBlockEntities;
 import com.nhat.biotech.Blocks.ModBlocks;
 import com.nhat.biotech.CreativeTabs.ModCreativeTabs;
 import com.nhat.biotech.Items.ModItems;
+import com.nhat.biotech.View.BreederScreen;
 import com.nhat.biotech.View.ModMenus;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -101,9 +98,7 @@ public class Biotech
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            MenuScreens.register(ModMenus.BREEDER.get(), BreederScreen::new);
         }
     }
 }

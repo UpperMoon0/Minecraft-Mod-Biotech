@@ -11,5 +11,6 @@
   "item.biotech.baby_sheep": "Baby Sheep",
   "item.biotech.rabbit": "Rabbit",
   "item.biotech.baby_rabbit": "Baby Rabbit",
-  "itemGroup.biotech": "Biotech"
+  "itemGroup.biotech": "Biotech",
+  "menu.title.biotech.breeder": "Breeder"
 }
