@@ -1,6 +1,12 @@
 {
   "block.biotech.net_trap": "Net Trap",
   "block.biotech.breeder": "Breeder",
+  "block.biotech.biotech_machine_casing": "Biotech Machine Casing",
+  "block.biotech.item_input_hatch": "Item Input Hatch",
+  "block.biotech.item_output_hatch": "Item Output Hatch",
+  "block.biotech.fluid_input_hatch": "Fluid Input Hatch",
+  "block.biotech.fluid_output_hatch": "Fluid Output Hatch",
+  "block.biotech.energy_input_hatch": "Energy Input Hatch",
   "item.biotech.cow": "Cow",
   "item.biotech.baby_cow": "Baby Cow",
   "item.biotech.chicken": "Chicken",
@@ -12,5 +18,12 @@
   "item.biotech.rabbit": "Rabbit",
   "item.biotech.baby_rabbit": "Baby Rabbit",
   "itemGroup.biotech": "Biotech",
-  "menu.title.biotech.breeder": "Breeder"
+  "menu.title.biotech.breeder": "Breeder",
+  "menu.title.biotech.item_input_hatch": "Item Input Hatch",
+  "menu.title.biotech.item_output_hatch": "Item Output Hatch",
+  "menu.title.biotech.fluid_input_hatch": "Fluid Input Hatch",
+  "menu.title.biotech.fluid_output_hatch": "Fluid Output Hatch",
+  "menu.title.biotech.energy_input_hatch": "Energy Input Hatch",
+  "biotech.tooltip.liquid.amount.with.capacity": "%s / %s mB",
+  "biotech.tooltip.liquid.amount": "%s mB"
 }

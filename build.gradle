@@ -152,13 +152,15 @@ dependencies {
     // The "userdev" classifier will be requested and setup by ForgeGradle.
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
-    minecraft "net.minecraftforge:forge:1.20.1-47.1.42"
+    minecraft "net.minecraftforge:forge:1.20.1-47.1.0"
 
     implementation fg.deobf("curse.maven:jei-238222:4644453")
     implementation fg.deobf("curse.maven:pipez-443900:4629656")
     implementation fg.deobf("curse.maven:rubidium-574856:4573226")
     implementation fg.deobf("curse.maven:journeymap-32274:4655325")
     implementation fg.deobf("curse.maven:iron-chests-228756:4614852")
+    implementation fg.deobf("curse.maven:itank-256991:4647928")
+    implementation fg.deobf("curse.maven:generatorgalore-691049:4661531")
 
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

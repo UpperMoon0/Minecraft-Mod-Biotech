@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/orientable",
   "textures": {
-    "front": "biotech:block/breeder_off",
+    "front": "biotech:block/fluid_input_hatch",
     "side": "biotech:block/biotech_machine_casing",
     "top": "biotech:block/biotech_machine_casing"
   }
