@@ -21,7 +21,7 @@ public abstract class CapabilityBlockEntity extends BlockEntity implements MenuP
         super.load(tag);
         if (tag.contains("item")) {
             this.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler) -> {
-                ((ItemStackHandler)handler).deserializeNBT(tag.getCompound("inv"));
+                ((ItemStackHandler)handler).deserializeNBT(tag.getCompound("item"));
             });
         }
 

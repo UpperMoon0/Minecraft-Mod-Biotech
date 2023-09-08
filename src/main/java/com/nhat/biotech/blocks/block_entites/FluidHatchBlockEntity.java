@@ -7,10 +7,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -71,9 +76,37 @@ public abstract class FluidHatchBlockEntity extends CapabilityBlockEntity {
     public static <T extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, T t) {
         FluidHatchBlockEntity blockEntity = (FluidHatchBlockEntity) t;
         if (!level.isClientSide()) {
+            blockEntity.bucketHandling(blockEntity);
             ModPackets.sendToClients(new FluidPacket(blockEntity.tank.getFluid(), blockPos));
             setChanged(level, blockPos, blockState);
         }
+    }
+
+    protected void bucketHandling(FluidHatchBlockEntity blockEntity) {
+        blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+            ItemStack slot0 = handler.getStackInSlot(0);
+            ItemStack slot1 = handler.getStackInSlot(1);
+            Item item0 = slot0.getItem();
+            int tankCapacity = tank.getCapacity();
+            int tankAmount = tank.getFluidAmount();
+            Fluid tankFluid = tank.getFluidInTank(0).getFluid();
+
+            if (item0.equals(Items.WATER_BUCKET)
+                    && tankAmount <= tankCapacity - 1000
+                    && (slot1.isEmpty() || (slot1.getItem().equals(Items.BUCKET)) && slot1.getCount() < 64)) {
+                tank.fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.EXECUTE);
+                handler.extractItem(0, 1, false);
+                handler.insertItem(1, Items.BUCKET.getDefaultInstance(), false);
+            }
+            else if (item0.equals(Items.BUCKET)
+                    && tankAmount >= 1000
+                    && tankFluid.equals(Fluids.WATER)
+                    && slot1.isEmpty()) {
+                tank.drain(1000, IFluidHandler.FluidAction.EXECUTE);
+                handler.extractItem(0, 1, false);
+                handler.insertItem(1, Items.WATER_BUCKET.getDefaultInstance(), false);
+            }
+        });
     }
     public void setFluid(FluidStack fluidStack) {
         tank.setFluid(fluidStack);
