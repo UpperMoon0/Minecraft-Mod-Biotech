@@ -1,18 +1,18 @@
 package com.nhat.biotech.utils;
 
+import com.nhat.biotech.blocks.BreederBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
 public abstract class MultiblockHelper {
-    public static boolean checkMultiblock(Level level, BlockPos controllerPos, DirectionProperty facing, BlockState blockState, Block[][][] pattern, int controllerHeight)
+    public static boolean checkMultiblock(Level level, BlockPos blockPos, BlockState blockState, Block[][][] pattern, int controllerHeight)
     {
         BlockPos currentLoc;
 
         //Rotate the pattern
-        switch (blockState.getValue(facing)) {
+        switch (blockState.getValue(BreederBlock.FACING)) {
             case NORTH -> {
                 for (Block[][] blocks : pattern) {
                     for (int k = 0; k < 2; k++) {
@@ -45,27 +45,27 @@ public abstract class MultiblockHelper {
                 //Loop the x dimension
                 for (int x = 0; x < pattern[0][0].length; x++) {
                     //Check facing
-                    switch (blockState.getValue(facing)) {
+                    switch (blockState.getValue(BreederBlock.FACING)) {
                         case NORTH -> {
-                            currentLoc = new BlockPos(controllerPos.getX() - pattern[0][0].length / 2 + x, controllerPos.getY() - (controllerHeight - 1) + y, controllerPos.getZ() + z);
+                            currentLoc = new BlockPos(blockPos.getX() - pattern[0][0].length / 2 + x, blockPos.getY() - (controllerHeight - 1) + y, blockPos.getZ() + z);
 
                             if (!level.getBlockState(currentLoc).is(pattern[pattern.length - 1 - y][z][x]) && pattern[pattern.length - 1 - y][z][x] != null)
                                 return false;
                         }
                         case SOUTH -> {
-                            currentLoc = new BlockPos(controllerPos.getX() - pattern[0][0].length / 2 + x, controllerPos.getY() - (controllerHeight - 1) + y, controllerPos.getZ() - (pattern[0].length - 1) + z);
+                            currentLoc = new BlockPos(blockPos.getX() - pattern[0][0].length / 2 + x, blockPos.getY() - (controllerHeight - 1) + y, blockPos.getZ() - (pattern[0].length - 1) + z);
 
                             if (!level.getBlockState(currentLoc).is(pattern[pattern.length - 1 - y][z][x]) && pattern[pattern.length - 1 - y][z][x] != null)
                                 return false;
                         }
                         case EAST -> {
-                            currentLoc = new BlockPos(controllerPos.getX() - (pattern[0][0].length - 1) + x, controllerPos.getY() - (controllerHeight - 1) + y, controllerPos.getZ() - pattern[0].length / 2 + z);
+                            currentLoc = new BlockPos(blockPos.getX() - (pattern[0][0].length - 1) + x, blockPos.getY() - (controllerHeight - 1) + y, blockPos.getZ() - pattern[0].length / 2 + z);
 
                             if (!level.getBlockState(currentLoc).is(pattern[pattern.length - 1 - y][z][x]) && pattern[pattern.length - 1 - y][z][x] != null)
                                 return false;
                         }
                         case WEST -> {
-                            currentLoc = new BlockPos(controllerPos.getX() + x, controllerPos.getY() - (controllerHeight - 1) + y, controllerPos.getZ() - pattern[0].length / 2 + z);
+                            currentLoc = new BlockPos(blockPos.getX() + x, blockPos.getY() - (controllerHeight - 1) + y, blockPos.getZ() - pattern[0].length / 2 + z);
 
                             if (!level.getBlockState(currentLoc).is(pattern[pattern.length - 1 - y][z][x]) && pattern[pattern.length - 1 - y][z][x] != null)
                                 return false;
@@ -79,7 +79,7 @@ public abstract class MultiblockHelper {
 
         return true;
     }
-    public static void rotateBlockMatrix(int N, Block[][] mat)
+    private static void rotateBlockMatrix(int N, Block[][] mat)
     {
         // Consider all squares one by one
         for (int x = 0; x < N / 2; x++) {

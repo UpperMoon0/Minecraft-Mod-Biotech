@@ -38,7 +38,7 @@ public class EnergyHatchMenu extends BiotechMenu {
     public BlockEntity getBlockEntity() {
         return blockEntity;
     }
-    public int calculateEnergyBarHeight()
+    public int getEnergyHeight()
     {
         return Math.max(energy * 52 / 128000, 1);
     }

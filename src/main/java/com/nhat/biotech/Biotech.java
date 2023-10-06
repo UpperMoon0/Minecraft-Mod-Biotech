@@ -6,6 +6,7 @@ import com.nhat.biotech.blocks.block_entites.IModBlockEntities;
 import com.nhat.biotech.creative_tabs.ModCreativeTabs;
 import com.nhat.biotech.items.IModItems;
 import com.nhat.biotech.networking.ModPackets;
+import com.nhat.biotech.recipes.ModRecipes;
 import com.nhat.biotech.utils.ScreenInit;
 import com.nhat.biotech.view.IModMenus;
 import net.minecraftforge.api.distmarker.Dist;
@@ -53,11 +54,14 @@ public class Biotech
         // Register the Deferred Register to the mod event bus so menus get registered
         IModMenus.MENUS.register(modEventBus);
 
-        // Register ourselves for server and other game events we are interested in
-        MinecraftForge.EVENT_BUS.register(this);
+        // Register the Deferred Register to the mod event bus so recipes get registered
+        ModRecipes.SERIALIZERS.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
+
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(this);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);

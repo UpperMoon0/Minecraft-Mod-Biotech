@@ -29,13 +29,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class FluidHatchBlockEntity extends CapabilityBlockEntity {
+    public final int TANK_CAPACITY = FluidType.BUCKET_VOLUME * 32;
     protected final ItemStackHandler slots = new ItemStackHandler(2) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
-    protected FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 16) {
+    protected FluidTank tank = new FluidTank(TANK_CAPACITY) {
         @Override
         protected void onContentsChanged() {
             setChanged();

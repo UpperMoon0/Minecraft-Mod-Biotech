@@ -57,14 +57,6 @@ public class BreederBlock extends BaseEntityBlock {
         } else
             return InteractionResult.SUCCESS;
     }
-    @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (!pState.is(pNewState.getBlock())) {
-            BreederBlockEntity blockEntity = (BreederBlockEntity) pLevel.getBlockEntity(pPos);
-            blockEntity.dropItem();
-            super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
-        }
-    }
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {

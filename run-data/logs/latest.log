@@ -1,0 +1,57 @@
+[13Sep2023 08:16:12.900] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\vongu\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.1.0, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, examplemod, --all, --output, D:\Dev\Workspace\Java\MCMods\Biotech-Minecraft-Mod\src\generated\resources, --existing, D:\Dev\Workspace\Java\MCMods\Biotech-Minecraft-Mod\src\main\resources]
+[13Sep2023 08:16:12.906] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.8 by Eclipse Adoptium; OS Windows 10 arch amd64 version 10.0
+[13Sep2023 08:16:13.078] [main/WARN] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Configuration file D:\Dev\Workspace\Java\MCMods\Biotech-Minecraft-Mod\run-data\config\fml.toml is not correct. Correcting
+[13Sep2023 08:16:13.080] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSkipGLVersions] was corrected from null to []
+[13Sep2023 08:16:13.080] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSquir] was corrected from null to false
+[13Sep2023 08:16:13.133] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[13Sep2023 08:16:13.333] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/vongu/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[13Sep2023 08:16:13.995] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\vongu\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.1.0\a2cd58d15791eaac9983e30be0995e66bd48633e\javafmllanguage-1.20.1-47.1.0.jar is missing mods.toml file
+[13Sep2023 08:16:13.998] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\vongu\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.1.0\f1f11b7217b8320f1b3eb81c746b7b8a70a9ba06\lowcodelanguage-1.20.1-47.1.0.jar is missing mods.toml file
+[13Sep2023 08:16:14.002] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\vongu\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.1.0\ff1b8eeb1bd00dfb130263b8952b931f5369252e\mclanguage-1.20.1-47.1.0.jar is missing mods.toml file
+[13Sep2023 08:16:14.007] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\vongu\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.1.0\69ca36ae5b8d45c377a5485dc38a7343e5ebf33c\fmlcore-1.20.1-47.1.0.jar is missing mods.toml file
+[13Sep2023 08:16:14.282] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[13Sep2023 08:16:18.421] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[13Sep2023 08:16:18.466] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\vongu\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, examplemod, --all, --output, D:\Dev\Workspace\Java\MCMods\Biotech-Minecraft-Mod\src\generated\resources, --existing, D:\Dev\Workspace\Java\MCMods\Biotech-Minecraft-Mod\src\main\resources]
+[13Sep2023 08:16:18.839] [main/INFO] [Rubidium/]: Loaded configuration file for Rubidium: 31 options available, 0 override(s) found
+[13Sep2023 08:16:19.521] [main/INFO] [mixin/]: Remapping refMap rubidium-refmap.json using D:\Dev\Workspace\Java\MCMods\Biotech-Minecraft-Mod\build\createSrgToMcp\output.srg
+[13Sep2023 08:16:19.523] [main/INFO] [mixin/]: Remapping refMap journeymap-refmap.json using D:\Dev\Workspace\Java\MCMods\Biotech-Minecraft-Mod\build\createSrgToMcp\output.srg
+[13Sep2023 08:16:20.573] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [examplemod]
+[13Sep2023 08:16:28.395] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.1.0, for MC 1.20.1 with MCP 20230612.114412
+[13Sep2023 08:16:28.402] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.1.0 Initialized
+[13Sep2023 08:16:28.536] [modloading-worker-0/INFO] [cy.jdkdigital.generatorgalore.GeneratorGalore/]: [Generator Galore] Pulling defaults from: [C:\Users\vongu\.gradle\caches\forge_gradle\deobf_dependencies\curse\maven\generatorgalore-691049\4661531_mapped_parchment_2023.06.26-1.20.1\generatorgalore-691049-4661531_mapped_parchment_2023.06.26-1.20.1.jar]
+[13Sep2023 08:16:29.880] [modloading-worker-0/ERROR] [net.minecraftforge.fml.javafmlmod.FMLModContainer/LOADING]: Failed to create mod instance. ModID: journeymap, class journeymap.common.Journeymap
+java.lang.reflect.InvocationTargetException: null
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
+	at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[?:?]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[?:?]
+	at net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:68) ~[javafmllanguage-1.20.1-47.1.0.jar%23192!/:?]
+	at net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$10(ModContainer.java:123) ~[fmlcore-1.20.1-47.1.0.jar%23195!/:?]
+	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?]
+	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?]
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+Caused by: java.lang.ExceptionInInitializerError
+	at journeymap.client.event.handlers.KeyEventHandler.<init>(KeyEventHandler.java:159) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	at journeymap.client.event.forge.ForgeKeyEvents.<init>(ForgeKeyEvents.java:39) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	at journeymap.client.JourneymapClient.<init>(JourneymapClient.java:117) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	at journeymap.common.Journeymap.lambda$new$0(Journeymap.java:110) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	at net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(DistExecutor.java:111) ~[fmlcore-1.20.1-47.1.0.jar%23195!/:?]
+	at journeymap.common.Journeymap.<init>(Journeymap.java:110) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	... 14 more
+Caused by: java.lang.NullPointerException: Cannot read field "screen" because the return value of "net.minecraft.client.Minecraft.getInstance()" is null
+	at journeymap.client.event.handlers.keymapping.KeyConflictContext.<clinit>(KeyConflictContext.java:9) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	at journeymap.client.event.handlers.KeyEventHandler.<init>(KeyEventHandler.java:159) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	at journeymap.client.event.forge.ForgeKeyEvents.<init>(ForgeKeyEvents.java:39) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	at journeymap.client.JourneymapClient.<init>(JourneymapClient.java:117) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	at journeymap.common.Journeymap.lambda$new$0(Journeymap.java:110) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	at net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(DistExecutor.java:111) ~[fmlcore-1.20.1-47.1.0.jar%23195!/:?]
+	at journeymap.common.Journeymap.<init>(Journeymap.java:110) ~[journeymap-32274-4655325_mapped_parchment_2023.06.26-1.20.1.jar%23201!/:1.20.1-5.9.12]
+	... 14 more
+[13Sep2023 08:16:30.241] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
+[13Sep2023 08:16:30.248] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 5.038 ms
+[13Sep2023 08:16:30.256] [main/FATAL] [net.minecraftforge.fml.ModLoader/LOADING]: Failed to complete lifecycle event CONSTRUCT, 1 errors found

@@ -15,7 +15,8 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ItemHatchBlockEntity extends CapabilityBlockEntity {
-    protected final ItemStackHandler slots = new ItemStackHandler(9) {
+    public final int INVENTORY_SIZE = 9;
+    protected final ItemStackHandler slots = new ItemStackHandler(INVENTORY_SIZE) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();

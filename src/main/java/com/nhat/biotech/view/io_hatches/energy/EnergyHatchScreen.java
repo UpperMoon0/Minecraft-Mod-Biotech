@@ -33,7 +33,7 @@ public class EnergyHatchScreen<T extends EnergyHatchMenu> extends AbstractContai
         renderBackground(graphics);
         graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         if (menu.getEnergy() > 0) {
-            graphics.blit(TEXTURE, leftPos + 80, topPos + 69 - menu.calculateEnergyBarHeight(), 176, 52 - menu.calculateEnergyBarHeight(), 16, menu.calculateEnergyBarHeight());
+            graphics.blit(TEXTURE, leftPos + 80, topPos + 69 - menu.getEnergyHeight(), 176, 52 - menu.getEnergyHeight(), 16, menu.getEnergyHeight());
         }
     }
 }

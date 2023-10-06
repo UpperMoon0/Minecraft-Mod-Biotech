@@ -35,6 +35,11 @@ public class ModPackets {
                 .encoder(EnergyPacket::toBytes)
                 .consumerMainThread(EnergyPacket::handle)
                 .add();
+        net.messageBuilder(BreederS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(BreederS2CPacket::new)
+                .encoder(BreederS2CPacket::toBytes)
+                .consumerMainThread(BreederS2CPacket::handle)
+                .add();
     }
     public static <MSG> void sendToClients(MSG message) {
         INSTANCE.send(PacketDistributor.ALL.noArg(), message);

@@ -1,0 +1,28 @@
+{
+  "type": "biotech:breeder",
+  "item": [
+    {
+      "id": "biotech:chicken",
+      "Count": 2
+    },
+    {
+      "id": "minecraft:wheat_seeds",
+      "Count": 2
+    }
+  ],
+  "itemConsumed": [false, true],
+  "itemResult": [
+    {
+      "id": "biotech:melon_chicken",
+      "Count": 1
+    }
+  ],
+  "fluid": [
+    {
+      "FluidName": "minecraft:water",
+      "Amount": 1000
+    }
+  ],
+  "fluidResult": [],
+  "energy": 12800
+}

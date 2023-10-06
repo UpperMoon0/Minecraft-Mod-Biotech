@@ -18,13 +18,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class EnergyHatchBlockEntity extends CapabilityBlockEntity {
-    protected final EnergyStorage energyStorage = initEnergyStorage();
+    public final int ENERGY_THROUGHPUT = 128;
+    public final int ENERGY_CAPACITY = ENERGY_THROUGHPUT * 1000;
 
-    protected final LazyOptional<IEnergyStorage> lazyEnergyStorage = initLazyEnergyStorage();
+    protected final EnergyStorage energyStorage = new EnergyStorage(ENERGY_CAPACITY);
 
-    protected abstract EnergyStorage initEnergyStorage();
-
-    protected abstract LazyOptional<IEnergyStorage> initLazyEnergyStorage();
+    protected final LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
 
     public EnergyHatchBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);

@@ -1,0 +1,28 @@
+{
+  "type": "biotech:breeder",
+  "item": [
+    {
+      "id": "biotech:cow",
+      "Count": 2
+    },
+    {
+      "id": "minecraft:wheat",
+      "Count": 2
+    }
+  ],
+  "itemConsumed": [false, true],
+  "itemResult": [
+    {
+      "id": "biotech:baby_cow",
+      "Count": 1
+    }
+  ],
+  "fluid": [
+    {
+      "FluidName": "minecraft:water",
+      "Amount": 1000
+    }
+  ],
+  "fluidResult": [],
+  "energy": 12800
+}

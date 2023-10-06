@@ -7,24 +7,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
 public class EnergyInputHatchBlockEntity extends EnergyHatchBlockEntity {
     public EnergyInputHatchBlockEntity(BlockPos pos, BlockState state)
     {
         super(IModBlockEntities.ENERGY_INPUT_HATCH.get(), pos, state);
-    }
-
-    @Override
-    protected EnergyStorage initEnergyStorage() {
-        return new EnergyStorage(128000, 128, 0);
-    }
-    @Override
-    protected LazyOptional<IEnergyStorage> initLazyEnergyStorage() {
-        return LazyOptional.of(() -> energyStorage);
     }
 
     @Override

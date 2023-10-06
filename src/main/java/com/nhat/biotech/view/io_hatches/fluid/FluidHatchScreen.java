@@ -21,7 +21,7 @@ public abstract class FluidHatchScreen<T extends FluidHatchMenu> extends Abstrac
     @Override
     protected void init() {
         super.init();
-        renderer = new FluidTankRenderer(16000, true, 16, 52);
+        renderer = new FluidTankRenderer(32000, true, 16, 52);
     }
     @Override
     protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
