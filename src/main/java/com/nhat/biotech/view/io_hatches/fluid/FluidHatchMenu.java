@@ -1,6 +1,7 @@
 package com.nhat.biotech.view.io_hatches.fluid;
 
-import com.nhat.biotech.blocks.IModBlocks;
+import com.nhat.biotech.blocks.ModBlocks;
+import com.nhat.biotech.blocks.block_entites.FluidHatchBlockEntity;
 import com.nhat.biotech.view.BiotechMenu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -15,13 +16,24 @@ import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class FluidHatchMenu extends BiotechMenu {
-    private final BlockEntity blockEntity;
-    private final Level level;
+    private final FluidHatchBlockEntity BLOCK_ENTITY;
+    private final Level LEVEL;
     private FluidStack fluidStack;
+    // Getters
+    public FluidStack getFluidStack() {
+        return fluidStack;
+    }
+    public FluidHatchBlockEntity getFluidHatchBlockEntity() {
+        return BLOCK_ENTITY;
+    }
+    // Setters
+    public void setFluidStack(FluidStack fluidStack) {
+        this.fluidStack = fluidStack;
+    }
     public FluidHatchMenu(MenuType menu, int pContainerId, Inventory inventory, BlockEntity blockEntity) {
         super(menu, pContainerId);
-        this.blockEntity = blockEntity;
-        level = inventory.player.level();
+        this.BLOCK_ENTITY = (FluidHatchBlockEntity) blockEntity;
+        LEVEL = inventory.player.level();
         fluidStack = FluidStack.EMPTY;
 
         blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
@@ -43,16 +55,7 @@ public abstract class FluidHatchMenu extends BiotechMenu {
     }
     @Override
     public boolean stillValid(Player pPlayer) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, IModBlocks.FLUID_INPUT_HATCH.get())
-                || stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, IModBlocks.FLUID_OUTPUT_HATCH.get());
-    }
-    public FluidStack getFluidStack() {
-        return fluidStack;
-    }
-    public BlockEntity getBlockEntity() {
-        return blockEntity;
-    }
-    public void setFluidStack(FluidStack fluidStack) {
-        this.fluidStack = fluidStack;
+        return stillValid(ContainerLevelAccess.create(LEVEL, BLOCK_ENTITY.getBlockPos()), pPlayer, ModBlocks.FLUID_INPUT_HATCH.get())
+                || stillValid(ContainerLevelAccess.create(LEVEL, BLOCK_ENTITY.getBlockPos()), pPlayer, ModBlocks.FLUID_OUTPUT_HATCH.get());
     }
 }

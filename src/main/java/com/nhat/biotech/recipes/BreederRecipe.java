@@ -2,6 +2,7 @@ package com.nhat.biotech.recipes;
 
 import com.google.gson.JsonObject;
 import com.nhat.biotech.Biotech;
+import com.nhat.biotech.utils.JsonUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -11,7 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 public class BreederRecipe extends BiotechRecipe {
-    public BreederRecipe(ResourceLocation id, BiotechRecipeEntity recipeEntity) {
+    public BreederRecipe(ResourceLocation id, RecipeContainer recipeEntity) {
         super(id, recipeEntity);
     }
     @Override
@@ -35,7 +36,7 @@ public class BreederRecipe extends BiotechRecipe {
         public static final ResourceLocation ID = new ResourceLocation(Biotech.MODID, "breeder");
         @Override
         public BreederRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-            return new BreederRecipe(ID, JsonHelper.getRecipeEntityFromJson(pSerializedRecipe));
+            return new BreederRecipe(ID, JsonUtils.getRecipeEntityFromJson(pSerializedRecipe));
         }
 
         @Override
@@ -84,12 +85,12 @@ public class BreederRecipe extends BiotechRecipe {
 
             int totalEnergy = pBuffer.readInt();
 
-            return new BreederRecipe(pRecipeId, new BiotechRecipeEntity(itemIngredients, ingredientsConsumable, itemResults, fluidIngredients, fluidResults, totalEnergy));
+            return new BreederRecipe(pRecipeId, new RecipeContainer(itemIngredients, ingredientsConsumable, itemResults, fluidIngredients, fluidResults, totalEnergy));
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf pBuffer, BreederRecipe pRecipe) {
-            BiotechRecipeEntity rEntity = pRecipe.getRecipeEntity();
+            RecipeContainer rEntity = pRecipe.getRecipeContainer();
 
             if (rEntity.getItemIngredients() != null) {
                 pBuffer.writeInt(rEntity.getItemIngredients().length);

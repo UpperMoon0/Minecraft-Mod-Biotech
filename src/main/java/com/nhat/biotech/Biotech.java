@@ -1,14 +1,14 @@
 package com.nhat.biotech;
 
 import com.mojang.logging.LogUtils;
-import com.nhat.biotech.blocks.IModBlocks;
-import com.nhat.biotech.blocks.block_entites.IModBlockEntities;
+import com.nhat.biotech.blocks.ModBlocks;
+import com.nhat.biotech.blocks.block_entites.ModBlockEntities;
 import com.nhat.biotech.creative_tabs.ModCreativeTabs;
-import com.nhat.biotech.items.IModItems;
+import com.nhat.biotech.items.ModItems;
 import com.nhat.biotech.networking.ModPackets;
 import com.nhat.biotech.recipes.ModRecipes;
 import com.nhat.biotech.utils.ScreenInit;
-import com.nhat.biotech.view.IModMenus;
+import com.nhat.biotech.view.ModMenus;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -40,19 +40,19 @@ public class Biotech
         modEventBus.addListener(this::commonSetup);
 
         // Register the Deferred Register to the mod event bus so blocks get registered
-        IModBlocks.BLOCKS.register(modEventBus);
+        ModBlocks.BLOCKS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so block entities get registered
-        IModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so items get registered
-        IModItems.ITEMS.register(modEventBus);
+        ModItems.ITEMS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so tabs get registered
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so menus get registered
-        IModMenus.MENUS.register(modEventBus);
+        ModMenus.MENUS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so recipes get registered
         ModRecipes.SERIALIZERS.register(modEventBus);

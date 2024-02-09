@@ -10,16 +10,16 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class FluidPacket {
+public class FluidHatchPacket {
     private final FluidStack fluidStack;
     private final BlockPos pos;
 
-    public FluidPacket(FluidStack fluidStack, BlockPos pos) {
+    public FluidHatchPacket(FluidStack fluidStack, BlockPos pos) {
         this.fluidStack = fluidStack;
         this.pos = pos;
     }
 
-    public FluidPacket(FriendlyByteBuf buf) {
+    public FluidHatchPacket(FriendlyByteBuf buf) {
         this.fluidStack = buf.readFluidStack();
         this.pos = buf.readBlockPos();
     }
@@ -36,7 +36,7 @@ public class FluidPacket {
                 blockEntity.setFluid(fluidStack);
 
                 if(Minecraft.getInstance().player.containerMenu instanceof FluidHatchMenu menu &&
-                        menu.getBlockEntity().getBlockPos().equals(pos)) {
+                        menu.getFluidHatchBlockEntity().getBlockPos().equals(pos)) {
                     menu.setFluidStack(fluidStack);
                 }
             }

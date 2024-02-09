@@ -23,7 +23,5 @@
   "menu.title.biotech.item_output_hatch": "Item Output Hatch",
   "menu.title.biotech.fluid_input_hatch": "Fluid Input Hatch",
   "menu.title.biotech.fluid_output_hatch": "Fluid Output Hatch",
-  "menu.title.biotech.energy_input_hatch": "Energy Input Hatch",
-  "biotech.tooltip.liquid.amount.with.capacity": "%s / %s mB",
-  "biotech.tooltip.liquid.amount": "%s mB"
+  "menu.title.biotech.energy_input_hatch": "Energy Input Hatch"
 }

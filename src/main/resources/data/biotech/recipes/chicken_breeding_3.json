@@ -6,14 +6,14 @@
       "Count": 2
     },
     {
-      "id": "minecraft:wheat_seeds",
+      "id": "minecraft:melon_seeds",
       "Count": 2
     }
   ],
   "itemConsumed": [false, true],
   "itemResult": [
     {
-      "id": "biotech:melon_chicken",
+      "id": "biotech:baby_chicken",
       "Count": 1
     }
   ],

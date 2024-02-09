@@ -24,10 +24,10 @@ public class ModPackets {
 
         INSTANCE = net;
 
-        net.messageBuilder(FluidPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(FluidPacket::new)
-                .encoder(FluidPacket::toBytes)
-                .consumerMainThread(FluidPacket::handle)
+        net.messageBuilder(FluidHatchPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(FluidHatchPacket::new)
+                .encoder(FluidHatchPacket::toBytes)
+                .consumerMainThread(FluidHatchPacket::handle)
                 .add();
 
         net.messageBuilder(EnergyPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
@@ -35,10 +35,10 @@ public class ModPackets {
                 .encoder(EnergyPacket::toBytes)
                 .consumerMainThread(EnergyPacket::handle)
                 .add();
-        net.messageBuilder(BreederS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(BreederS2CPacket::new)
-                .encoder(BreederS2CPacket::toBytes)
-                .consumerMainThread(BreederS2CPacket::handle)
+        net.messageBuilder(BreederPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(BreederPacket::new)
+                .encoder(BreederPacket::toBytes)
+                .consumerMainThread(BreederPacket::handle)
                 .add();
     }
     public static <MSG> void sendToClients(MSG message) {

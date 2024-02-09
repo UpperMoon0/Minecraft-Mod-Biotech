@@ -1,13 +1,16 @@
 package com.nhat.biotech.blocks.block_entites;
 
 import com.nhat.biotech.blocks.BreederBlock;
-import com.nhat.biotech.blocks.IModBlocks;
-import com.nhat.biotech.networking.BreederS2CPacket;
+import com.nhat.biotech.blocks.ModBlocks;
+import com.nhat.biotech.networking.BreederPacket;
 import com.nhat.biotech.networking.ModPackets;
+import com.nhat.biotech.recipes.BiotechRecipe;
 import com.nhat.biotech.recipes.BreederRecipe;
-import com.nhat.biotech.utils.MultiblockHelper;
+import com.nhat.biotech.utils.MultiblockUtils;
 import com.nhat.biotech.view.machines.BreederMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -22,6 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +35,7 @@ import java.util.Optional;
 
 public class BreederBlockEntity extends BlockEntity implements MenuProvider {
     private int energyConsumed;
-    private int recipeTotalEnergy;
+    private int recipeEnergyCost;
     private int energyConsumption;
     private boolean isStructureValid;
     private ItemInputHatchBlockEntity itemInputHatch1;
@@ -46,7 +50,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
     private EnergyStorage energyStorage;
     private Optional<BreederRecipe> recipe = Optional.empty();
     public BreederBlockEntity(BlockPos pos, BlockState state) {
-        super(IModBlockEntities.BREEDER.get(), pos, state);
+        super(ModBlockEntities.BREEDER.get(), pos, state);
     }
     @Override
     public @NotNull Component getDisplayName() {
@@ -164,35 +168,42 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         });
     }
 
-    private static void processRecipe(Level level, BlockPos blockPos, BreederBlockEntity blockEntity) {
-        blockEntity.copyHatchesContents();
-        blockEntity.energyConsumption = blockEntity.energyInputHatch.ENERGY_THROUGHPUT;
-        ModPackets.sendToClients(new BreederS2CPacket(blockEntity.energyStorage.getEnergyStored(), blockEntity.energyConsumed, blockEntity.recipeTotalEnergy, blockEntity.inputTank.getFluidInTank(0), blockEntity.isStructureValid, blockPos));
+    private void processRecipe(Level level, BlockPos blockPos, BreederBlockEntity blockEntity) {
+        copyHatchesContents();
+        energyConsumption = energyInputHatch.ENERGY_THROUGHPUT;
 
-        if (blockEntity.recipe.isEmpty())
-            blockEntity.recipe = level.getRecipeManager().getAllRecipesFor(BreederRecipe.Type.INSTANCE).stream().filter(r -> r.recipeMatch(blockEntity.inputSlots, new FluidTank[]{blockEntity.inputTank}, blockEntity.outputSlots, null)).findFirst();
+        if (recipe.isEmpty()) {
+            recipe = level.getRecipeManager().getAllRecipesFor(BreederRecipe.Type.INSTANCE).stream().filter(r -> r.recipeMatch(inputSlots, new FluidTank[]{inputTank}, outputSlots, null)).findFirst();
+        }
 
-        if (blockEntity.recipe.isPresent()) {
-            BreederRecipe breederRecipe = blockEntity.recipe.get();
-            blockEntity.recipeTotalEnergy = breederRecipe.getTotalEnergy();
+        int energyCapacity = energyInputHatch.ENERGY_CAPACITY;
+        int energyStored = energyStorage.getEnergyStored();
+        int energyConsumeRate = energyInputHatch.ENERGY_THROUGHPUT;
+        int fluidCapacity = fluidInputHatch.TANK_CAPACITY;
+        FluidStack fluidStored = inputTank.getFluidInTank(0);
+        ModPackets.sendToClients(new BreederPacket(energyCapacity, energyStored, energyConsumeRate, energyConsumed, recipeEnergyCost, fluidCapacity, fluidStored, isStructureValid, blockPos, recipe.map(BiotechRecipe::getRecipeContainer).orElse(null)));
 
-            if (blockEntity.energyStorage.getEnergyStored() >= blockEntity.energyConsumption) {
-                int energyToConsume = Math.min(blockEntity.energyConsumption, blockEntity.recipeTotalEnergy - blockEntity.energyConsumed);
-                blockEntity.energyConsumed += energyToConsume;
-                blockEntity.energyStorage.extractEnergy(energyToConsume, false);;
-                blockEntity.synchronizeEnergyHatches();
+        if (recipe.isPresent()) {
+            BreederRecipe breederRecipe = recipe.get();
+            recipeEnergyCost = breederRecipe.getTotalEnergy();
+
+            if (energyStorage.getEnergyStored() >= energyConsumption) {
+                int energyToConsume = Math.min(energyConsumption, recipeEnergyCost - energyConsumed);
+                energyConsumed += energyToConsume;
+                energyStorage.extractEnergy(energyToConsume, false);;
+                synchronizeEnergyHatches();
             }
 
-            if (blockEntity.energyConsumed == blockEntity.recipeTotalEnergy) {
-                blockEntity.energyConsumed = 0;
-                blockEntity.recipeTotalEnergy = 0;
-                breederRecipe.craft(blockEntity.inputSlots, new FluidTank[]{blockEntity.inputTank}, blockEntity.outputSlots, null);
-                blockEntity.recipe = Optional.empty();
-                blockEntity.synchronizeItemAndFluidHatches();
+            if (energyConsumed == recipeEnergyCost) {
+                energyConsumed = 0;
+                recipeEnergyCost = 0;
+                breederRecipe.craft(inputSlots, new FluidTank[]{inputTank}, outputSlots, null);
+                recipe = Optional.empty();
+                synchronizeItemAndFluidHatches();
             }
         } else {
-            blockEntity.energyConsumed = 0;
-            blockEntity.recipeTotalEnergy = 0;
+            energyConsumed = 0;
+            recipeEnergyCost = 0;
         }
     }
 
@@ -200,15 +211,11 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         BreederBlockEntity blockEntity = (BreederBlockEntity) t;
 
         if (!level.isClientSide) {
-            blockEntity.isStructureValid = MultiblockHelper.checkMultiblock(level, blockPos, blockState, getPattern(), 2);
+            blockEntity.isStructureValid = MultiblockUtils.checkMultiblock(level, blockPos, blockState, getPattern(), 2);
 
             if (blockEntity.isStructureValid) {
-                blockEntity.itemInputHatch1 = (ItemInputHatchBlockEntity) level.getBlockEntity(blockPos.offset(-3, -1, -1));
-                blockEntity.itemInputHatch2 = (ItemInputHatchBlockEntity) level.getBlockEntity(blockPos.offset(-3, -1, -3));
-                blockEntity.itemInputHatch3 = (ItemInputHatchBlockEntity) level.getBlockEntity(blockPos.offset(-3, -1, -5));
-                blockEntity.itemOutputHatch = (ItemOutputHatchBlockEntity) level.getBlockEntity(blockPos.offset(3, -1, -3));
-                blockEntity.energyInputHatch = (EnergyInputHatchBlockEntity) level.getBlockEntity(blockPos.offset(0, -1, -6));
-                blockEntity.fluidInputHatch = (FluidInputHatchBlockEntity) level.getBlockEntity(blockPos.offset(-2, -1, -6));
+                
+                blockEntity.setHatches(blockPos, level);
 
                 if (blockEntity.itemInputHatch1 != null
                         && blockEntity.itemInputHatch2 != null
@@ -217,13 +224,13 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
                         && blockEntity.energyInputHatch != null
                         && blockEntity.fluidInputHatch != null)
                 {
-                    processRecipe(level, blockPos, blockEntity);
+                    blockEntity.processRecipe(level, blockPos, blockEntity);
                 }
 
                 setChanged(level, blockPos, blockState);
             } else {
                 blockEntity.energyConsumed = 0;
-                blockEntity.recipeTotalEnergy = 0;
+                blockEntity.recipeEnergyCost = 0;
             }
 
             if (blockEntity.energyConsumed > 0) {
@@ -236,14 +243,51 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
+    private void setHatches(BlockPos blockPos, Level level) {
+        Direction facing = getBlockState().getValue(BreederBlock.FACING);
+
+        // Define the south offset
+        Vec3i[] southOffset = {
+                new Vec3i(-3, -1, -1),
+                new Vec3i(-3, -1, -3),
+                new Vec3i(-3, -1, -5),
+                new Vec3i(3, -1, -3),
+                new Vec3i(0, -1, -6),
+                new Vec3i(-2, -1, -6)
+        };
+
+        // Rotate the south offset and get the hatches
+        for (int i = 0; i < southOffset.length; i++) {
+            Vec3i rotatedOffset = rotateHatchesOffset(southOffset[i], facing);
+            BlockPos hatchPos = blockPos.offset(rotatedOffset);
+            switch (i) {
+                case 0 -> itemInputHatch1 = (ItemInputHatchBlockEntity) level.getBlockEntity(hatchPos);
+                case 1 -> itemInputHatch2 = (ItemInputHatchBlockEntity) level.getBlockEntity(hatchPos);
+                case 2 -> itemInputHatch3 = (ItemInputHatchBlockEntity) level.getBlockEntity(hatchPos);
+                case 3 -> itemOutputHatch = (ItemOutputHatchBlockEntity) level.getBlockEntity(hatchPos);
+                case 4 -> energyInputHatch = (EnergyInputHatchBlockEntity) level.getBlockEntity(hatchPos);
+                case 5 -> fluidInputHatch = (FluidInputHatchBlockEntity) level.getBlockEntity(hatchPos);
+            }
+        }
+    }
+
+    private Vec3i rotateHatchesOffset(Vec3i southOffset, Direction direction) {
+        return switch (direction) {
+            case NORTH -> new BlockPos(-southOffset.getX(), southOffset.getY(), -southOffset.getZ());
+            case WEST -> new BlockPos(-southOffset.getZ(), southOffset.getY(), southOffset.getX());
+            case EAST -> new BlockPos(southOffset.getZ(), southOffset.getY(), southOffset.getX());
+            default -> southOffset;
+        };
+    }
+
     private static Block[][][] getPattern()
     {
         Block a = Blocks.AIR,
-              b = IModBlocks.BIOTECH_MACHINE_CASING.get(),
-              c = IModBlocks.ITEM_INPUT_HATCH.get(),
-              d = IModBlocks.ITEM_OUTPUT_HATCH.get(),
-              e = IModBlocks.FLUID_INPUT_HATCH.get(),
-              f = IModBlocks.ENERGY_INPUT_HATCH.get(),
+              b = ModBlocks.BIOTECH_MACHINE_CASING.get(),
+              c = ModBlocks.ITEM_INPUT_HATCH.get(),
+              d = ModBlocks.ITEM_OUTPUT_HATCH.get(),
+              e = ModBlocks.FLUID_INPUT_HATCH.get(),
+              f = ModBlocks.ENERGY_INPUT_HATCH.get(),
               g = Blocks.PINK_CONCRETE,
               h = Blocks.PINK_STAINED_GLASS,
               i = Blocks.GLOWSTONE,

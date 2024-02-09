@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class EnergyInputHatchBlockEntity extends EnergyHatchBlockEntity {
     public EnergyInputHatchBlockEntity(BlockPos pos, BlockState state)
     {
-        super(IModBlockEntities.ENERGY_INPUT_HATCH.get(), pos, state);
+        super(ModBlockEntities.ENERGY_INPUT_HATCH.get(), pos, state);
     }
 
     @Override

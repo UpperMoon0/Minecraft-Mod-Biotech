@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemInputHatchBlockEntity extends ItemHatchBlockEntity {
     public ItemInputHatchBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(IModBlockEntities.ITEM_INPUT_HATCH.get(), pPos, pBlockState);
+        super(ModBlockEntities.ITEM_INPUT_HATCH.get(), pPos, pBlockState);
     }
     @Override
     public Component getDisplayName() {
