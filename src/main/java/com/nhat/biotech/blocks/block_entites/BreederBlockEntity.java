@@ -17,17 +17,18 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,10 +44,6 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
     private ItemOutputHatchBlockEntity itemOutputHatch;
     private EnergyInputHatchBlockEntity energyInputHatch;
     private FluidInputHatchBlockEntity fluidInputHatch;
-    private ItemStack[] inputSlots;
-    private ItemStack[] outputSlots;
-    private FluidTank inputTank;
-    private EnergyStorage energyStorage;
     private Optional<BreederRecipe> recipe = Optional.empty();
     public BreederBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BREEDER.get(), pos, state);
@@ -66,115 +63,46 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         energyConsumed = pTag.getInt("usedEnergy");
     }
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
+    protected void saveAdditional(@NotNull CompoundTag pTag) {
         super.saveAdditional(pTag);
         pTag.putInt("usedEnergy", energyConsumed);
     }
-    private void copyHatchesContents() {
-        // Copy input slots
-        inputSlots = new ItemStack[itemInputHatch1.INVENTORY_SIZE + itemInputHatch2.INVENTORY_SIZE + itemInputHatch3.INVENTORY_SIZE];
-        itemInputHatch1.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler) -> {
-            for (int i = 0; i < itemInputHatch1.INVENTORY_SIZE; i++) {
-                inputSlots[i] = handler.getStackInSlot(i).copy();
-            }
-        });
-        itemInputHatch2.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler) -> {
-            for (int i = 0; i < itemInputHatch2.INVENTORY_SIZE; i++) {
-                inputSlots[i + itemInputHatch1.INVENTORY_SIZE] = handler.getStackInSlot(i).copy();
-            }
-        });
-        itemInputHatch3.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler) -> {
-            for (int i = 0; i < itemInputHatch3.INVENTORY_SIZE; i++) {
-                inputSlots[i + itemInputHatch1.INVENTORY_SIZE + itemInputHatch2.INVENTORY_SIZE] = handler.getStackInSlot(i).copy();
-            }
-        });
-
-        // Copy output slots
-        outputSlots = new ItemStack[itemOutputHatch.INVENTORY_SIZE];
-        itemOutputHatch.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler) -> {
-            for (int i = 0; i < itemOutputHatch.INVENTORY_SIZE; i++) {
-                outputSlots[i] = handler.getStackInSlot(i).copy();
-            }
-        });
-
-        // Copy fluid tank
-        inputTank = new FluidTank(fluidInputHatch.TANK_CAPACITY);
-        fluidInputHatch.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent((handler) -> {
-            inputTank.setFluid(handler.getFluidInTank(0).copy());
-        });
-
-        // Copy energy storage
-        energyStorage = new EnergyStorage(energyInputHatch.ENERGY_CAPACITY);
-        energyInputHatch.getCapability(ForgeCapabilities.ENERGY).ifPresent((handler) -> {
-            energyStorage.extractEnergy(energyStorage.getEnergyStored(), false);
-            energyStorage.receiveEnergy(handler.getEnergyStored(), false);
-        });
-    }
-
-    private void synchronizeItemAndFluidHatches() {
-        // Synchronize input slots
-        itemInputHatch1.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler) -> {
-            for (int i = 0; i < itemInputHatch1.INVENTORY_SIZE; i++) {
-                if (!handler.getStackInSlot(i).equals(inputSlots[i])) {
-                    handler.extractItem(i, handler.getStackInSlot(i).getCount(), false);
-                    handler.insertItem(i, inputSlots[i], false);
-                }
-            }
-        });
-        itemInputHatch2.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler) -> {
-            for (int i = 0; i < itemInputHatch2.INVENTORY_SIZE; i++) {
-                if (!handler.getStackInSlot(i).equals(inputSlots[i + itemInputHatch1.INVENTORY_SIZE])) {
-                    handler.extractItem(i, handler.getStackInSlot(i).getCount(), false);
-                    handler.insertItem(i, inputSlots[i + itemInputHatch1.INVENTORY_SIZE], false);
-                }
-            }
-        });
-        itemInputHatch3.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler) -> {
-            for (int i = 0; i < itemInputHatch3.INVENTORY_SIZE; i++) {
-                if (!handler.getStackInSlot(i).equals(inputSlots[i + itemInputHatch1.INVENTORY_SIZE + itemInputHatch2.INVENTORY_SIZE])) {
-                    handler.extractItem(i, handler.getStackInSlot(i).getCount(), false);
-                    handler.insertItem(i, inputSlots[i + itemInputHatch1.INVENTORY_SIZE + itemInputHatch2.INVENTORY_SIZE], false);
-                }
-            }
-        });
-
-        // Synchronize output slots
-        itemOutputHatch.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler) -> {
-            for (int i = 0; i < itemOutputHatch.INVENTORY_SIZE; i++) {
-                if (!handler.getStackInSlot(i).equals(outputSlots[i])) {
-                    handler.extractItem(i, handler.getStackInSlot(i).getCount(), false);
-                    handler.insertItem(i, outputSlots[i], false);
-                }
-            }
-        });
-
-        // Synchronize fluid tank
-        fluidInputHatch.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent((handler) -> {
-            if (!handler.getFluidInTank(0).equals(inputTank.getFluid()) || !(handler.getFluidInTank(0).getAmount() == inputTank.getFluid().getAmount())) {
-                handler.drain(handler.getFluidInTank(0).getAmount(), IFluidHandler.FluidAction.EXECUTE);
-                handler.fill(inputTank.getFluid(), IFluidHandler.FluidAction.EXECUTE);
-            }
-        });
-    }
-
-    private void synchronizeEnergyHatches() {
-        // Synchronize energy storage
-        energyInputHatch.getCapability(ForgeCapabilities.ENERGY).ifPresent((handler) -> {
-            if (handler.getEnergyStored() != energyStorage.getEnergyStored()) {
-                handler.extractEnergy(handler.getEnergyStored(), false);
-                handler.receiveEnergy(energyStorage.getEnergyStored(), false);
-            }
-        });
-    }
 
     private void processRecipe(Level level, BlockPos blockPos) {
-        copyHatchesContents();
+        IItemHandler combinedInputItemHandler = new CombinedInvWrapper(
+                (IItemHandlerModifiable) itemInputHatch1.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new),
+                (IItemHandlerModifiable) itemInputHatch2.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new),
+                (IItemHandlerModifiable) itemInputHatch3.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new)
+        );
+        IItemHandler outputItemHandler = itemOutputHatch.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new);
+        IFluidHandler inputFluidHandler = fluidInputHatch.getCapability(ForgeCapabilities.FLUID_HANDLER).orElseThrow(NullPointerException::new);
+        IEnergyStorage energyStorage = energyInputHatch.getCapability(ForgeCapabilities.ENERGY).orElseThrow(NullPointerException::new);
 
         int energyCapacity = energyInputHatch.ENERGY_CAPACITY;
         int energyStored = energyStorage.getEnergyStored();
         int energyConsumeRate = energyInputHatch.ENERGY_THROUGHPUT;
         int fluidCapacity = fluidInputHatch.TANK_CAPACITY;
-        FluidStack fluidStored = inputTank.getFluidInTank(0);
+        FluidStack fluidStored = inputFluidHandler.getFluidInTank(0);
+
+        if (recipe.isEmpty()) {
+            energyConsumed = 0;
+            recipe = level.getRecipeManager().getAllRecipesFor(BreederRecipe.Type.INSTANCE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
+        } else {
+            BreederRecipe breederRecipe = recipe.get();
+            recipeEnergyCost = breederRecipe.getTotalEnergy();
+
+            if (energyStorage.getEnergyStored() >= energyConsumeRate) {
+                int energyToConsume = Math.min(energyConsumeRate, recipeEnergyCost - energyConsumed);
+                energyConsumed += energyToConsume;
+                energyStorage.extractEnergy(energyToConsume, false);
+            }
+
+            if (energyConsumed == recipeEnergyCost) {
+                energyConsumed = 0;
+                breederRecipe.craft(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null);
+
+                recipe = level.getRecipeManager().getAllRecipesFor(BreederRecipe.Type.INSTANCE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
+        }
 
         ModPackets.sendToClients(new BreederPacket(
                 energyCapacity,
@@ -188,29 +116,6 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
                 blockPos,
                 recipe.map(BiotechRecipe::getRecipeContainer).orElse(null)
         ));
-
-        if (recipe.isEmpty()) {
-            energyConsumed = 0;
-            recipe = level.getRecipeManager().getAllRecipesFor(BreederRecipe.Type.INSTANCE).stream().filter(r -> r.recipeMatch(inputSlots, new FluidTank[]{inputTank}, outputSlots, null)).findFirst();
-        } else {
-            BreederRecipe breederRecipe = recipe.get();
-            recipeEnergyCost = breederRecipe.getTotalEnergy();
-
-            if (energyStorage.getEnergyStored() >= energyConsumeRate) {
-                int energyToConsume = Math.min(energyConsumeRate, recipeEnergyCost - energyConsumed);
-                energyConsumed += energyToConsume;
-                energyStorage.extractEnergy(energyToConsume, false);;
-                synchronizeEnergyHatches();
-            }
-
-            if (energyConsumed == recipeEnergyCost) {
-                energyConsumed = 0;
-                breederRecipe.craft(inputSlots, new FluidTank[]{inputTank}, outputSlots, null);
-                synchronizeItemAndFluidHatches();
-
-                recipe = level.getRecipeManager().getAllRecipesFor(BreederRecipe.Type.INSTANCE).stream().filter(r -> r.recipeMatch(inputSlots, new FluidTank[]{inputTank}, outputSlots, null)).findFirst();
-            }
-        }
     }
 
     public static <T extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, T t) {
@@ -229,13 +134,13 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
                 blockEntity.recipeEnergyCost = 0;
             }
 
+            BlockState state;
             if (blockEntity.recipe.isPresent()) {
-                BlockState state = blockState.setValue(BreederBlock.OPERATING, Boolean.TRUE);
-                level.setBlock(blockPos, state, 3);
+                state = blockState.setValue(BreederBlock.OPERATING, Boolean.TRUE);
             } else {
-                BlockState state = blockState.setValue(BreederBlock.OPERATING, Boolean.FALSE);
-                level.setBlock(blockPos, state, 3);
+                state = blockState.setValue(BreederBlock.OPERATING, Boolean.FALSE);
             }
+            level.setBlock(blockPos, state, 3);
         }
     }
 
@@ -279,64 +184,62 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
     private static Block[][][] getPattern()
     {
         Block a = Blocks.AIR,
-              b = ModBlocks.BIOTECH_MACHINE_CASING.get(),
-              c = ModBlocks.ITEM_INPUT_HATCH.get(),
-              d = ModBlocks.ITEM_OUTPUT_HATCH.get(),
-              e = ModBlocks.FLUID_INPUT_HATCH.get(),
-              f = ModBlocks.ENERGY_INPUT_HATCH.get(),
-              g = Blocks.PINK_CONCRETE,
-              h = Blocks.PINK_STAINED_GLASS,
-              i = Blocks.GLOWSTONE,
-              j = Blocks.GRASS_BLOCK;
+                b = ModBlocks.BIOTECH_MACHINE_CASING.get(),
+                c = ModBlocks.ITEM_INPUT_HATCH.get(),
+                d = ModBlocks.ITEM_OUTPUT_HATCH.get(),
+                e = ModBlocks.FLUID_INPUT_HATCH.get(),
+                f = ModBlocks.ENERGY_INPUT_HATCH.get(),
+                g = Blocks.PINK_CONCRETE,
+                h = Blocks.PINK_STAINED_GLASS,
+                i = Blocks.GLOWSTONE,
+                j = Blocks.GRASS_BLOCK;
 
         return new Block[][][]{
-            {
-                {a, a, h, b, h, a, a},
-                {a, a, h, i, h, a, a},
-                {a, a, h, i, h, a, a},
-                {a, a, h, i, h, a, a},
-                {a, a, h, i, h, a, a},
-                {a, a, h, i, h, a, a},
-                {a, a, h, b, h, a, a}
-            },
-            {
-                {a, g, h, b, h, g, a},
-                {a, g, a, a, a, g, a},
-                {a, g, a, a, a, g, a},
-                {a, g, a, a, a, g, a},
-                {a, g, a, a, a, g, a},
-                {a, g, a, a, a, g, a},
-                {a, g, h, b, h, g, a}
-            },
-            {
-                {a, b, b, b, b, b, a},
-                {a, b, a, a, a, b, a},
-                {a, b, a, a, a, b, a},
-                {a, b, a, a, a, b, a},
-                {a, b, a, a, a, b, a},
-                {a, b, a, a, a, b, a},
-                {a, b, b, b, b, b, a}
-            },
-            {
-                {b, b, b, b, b, b, b},
-                {b, a, a, a, a, a, b},
-                {b, a, a, a, a, a, b},
-                {b, a, a, a, a, a, b},
-                {b, a, a, a, a, a, b},
-                {b, a, a, a, a, a, b},
-                {b, b, b, null, b, b, b}
-            },
-            {
-                {b, e, b, f, b, b, b},
-                {c, b, j, j, j, b, b},
-                {b, b, j, j, j, b, b},
-                {c, b, j, j, j, b, d},
-                {b, b, j, j, j, b, b},
-                {c, b, j, j, j, b, b},
-                {b, b, b, b, b, b, b}
-            }
+                {
+                        {a, a, h, b, h, a, a},
+                        {a, a, h, i, h, a, a},
+                        {a, a, h, i, h, a, a},
+                        {a, a, h, i, h, a, a},
+                        {a, a, h, i, h, a, a},
+                        {a, a, h, i, h, a, a},
+                        {a, a, h, b, h, a, a}
+                },
+                {
+                        {a, g, h, b, h, g, a},
+                        {a, g, a, a, a, g, a},
+                        {a, g, a, a, a, g, a},
+                        {a, g, a, a, a, g, a},
+                        {a, g, a, a, a, g, a},
+                        {a, g, a, a, a, g, a},
+                        {a, g, h, b, h, g, a}
+                },
+                {
+                        {a, b, b, b, b, b, a},
+                        {a, b, a, a, a, b, a},
+                        {a, b, a, a, a, b, a},
+                        {a, b, a, a, a, b, a},
+                        {a, b, a, a, a, b, a},
+                        {a, b, a, a, a, b, a},
+                        {a, b, b, b, b, b, a}
+                },
+                {
+                        {b, b, b, b, b, b, b},
+                        {b, a, a, a, a, a, b},
+                        {b, a, a, a, a, a, b},
+                        {b, a, a, a, a, a, b},
+                        {b, a, a, a, a, a, b},
+                        {b, a, a, a, a, a, b},
+                        {b, b, b, null, b, b, b}
+                },
+                {
+                        {b, e, b, f, b, b, b},
+                        {c, b, j, j, j, b, b},
+                        {b, b, j, j, j, b, b},
+                        {c, b, j, j, j, b, d},
+                        {b, b, j, j, j, b, b},
+                        {c, b, j, j, j, b, b},
+                        {b, b, b, b, b, b, b}
+                }
         };
     }
 }
-
-

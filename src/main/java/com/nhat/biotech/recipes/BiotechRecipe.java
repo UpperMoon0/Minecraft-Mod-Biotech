@@ -11,6 +11,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.IItemHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -76,7 +77,7 @@ public abstract class BiotechRecipe implements Recipe<Container> {
         return RECIPE_CONTAINER;
     }
 
-    public boolean recipeMatch(ItemStack[] inputSlots, FluidTank[] inputTanks, ItemStack[] outputSlots, FluidTank[] outputTanks) {
+    public boolean recipeMatch(IItemHandler inputSlots, IFluidHandler inputTanks, IItemHandler outputSlots, IFluidHandler outputTanks) {
         Map<Item, Integer> slotItems = new HashMap<>();
         Map<Fluid, Integer> tankFluids = new HashMap<>();
         boolean flag1 = false;
@@ -87,10 +88,9 @@ public abstract class BiotechRecipe implements Recipe<Container> {
         }
 
         if (RECIPE_CONTAINER.getItemIngredients() != null) {
-            if (inputSlots == null)
-                return false;
             // Save the items in the input slots to a map
-            for (ItemStack stack : inputSlots) {
+            for (int i = 0; i < inputSlots.getSlots(); i++) {
+                ItemStack stack = inputSlots.getStackInSlot(i);
                 int newQuantity = slotItems.getOrDefault(stack.getItem(), 0) + stack.getCount();
                 slotItems.put(stack.getItem(), newQuantity);
             }
@@ -99,11 +99,9 @@ public abstract class BiotechRecipe implements Recipe<Container> {
         }
 
         if (RECIPE_CONTAINER.getFluidIngredients() != null) {
-            if (inputTanks == null)
-                return false;
             // Save the fluids in the input tanks to a map
-            for (FluidTank tank : inputTanks) {
-                FluidStack fluidStack = tank.getFluid();
+            for (int i = 0; i < inputTanks.getTanks(); i++) {
+                FluidStack fluidStack = inputTanks.getFluidInTank(i);
                 int newAmount = tankFluids.getOrDefault(fluidStack.getFluid(), 0) + fluidStack.getAmount();
                 tankFluids.put(fluidStack.getFluid(), newAmount);
             }
@@ -111,12 +109,9 @@ public abstract class BiotechRecipe implements Recipe<Container> {
             flag2 = fluidsMatch(RECIPE_CONTAINER.getFluidIngredients(), tankFluids);
         }
 
-        if (flag1 && flag2) {
-            return true;
-        }
-
-        return false;
+        return flag1 && flag2;
     }
+
     private boolean itemsMatch(ItemStack[] itemIngredients, Map<Item, Integer> slotItems) {
         // Save the required item ingredients to a map
         Map<Item, Integer> requiredItems = new HashMap<>();
@@ -133,6 +128,7 @@ public abstract class BiotechRecipe implements Recipe<Container> {
 
         return true;
     }
+
     private boolean fluidsMatch(FluidStack[] fluidIngredients, Map<Fluid, Integer> tankFluids) {
         // Save the required fluids ingredients to a map
         Map<Fluid, Integer> requiredFluids = new HashMap<>();
@@ -149,11 +145,13 @@ public abstract class BiotechRecipe implements Recipe<Container> {
 
         return true;
     }
-    private boolean outputSpaceAvailable(ItemStack[] outputSlots, FluidTank[] outputTanks) {
+
+    private boolean outputSpaceAvailable(IItemHandler outputSlots, IFluidHandler outputTanks) {
         // Check item results
         for (ItemStack result : RECIPE_CONTAINER.getItemResults()) {
             boolean canInsertItem = false;
-            for (ItemStack slot : outputSlots) {
+            for (int i = 0; i < outputSlots.getSlots(); i++) {
+                ItemStack slot = outputSlots.getStackInSlot(i);
                 if (slot.isEmpty() || (slot.getItem().equals(result.getItem()) && slot.getCount() < slot.getMaxStackSize())) {
                     canInsertItem = true;
                     break;
@@ -167,8 +165,9 @@ public abstract class BiotechRecipe implements Recipe<Container> {
         // Check fluid results
         for (FluidStack result : RECIPE_CONTAINER.getFluidResults()) {
             boolean canInsertFluid = false;
-            for (FluidTank tank : outputTanks) {
-                if (tank.isEmpty() || (tank.getFluidInTank(0).getFluid().equals(result.getFluid()) && tank.getFluidInTank(0).getAmount() + result.getAmount() <= tank.getCapacity())) {
+            for (int i = 0; i < outputTanks.getTanks(); i++) {
+                FluidStack tankFluid = outputTanks.getFluidInTank(i);
+                if (tankFluid.isEmpty() || (tankFluid.getFluid().equals(result.getFluid()) && tankFluid.getAmount() + result.getAmount() <= outputTanks.getTankCapacity(i))) {
                     canInsertFluid = true;
                     break;
                 }
@@ -181,14 +180,9 @@ public abstract class BiotechRecipe implements Recipe<Container> {
         return true;
     }
 
-
-    public void craft(ItemStack[] inputSlots, FluidTank[] inputTanks, ItemStack[] outputSlots, FluidTank[] outputTanks) {
+    public void craft(IItemHandler inputSlots, IFluidHandler inputTanks, IItemHandler outputSlots, IFluidHandler outputTanks) {
         // Consume the required items from the input slots
         if (RECIPE_CONTAINER.getItemIngredients() != null) {
-            // If the input slots are null, return
-            if (inputSlots == null)
-                return;
-
             // Save the required item ingredients to a map
             Map<Item, Integer> requiredItems = new HashMap<>();
             for (int i = 0; i < RECIPE_CONTAINER.getItemIngredients().length; i++) {
@@ -201,20 +195,21 @@ public abstract class BiotechRecipe implements Recipe<Container> {
                 int remaining = entry.getValue();
 
                 // Loop through the input slots
-                for (int i = 0; i < inputSlots.length && remaining > 0; i++) {
+                for (int i = 0; i < inputSlots.getSlots() && remaining > 0; i++) {
+                    ItemStack slotStack = inputSlots.getStackInSlot(i);
                     // If the ingredient is not in the input slots, skip it
-                    if (inputSlots[i].getItem().equals(entry.getKey())) {
-                        int ingredientIndex = RECIPE_CONTAINER.getIngredientIndex(inputSlots[i].getItem());
+                    if (slotStack.getItem().equals(entry.getKey())) {
+                        int ingredientIndex = RECIPE_CONTAINER.getIngredientIndex(slotStack.getItem());
                         // If the ingredient is not consumable, skip it
                         if (ingredientIndex != -1 && !RECIPE_CONTAINER.getIngredientsConsumable()[ingredientIndex]) {
                             continue;
                         }
                         // If the ingredient is consumable, consume it
-                        if (inputSlots[i].getCount() <= remaining) {
-                            remaining -= inputSlots[i].getCount();
-                            inputSlots[i] = ItemStack.EMPTY;
+                        if (slotStack.getCount() <= remaining) {
+                            remaining -= slotStack.getCount();
+                            inputSlots.extractItem(i, slotStack.getCount(), false);
                         } else {
-                            inputSlots[i].shrink(remaining);
+                            inputSlots.extractItem(i, remaining, false);
                             remaining = 0;
                         }
                     }
@@ -224,10 +219,6 @@ public abstract class BiotechRecipe implements Recipe<Container> {
 
         // Consume the required fluids from the input tanks
         if (RECIPE_CONTAINER.getFluidIngredients() != null) {
-            // If the input tanks are null, return
-            if (inputTanks == null)
-                return;
-
             // Save the required fluids ingredients to a map
             Map<Fluid, Integer> requiredFluids = new HashMap<>();
             for (FluidStack fluidInput : RECIPE_CONTAINER.getFluidIngredients()) {
@@ -236,13 +227,14 @@ public abstract class BiotechRecipe implements Recipe<Container> {
 
             for (Map.Entry<Fluid, Integer> entry : requiredFluids.entrySet()) {
                 int remaining = entry.getValue();
-                for (int i = 0; i < inputTanks.length && remaining > 0; i++) {
-                    if (inputTanks[i].getFluid().getFluid().equals(entry.getKey())) {
-                        if (inputTanks[i].getFluidAmount() <= remaining) {
-                            remaining -= inputTanks[i].getFluidAmount();
-                            inputTanks[i].setFluid(FluidStack.EMPTY);
+                for (int i = 0; i < inputTanks.getTanks() && remaining > 0; i++) {
+                    FluidStack tankFluid = inputTanks.getFluidInTank(i);
+                    if (tankFluid.getFluid().equals(entry.getKey())) {
+                        if (tankFluid.getAmount() <= remaining) {
+                            remaining -= tankFluid.getAmount();
+                            inputTanks.drain(tankFluid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
                         } else {
-                            inputTanks[i].drain(remaining, IFluidHandler.FluidAction.EXECUTE);
+                            inputTanks.drain(remaining, IFluidHandler.FluidAction.EXECUTE);
                             remaining = 0;
                         }
                     }
@@ -253,12 +245,13 @@ public abstract class BiotechRecipe implements Recipe<Container> {
         // Insert the item results into the output slots
         if (RECIPE_CONTAINER.getItemResults() != null) {
             for (ItemStack result : RECIPE_CONTAINER.getItemResults()) {
-                for (int i = 0; i < outputSlots.length; i++) {
-                    if (outputSlots[i].isEmpty()) {
-                        outputSlots[i] = result.copy();
+                for (int i = 0; i < outputSlots.getSlots(); i++) {
+                    ItemStack slotStack = outputSlots.getStackInSlot(i);
+                    if (slotStack.isEmpty()) {
+                        outputSlots.insertItem(i, result.copy(), false);
                         break;
-                    } else if (outputSlots[i].getItem().equals(result.getItem()) && outputSlots[i].getCount() < outputSlots[i].getMaxStackSize()) {
-                        outputSlots[i].grow(result.getCount());
+                    } else if (slotStack.getItem().equals(result.getItem()) && slotStack.getCount() < slotStack.getMaxStackSize()) {
+                        slotStack.grow(result.getCount());
                         break;
                     }
                 }
@@ -268,12 +261,13 @@ public abstract class BiotechRecipe implements Recipe<Container> {
         // Insert the fluid results into the output tanks
         if (RECIPE_CONTAINER.getFluidResults() != null) {
             for (FluidStack result : RECIPE_CONTAINER.getFluidResults()) {
-                for (FluidTank outputTank : outputTanks) {
-                    if (outputTank.isEmpty()) {
-                        outputTank.setFluid(result.copy());
+                for (int i = 0; i < outputTanks.getTanks(); i++) {
+                    FluidStack tankFluid = outputTanks.getFluidInTank(i);
+                    if (tankFluid.isEmpty()) {
+                        outputTanks.fill(result.copy(), IFluidHandler.FluidAction.EXECUTE);
                         break;
-                    } else if (outputTank.getFluid().getFluid().equals(result.getFluid()) && outputTank.getFluidAmount() + result.getAmount() <= outputTank.getCapacity()) {
-                        outputTank.fill(result, IFluidHandler.FluidAction.EXECUTE);
+                    } else if (tankFluid.getFluid().equals(result.getFluid()) && tankFluid.getAmount() + result.getAmount() <= outputTanks.getTankCapacity(i)) {
+                        outputTanks.fill(result, IFluidHandler.FluidAction.EXECUTE);
                         break;
                     }
                 }
@@ -283,17 +277,5 @@ public abstract class BiotechRecipe implements Recipe<Container> {
 
     public int getTotalEnergy() {
         return RECIPE_CONTAINER.getTotalEnergy();
-    }
-
-    public ItemStack[] getItemIngredients() {
-        return RECIPE_CONTAINER.getItemIngredients();
-    }
-
-    public FluidStack[] getFluidIngredients() {
-        return RECIPE_CONTAINER.getFluidIngredients();
-    }
-
-    public ItemStack[] getItemResults() {
-        return RECIPE_CONTAINER.getItemResults();
     }
 }
