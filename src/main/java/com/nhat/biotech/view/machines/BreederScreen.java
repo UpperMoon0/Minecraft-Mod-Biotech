@@ -121,7 +121,7 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
                 animalItemRenderer.render(graphics.pose(), leftPos + 46, topPos + 35, currentAnimal);
 
                 ItemStack currentFood = menu.getRecipe().getItemIngredients()[1];
-                graphics.renderItem(currentFood, leftPos + 30, topPos + 94);
+                graphics.renderItem(currentFood, leftPos + 29, topPos + 94);
 
                 FluidStack currentFluid = menu.getRecipe().getFluidIngredients()[0];
                 BiotechFluidRenderer fluidRenderer = new BiotechFluidRenderer();

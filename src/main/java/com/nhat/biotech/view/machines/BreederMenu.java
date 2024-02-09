@@ -122,6 +122,6 @@ public class BreederMenu extends BiotechMenu {
     }
 
     public boolean getIsOperating() {
-        return energyConsumed > 0;
+        return recipe != null;
     }
 }
