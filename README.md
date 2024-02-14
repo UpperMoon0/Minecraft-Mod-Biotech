@@ -1,2 +1,2 @@
 # Biotech
-The mod that let you biologically engineer Minecraft.
+A mod that let you biologically engineer Minecraft.
