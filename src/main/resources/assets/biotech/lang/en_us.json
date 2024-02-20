@@ -1,6 +1,7 @@
 {
   "block.biotech.net_trap": "Net Trap",
-  "block.biotech.breeder": "Breeding Chamber",
+  "block.biotech.breeding_chamber": "Breeding Chamber",
+  "block.biotech.terrestrial_habitat": "Terrestrial Habitat",
   "block.biotech.biotech_machine_casing": "Biotech Machine Casing",
   "block.biotech.item_input_hatch": "Item Input Hatch",
   "block.biotech.item_output_hatch": "Item Output Hatch",
@@ -18,10 +19,11 @@
   "item.biotech.rabbit": "Rabbit",
   "item.biotech.baby_rabbit": "Baby Rabbit",
   "itemGroup.biotech": "Biotech",
-  "menu.title.biotech.breeder": "Breeder",
+  "menu.title.biotech.breeding_chamber": "Breeding Chamber",
   "menu.title.biotech.item_input_hatch": "Item Input Hatch",
   "menu.title.biotech.item_output_hatch": "Item Output Hatch",
   "menu.title.biotech.fluid_input_hatch": "Fluid Input Hatch",
   "menu.title.biotech.fluid_output_hatch": "Fluid Output Hatch",
-  "menu.title.biotech.energy_input_hatch": "Energy Input Hatch"
+  "menu.title.biotech.energy_input_hatch": "Energy Input Hatch",
+  "menu.title.biotech.terrestrial_habitat": "Terrestrial Habitat"
 }

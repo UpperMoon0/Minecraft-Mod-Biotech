@@ -1,6 +1,6 @@
 package com.nhat.biotech.blocks;
 
-import com.nhat.biotech.blocks.block_entites.*;
+import com.nhat.biotech.blocks.block_entites.hatches.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;

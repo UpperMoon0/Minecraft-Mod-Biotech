@@ -1,7 +1,7 @@
 package com.nhat.biotech.view.machines;
 
 import com.nhat.biotech.blocks.ModBlocks;
-import com.nhat.biotech.blocks.block_entites.BreederBlockEntity;
+import com.nhat.biotech.blocks.block_entites.machines.BreedingChamberBlockEntity;
 import com.nhat.biotech.recipes.RecipeContainer;
 import com.nhat.biotech.view.BiotechMenu;
 import com.nhat.biotech.view.ModMenus;
@@ -18,9 +18,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class BreederMenu extends BiotechMenu {
+public class BreedingChamberMenu extends BiotechMenu {
     private final Level LEVEL;
-    private final BreederBlockEntity BLOCK_ENTITY;
+    private final BreedingChamberBlockEntity BLOCK_ENTITY;
     private final BlockPos POS;
     private int energyCapacity;
     private int energyStored;
@@ -33,7 +33,7 @@ public class BreederMenu extends BiotechMenu {
     private RecipeContainer recipe;
 
     // Getters
-    public BreederBlockEntity getBlockEntity() {
+    public BreedingChamberBlockEntity getBlockEntity() {
         return BLOCK_ENTITY;
     }
     public int getEnergyCapacity() {
@@ -44,6 +44,9 @@ public class BreederMenu extends BiotechMenu {
     }
     public int getEnergyConsumeRate() {
         return energyConsumeRate;
+    }
+    public int getEnergyConsumed() {
+        return energyConsumed;
     }
     public int getFluidCapacity() {
         return fluidCapacity > 0? fluidCapacity : 1;
@@ -87,14 +90,14 @@ public class BreederMenu extends BiotechMenu {
         this.recipe = recipeEntity;
     }
 
-    public BreederMenu(int pContainerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
+    public BreedingChamberMenu(int pContainerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
         this(pContainerId, inventory, Objects.requireNonNull(inventory.player.level().getBlockEntity(friendlyByteBuf.readBlockPos())));
     }
 
-    public BreederMenu(int i, Inventory inventory, BlockEntity blockEntity) {
+    public BreedingChamberMenu(int i, Inventory inventory, BlockEntity blockEntity) {
         super(ModMenus.BREEDER.get(), i);
         this.LEVEL = inventory.player.level();
-        this.BLOCK_ENTITY = (BreederBlockEntity) blockEntity;
+        this.BLOCK_ENTITY = (BreedingChamberBlockEntity) blockEntity;
         this.POS = blockEntity.getBlockPos();
     }
 
@@ -105,7 +108,7 @@ public class BreederMenu extends BiotechMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return stillValid(ContainerLevelAccess.create(LEVEL, POS), player, ModBlocks.BREEDER.get());
+        return stillValid(ContainerLevelAccess.create(LEVEL, POS), player, ModBlocks.BREEDING_CHAMBER.get());
     }
     public int getEnergyHeight()
     {

@@ -1,6 +1,6 @@
 package com.nhat.biotech.utils;
 
-import com.nhat.biotech.blocks.BreederBlock;
+import com.nhat.biotech.blocks.BreedingChamberBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -13,7 +13,7 @@ public class MultiblockUtils {
         BlockPos currentLoc;
 
         //Rotate the pattern
-        switch (blockState.getValue(BreederBlock.FACING)) {
+        switch (blockState.getValue(BreedingChamberBlock.FACING)) {
             case NORTH -> {
                 for (Block[][] layer : pattern) {
                     for (int k = 0; k < 2; k++) {
@@ -72,7 +72,7 @@ public class MultiblockUtils {
                 //Loop the x dimension
                 for (int x = 0; x < pattern[0][0].length; x++) {
                     //Check facing
-                    switch (blockState.getValue(BreederBlock.FACING)) {
+                    switch (blockState.getValue(BreedingChamberBlock.FACING)) {
                         case NORTH -> {
                             currentLoc = new BlockPos(blockPos.getX() - pattern[0][0].length / 2 + x, blockPos.getY() - (controllerHeight - 1) + y, blockPos.getZ() + z);
 

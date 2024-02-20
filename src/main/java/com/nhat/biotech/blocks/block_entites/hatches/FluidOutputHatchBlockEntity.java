@@ -1,5 +1,6 @@
-package com.nhat.biotech.blocks.block_entites;
+package com.nhat.biotech.blocks.block_entites.hatches;
 
+import com.nhat.biotech.blocks.block_entites.ModBlockEntities;
 import com.nhat.biotech.view.io_hatches.fluid.FluidOutputHatchMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

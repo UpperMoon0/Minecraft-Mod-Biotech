@@ -2,6 +2,7 @@ package com.nhat.biotech.items;
 
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.blocks.ModBlocks;
+import com.nhat.biotech.utils.RBuildings;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
@@ -14,7 +15,7 @@ import java.util.Set;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Biotech.MODID);
     public static final RegistryObject<Item> NET_TRAP_ITEM = ITEMS.register("net_trap", () -> new BlockItem(ModBlocks.NET_TRAP.get(), new Item.Properties()));
-    public static final RegistryObject<Item> BREEDER_ITEM = ITEMS.register("breeder", () -> new BlockItem(ModBlocks.BREEDER.get(), new Item.Properties()));
+    public static final RegistryObject<Item> BREEDING_CHAMBER_ITEM = ITEMS.register(RBuildings.BREEDING_CHAMBER_ID, () -> new BlockItem(ModBlocks.BREEDING_CHAMBER.get(), new Item.Properties()));
     public static final RegistryObject<Item> BIOTECH_MACHINE_CASING = ITEMS.register("biotech_machine_casing", () -> new BlockItem(ModBlocks.BIOTECH_MACHINE_CASING.get(), new Item.Properties()));
     public static final RegistryObject<Item> ITEM_INPUT_HATCH = ITEMS.register("item_input_hatch", () -> new BlockItem(ModBlocks.ITEM_INPUT_HATCH.get(), new Item.Properties()));
     public static final RegistryObject<Item> ITEM_OUTPUT_HATCH = ITEMS.register("item_output_hatch", () -> new BlockItem(ModBlocks.ITEM_OUTPUT_HATCH.get(), new Item.Properties()));
@@ -31,9 +32,10 @@ public class ModItems {
     public static final RegistryObject<Item> BABY_SHEEP = ITEMS.register("baby_sheep", () -> new MobItem(8));
     public static final RegistryObject<Item> RABBIT = ITEMS.register("rabbit", () -> new MobItem(9));
     public static final RegistryObject<Item> BABY_RABBIT = ITEMS.register("baby_rabbit", () -> new MobItem(10));
+    public static final RegistryObject<Item> TERRESTRIAL_HABITAT_ITEM = ITEMS.register(RBuildings.TERRESTRIAL_HABITAT_ID, () -> new BlockItem(ModBlocks.TERRESTRIAL_HABITAT.get(), new Item.Properties()));
     public static final Set<RegistryObject<Item>> ITEM_SET = new LinkedHashSet<>() {{
         add(NET_TRAP_ITEM);
-        add(BREEDER_ITEM);
+        add(BREEDING_CHAMBER_ITEM);
         add(BIOTECH_MACHINE_CASING);
         add(ITEM_INPUT_HATCH);
         add(ITEM_OUTPUT_HATCH);
@@ -50,5 +52,6 @@ public class ModItems {
         add(BABY_SHEEP);
         add(RABBIT);
         add(BABY_RABBIT);
+        add(TERRESTRIAL_HABITAT_ITEM);
     }};
 }

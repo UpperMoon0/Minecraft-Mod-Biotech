@@ -7,7 +7,7 @@ import net.minecraft.world.item.Items;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public record RAnimalSets() {
+public record RAnimals() {
     public static final Set<Item> ADULT_ANIMAL;
     public static final Set<Item> FOOD;
 

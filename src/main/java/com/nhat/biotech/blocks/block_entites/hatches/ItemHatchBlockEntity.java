@@ -1,6 +1,7 @@
-package com.nhat.biotech.blocks.block_entites;
+package com.nhat.biotech.blocks.block_entites.hatches;
 
 import com.nhat.biotech.blocks.IOHatchBlock;
+import com.nhat.biotech.blocks.block_entites.CapabilityBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;

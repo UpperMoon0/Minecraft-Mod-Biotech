@@ -1,10 +1,8 @@
 package com.nhat.biotech.view.io_hatches.fluid;
 
-import com.nhat.biotech.blocks.block_entites.FluidHatchBlockEntity;
 import com.nhat.biotech.view.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Objects;

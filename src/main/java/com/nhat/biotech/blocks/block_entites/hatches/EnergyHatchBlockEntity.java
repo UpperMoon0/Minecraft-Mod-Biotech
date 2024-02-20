@@ -1,6 +1,7 @@
-package com.nhat.biotech.blocks.block_entites;
+package com.nhat.biotech.blocks.block_entites.hatches;
 
 import com.nhat.biotech.blocks.IOHatchBlock;
+import com.nhat.biotech.blocks.block_entites.CapabilityBlockEntity;
 import com.nhat.biotech.networking.EnergyPacket;
 import com.nhat.biotech.networking.ModPackets;
 import net.minecraft.core.BlockPos;

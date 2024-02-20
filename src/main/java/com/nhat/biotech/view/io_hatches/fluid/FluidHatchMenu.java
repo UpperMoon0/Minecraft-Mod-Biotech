@@ -1,7 +1,7 @@
 package com.nhat.biotech.view.io_hatches.fluid;
 
 import com.nhat.biotech.blocks.ModBlocks;
-import com.nhat.biotech.blocks.block_entites.FluidHatchBlockEntity;
+import com.nhat.biotech.blocks.block_entites.hatches.FluidHatchBlockEntity;
 import com.nhat.biotech.view.BiotechMenu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

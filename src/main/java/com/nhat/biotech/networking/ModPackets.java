@@ -35,10 +35,10 @@ public class ModPackets {
                 .encoder(EnergyPacket::toBytes)
                 .consumerMainThread(EnergyPacket::handle)
                 .add();
-        net.messageBuilder(BreederPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(BreederPacket::new)
-                .encoder(BreederPacket::toBytes)
-                .consumerMainThread(BreederPacket::handle)
+        net.messageBuilder(BreedingChamberPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(BreedingChamberPacket::new)
+                .encoder(BreedingChamberPacket::toBytes)
+                .consumerMainThread(BreedingChamberPacket::handle)
                 .add();
     }
     public static <MSG> void sendToClients(MSG message) {

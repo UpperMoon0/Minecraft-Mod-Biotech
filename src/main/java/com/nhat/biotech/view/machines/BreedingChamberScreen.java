@@ -2,6 +2,7 @@ package com.nhat.biotech.view.machines;
 
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.recipes.RecipeContainer;
+import com.nhat.biotech.utils.RBuildings;
 import com.nhat.biotech.view.renderer.BiotechFluidRenderer;
 import com.nhat.biotech.view.renderer.BiotechFluidTankRenderer;
 import com.nhat.biotech.view.renderer.BiotechItemRenderer;
@@ -16,9 +17,9 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.List;
 import java.util.Optional;
 
-public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/breeder.png");
-    public BreederScreen(BreederMenu menu, Inventory inventory, Component component) {
+public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamberMenu> {
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/" + RBuildings.BREEDING_CHAMBER_ID + ".png");
+    public BreedingChamberScreen(BreedingChamberMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
     }
 
@@ -42,21 +43,18 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
 
             String foodRawName = recipe.getItemIngredients()[1].getDisplayName().getString();
             String foodName = foodRawName.substring(1, foodRawName.length() - 1);
-            if (isHovering(31, 95, 16, 16, pMouseX, pMouseY)) {
+            if (isHovering(31, 98, 20, 20, pMouseX, pMouseY)) {
                 pGuiGraphics.renderTooltip(font, List.of(Component.literal(foodName)), Optional.empty(), pMouseX - leftPos, pMouseY - topPos);
             }
             int foodCount = recipe.getItemIngredients()[1].getCount();
-            pGuiGraphics.drawCenteredString(font, String.valueOf(foodCount), 67, 111, 0xFFFFFF);
+            pGuiGraphics.drawCenteredString(font, String.valueOf(foodCount), 95, 104, 0xFFFFFF);
 
             String fluidName = recipe.getFluidIngredients()[0].getDisplayName().getString();
-            if (isHovering(94, 125, 16, 16, pMouseX, pMouseY)) {
+            if (isHovering(31, 131, 20, 20, pMouseX, pMouseY)) {
                 pGuiGraphics.renderTooltip(font, List.of(Component.literal(fluidName)), Optional.empty(), pMouseX - leftPos, pMouseY - topPos);
             }
             int fluidAmount = recipe.getFluidIngredients()[0].getAmount();
-            pGuiGraphics.drawCenteredString(font, fluidAmount + " mB", 62, 144, 0xFFFFFF);
-
-            int energyCost = recipe.getTotalEnergy();
-            pGuiGraphics.drawCenteredString(font, energyCost + " FE", 150, 148, 0xFFFFFF);
+            pGuiGraphics.drawCenteredString(font, fluidAmount + " mB", 95, 137, 0xFFFFFF);
         }
 
         if (isHovering(4, 43, 9, 76, pMouseX, pMouseY)) {
@@ -90,11 +88,31 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
             }
         }
 
+        if (isHovering(88,28, 19, 19, pMouseX, pMouseY)) {
+            if (menu.getStructureValid()) {
+                if (menu.getIsOperating()) {
+                    int energyCost = menu.getRecipe().getTotalEnergy();
+                    float totalTimeProgress = ((float) energyCost / energyConsumeRate) / 20;
+                    float currentTimeProgress = ((float) menu.getEnergyConsumed() / energyConsumeRate) / 20;
+                    String formattedTotalTimeProgress = String.format("%.1f", totalTimeProgress);
+                    String formattedCurrentTimeProgress = String.format("%.1f", currentTimeProgress);
+                    pGuiGraphics.renderTooltip(font, List.of(
+                            Component.literal("Progress:"),
+                            Component.literal(menu.getEnergyConsumed() + " / " + energyCost + " FE"),
+                            Component.literal(formattedCurrentTimeProgress + " / " + formattedTotalTimeProgress + " s")
+                    ), Optional.empty(), pMouseX - leftPos, pMouseY - topPos);
+                }
+                else {
+                    pGuiGraphics.renderTooltip(font, Component.literal("Not Operating"), pMouseX - leftPos, pMouseY - topPos);
+                }
+            }
+            else {
+                pGuiGraphics.renderTooltip(font, Component.literal("Invalid Structure"), pMouseX - leftPos, pMouseY - topPos);
+            }
+        }
+
         int x = 106 - font.width("Breeding Chamber") / 2;
         pGuiGraphics.drawString(font, "Breeding Chamber", x, 3, 0x3F3F3F, false);
-        pGuiGraphics.drawCenteredString(font, "Food", 79, 96, 0xFFFFFF);
-        pGuiGraphics.drawCenteredString(font, "Fluid", 61, 129, 0xFFFFFF);
-        pGuiGraphics.drawCenteredString(font, "Energy", 150, 134, 0xFFFFFF);
     }
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
@@ -115,19 +133,17 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
             if (this.menu.getIsOperating()) {
                 graphics.blit(TEXTURE, this.leftPos + 88, this.topPos + 28, 212, 0, this.menu.getProgressWidth() + 1, 19);
 
-                ItemStack currentAnimal = menu.getRecipe().getItemIngredients()[0];
-
                 BiotechItemRenderer animalItemRenderer = new BiotechItemRenderer(48, 48);
+                ItemStack currentAnimal = menu.getRecipe().getItemIngredients()[0];
                 animalItemRenderer.render(graphics.pose(), leftPos + 46, topPos + 35, currentAnimal);
 
+                BiotechItemRenderer foodItemRenderer = new BiotechItemRenderer(20, 20);
                 ItemStack currentFood = menu.getRecipe().getItemIngredients()[1];
-                graphics.renderItem(currentFood, leftPos + 29, topPos + 94);
+                foodItemRenderer.render(graphics.pose(), this.leftPos + 33, this.topPos + 100, currentFood);
 
                 FluidStack currentFluid = menu.getRecipe().getFluidIngredients()[0];
                 BiotechFluidRenderer fluidRenderer = new BiotechFluidRenderer();
-                fluidRenderer.renderFluid(graphics.pose(), this.leftPos + 94, this.topPos + 124, 16, 16, currentFluid);
-
-                graphics.blit(TEXTURE, this.leftPos + 147, this.topPos + 126, 212, 95, 7, 2);
+                fluidRenderer.renderFluid(graphics.pose(), this.leftPos + 31, this.topPos + 131, 20, 20, currentFluid);
             }
         }
     }

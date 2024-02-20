@@ -1,8 +1,8 @@
 package com.nhat.biotech.networking;
 
-import com.nhat.biotech.blocks.block_entites.BreederBlockEntity;
+import com.nhat.biotech.blocks.block_entites.machines.BreedingChamberBlockEntity;
 import com.nhat.biotech.recipes.RecipeContainer;
-import com.nhat.biotech.view.machines.BreederMenu;
+import com.nhat.biotech.view.machines.BreedingChamberMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,7 +11,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class BreederPacket {
+public class BreedingChamberPacket extends MachinePacket {
     private final int energyCapacity;
     private final int energyStored;
     private final int energyConsumeRate;
@@ -22,7 +22,7 @@ public class BreederPacket {
     private final boolean isStructureValid;
     private final BlockPos pos;
     private final RecipeContainer recipeContainer;
-    public BreederPacket(int energyCapacity, int energyStored, int energyConsumeRate, int consumedEnergy, int recipeEnergyCost, int fluidCapacity, FluidStack fluidStored, boolean isStructureValid, BlockPos pos, RecipeContainer recipeEntity) {
+    public BreedingChamberPacket(int energyCapacity, int energyStored, int energyConsumeRate, int consumedEnergy, int recipeEnergyCost, int fluidCapacity, FluidStack fluidStored, boolean isStructureValid, BlockPos pos, RecipeContainer recipeEntity) {
         this.energyCapacity = energyCapacity;
         this.energyStored = energyStored;
         this.energyConsumeRate = energyConsumeRate;
@@ -34,7 +34,7 @@ public class BreederPacket {
         this.pos = pos;
         this.recipeContainer = recipeEntity;
     }
-    public BreederPacket(FriendlyByteBuf buf) {
+    public BreedingChamberPacket(FriendlyByteBuf buf) {
         this.energyCapacity = buf.readInt();
         this.energyStored = buf.readInt();
         this.energyConsumeRate = buf.readInt();
@@ -70,8 +70,8 @@ public class BreederPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            if(Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof BreederBlockEntity) {
-                if(Minecraft.getInstance().player.containerMenu instanceof BreederMenu menu && menu.getBlockEntity().getBlockPos().equals(pos)) {
+            if(Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof BreedingChamberBlockEntity) {
+                if(Minecraft.getInstance().player.containerMenu instanceof BreedingChamberMenu menu && menu.getBlockEntity().getBlockPos().equals(pos)) {
                     menu.setEnergyCapacity(energyCapacity);
                     menu.setEnergyStored(energyStored);
                     menu.setEnergyConsumeRate(energyConsumeRate);

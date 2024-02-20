@@ -10,6 +10,6 @@ public class ModRecipes {
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
             DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Biotech.MODID);
 
-    public static final RegistryObject<RecipeSerializer<BreederRecipe>> BREEDER_SERIALIZER =
-            SERIALIZERS.register("breeder", () -> BreederRecipe.Serializer.INSTANCE);
+    public static final RegistryObject<RecipeSerializer<BreedingChamberRecipe>> BREEDING_CHAMBER_SERIALIZER =
+            SERIALIZERS.register("breeding_chamber", () -> BreedingChamberRecipe.SERIALIZER);
 }

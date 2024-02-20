@@ -1,6 +1,6 @@
 package com.nhat.biotech.networking;
 
-import com.nhat.biotech.blocks.block_entites.EnergyHatchBlockEntity;
+import com.nhat.biotech.blocks.block_entites.hatches.EnergyHatchBlockEntity;
 import com.nhat.biotech.view.io_hatches.energy.EnergyHatchMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;

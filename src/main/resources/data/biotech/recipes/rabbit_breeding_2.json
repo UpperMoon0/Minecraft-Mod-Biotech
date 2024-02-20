@@ -1,5 +1,5 @@
 {
-  "type": "biotech:breeder",
+  "type": "biotech:breeding_chamber",
   "item": [
     {
       "id": "biotech:rabbit",
