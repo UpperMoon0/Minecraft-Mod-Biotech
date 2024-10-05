@@ -6,7 +6,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-public class ModPackets {
+public class BiotechPackets {
     private static SimpleChannel INSTANCE;
 
     private static int packetId = 0;
@@ -35,6 +35,7 @@ public class ModPackets {
                 .encoder(EnergyPacket::toBytes)
                 .consumerMainThread(EnergyPacket::handle)
                 .add();
+
         net.messageBuilder(BreedingChamberPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(BreedingChamberPacket::new)
                 .encoder(BreedingChamberPacket::toBytes)

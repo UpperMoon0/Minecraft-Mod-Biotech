@@ -3,7 +3,7 @@ package com.nhat.biotech.blocks.block_entites.hatches;
 import com.nhat.biotech.blocks.IOHatchBlock;
 import com.nhat.biotech.blocks.block_entites.CapabilityBlockEntity;
 import com.nhat.biotech.networking.EnergyPacket;
-import com.nhat.biotech.networking.ModPackets;
+import com.nhat.biotech.networking.BiotechPackets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -43,7 +43,7 @@ public abstract class EnergyHatchBlockEntity extends CapabilityBlockEntity {
     public static <T extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, T t) {
         EnergyHatchBlockEntity blockEntity = (EnergyHatchBlockEntity) t;
         if (!level.isClientSide()) {
-            ModPackets.sendToClients(new EnergyPacket(blockEntity.energyStorage.getEnergyStored(), blockPos));
+            BiotechPackets.sendToClients(new EnergyPacket(blockEntity.energyStorage.getEnergyStored(), blockPos));
             setChanged(level, blockPos, blockState);
         }
     }

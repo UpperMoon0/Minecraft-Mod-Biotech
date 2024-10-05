@@ -1,8 +1,8 @@
 package com.nhat.biotech.view.machines;
 
 import com.nhat.biotech.Biotech;
-import com.nhat.biotech.recipes.RecipeContainer;
-import com.nhat.biotech.utils.RBuildings;
+import com.nhat.biotech.recipes.BiotechRecipe;
+import com.nhat.biotech.utils.Machines;
 import com.nhat.biotech.view.renderer.BiotechFluidRenderer;
 import com.nhat.biotech.view.renderer.BiotechFluidTankRenderer;
 import com.nhat.biotech.view.renderer.BiotechItemRenderer;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamberMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/" + RBuildings.BREEDING_CHAMBER_ID + ".png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/" + Machines.BREEDING_CHAMBER_ID + ".png");
     public BreedingChamberScreen(BreedingChamberMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
     }
@@ -36,7 +36,7 @@ public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamb
         if (this.menu.getIsOperating()) {
             energyConsumeRate = menu.getEnergyConsumeRate();
 
-            RecipeContainer recipe = menu.getRecipe();
+            BiotechRecipe recipe = menu.getRecipe();
             String animalRawName = recipe.getItemIngredients()[0].getDisplayName().getString();
             String animalName = animalRawName.substring(1, animalRawName.length() - 1);
             pGuiGraphics.drawCenteredString(font, animalName, 70, 76, 0xFFFFFF);

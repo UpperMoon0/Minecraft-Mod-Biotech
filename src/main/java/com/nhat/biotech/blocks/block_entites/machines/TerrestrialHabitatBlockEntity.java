@@ -1,7 +1,7 @@
 package com.nhat.biotech.blocks.block_entites.machines;
 
-import com.nhat.biotech.blocks.ModBlocks;
-import com.nhat.biotech.blocks.block_entites.ModBlockEntities;
+import com.nhat.biotech.blocks.BiotechBlocks;
+import com.nhat.biotech.blocks.block_entites.BiotechBlockEntityTypes;
 import com.nhat.biotech.blocks.block_entites.hatches.EnergyInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.FluidInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemInputHatchBlockEntity;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class TerrestrialHabitatBlockEntity extends AbstractMachineBlockEntity {
+public class TerrestrialHabitatBlockEntity extends BaseMachineBlockEntity {
     private ItemInputHatchBlockEntity itemInputHatch1;
     private ItemInputHatchBlockEntity itemInputHatch2;
     private ItemInputHatchBlockEntity itemInputHatch3;
@@ -26,7 +26,7 @@ public class TerrestrialHabitatBlockEntity extends AbstractMachineBlockEntity {
     private EnergyInputHatchBlockEntity energyInputHatch;
     private FluidInputHatchBlockEntity fluidInputHatch;
     public TerrestrialHabitatBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.TERRESTRIAL_HABITAT.get(), pPos, pBlockState);
+        super(BiotechBlockEntityTypes.TERRESTRIAL_HABITAT.get(), pPos, pBlockState);
         translateKey = "menu.title.biotech.terrestrial_habitat";
     }
 
@@ -69,11 +69,11 @@ public class TerrestrialHabitatBlockEntity extends AbstractMachineBlockEntity {
     @Override
     protected Block[][][] getPattern() {
         Block a = Blocks.AIR,
-                b = ModBlocks.BIOTECH_MACHINE_CASING.get(),
-                c = ModBlocks.ITEM_INPUT_HATCH.get(),
-                d = ModBlocks.ITEM_OUTPUT_HATCH.get(),
-                e = ModBlocks.FLUID_INPUT_HATCH.get(),
-                f = ModBlocks.ENERGY_INPUT_HATCH.get(),
+                b = BiotechBlocks.BIOTECH_MACHINE_CASING.get(),
+                c = BiotechBlocks.ITEM_INPUT_HATCH.get(),
+                d = BiotechBlocks.ITEM_OUTPUT_HATCH.get(),
+                e = BiotechBlocks.FLUID_INPUT_HATCH.get(),
+                f = BiotechBlocks.ENERGY_INPUT_HATCH.get(),
                 g = Blocks.YELLOW_CONCRETE,
                 h = Blocks.YELLOW_STAINED_GLASS,
                 i = Blocks.GLOWSTONE,

@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class MobItem extends Item {
     private final int type;
@@ -18,7 +19,7 @@ public class MobItem extends Item {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         // Get the world, player, and block position from the context
         Level world = context.getLevel();
         Player player = context.getPlayer();
@@ -79,7 +80,7 @@ public class MobItem extends Item {
                 }
             }
 
-            if (mob != null) {
+            if (mob != null && player != null) {
                 mob.setPos(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                 world.addFreshEntity(mob);
 

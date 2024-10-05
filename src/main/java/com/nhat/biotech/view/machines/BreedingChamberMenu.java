@@ -1,10 +1,10 @@
 package com.nhat.biotech.view.machines;
 
-import com.nhat.biotech.blocks.ModBlocks;
+import com.nhat.biotech.blocks.BiotechBlocks;
 import com.nhat.biotech.blocks.block_entites.machines.BreedingChamberBlockEntity;
-import com.nhat.biotech.recipes.RecipeContainer;
+import com.nhat.biotech.recipes.BiotechRecipe;
 import com.nhat.biotech.view.BiotechMenu;
-import com.nhat.biotech.view.ModMenus;
+import com.nhat.biotech.view.BiotechMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -30,7 +30,7 @@ public class BreedingChamberMenu extends BiotechMenu {
     private int fluidCapacity;
     private FluidStack fluidStored;
     private boolean isStructureValid;
-    private RecipeContainer recipe;
+    private BiotechRecipe recipe;
 
     // Getters
     public BreedingChamberBlockEntity getBlockEntity() {
@@ -57,7 +57,7 @@ public class BreedingChamberMenu extends BiotechMenu {
     public boolean getStructureValid() {
         return isStructureValid;
     }
-    public RecipeContainer getRecipe() {
+    public BiotechRecipe getRecipe() {
         return recipe;
     }
 
@@ -86,7 +86,7 @@ public class BreedingChamberMenu extends BiotechMenu {
     public void setStructureValid(boolean structureValid) {
         isStructureValid = structureValid;
     }
-    public void setRecipeEntity(RecipeContainer recipeEntity) {
+    public void setRecipeEntity(BiotechRecipe recipeEntity) {
         this.recipe = recipeEntity;
     }
 
@@ -95,7 +95,7 @@ public class BreedingChamberMenu extends BiotechMenu {
     }
 
     public BreedingChamberMenu(int i, Inventory inventory, BlockEntity blockEntity) {
-        super(ModMenus.BREEDER.get(), i);
+        super(BiotechMenus.BREEDER.get(), i);
         this.LEVEL = inventory.player.level();
         this.BLOCK_ENTITY = (BreedingChamberBlockEntity) blockEntity;
         this.POS = blockEntity.getBlockPos();
@@ -108,7 +108,7 @@ public class BreedingChamberMenu extends BiotechMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return stillValid(ContainerLevelAccess.create(LEVEL, POS), player, ModBlocks.BREEDING_CHAMBER.get());
+        return stillValid(ContainerLevelAccess.create(LEVEL, POS), player, BiotechBlocks.BREEDING_CHAMBER.get());
     }
     public int getEnergyHeight()
     {

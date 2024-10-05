@@ -1,6 +1,6 @@
 package com.nhat.biotech.blocks.block_entites.hatches;
 
-import com.nhat.biotech.blocks.block_entites.ModBlockEntities;
+import com.nhat.biotech.blocks.block_entites.BiotechBlockEntityTypes;
 import com.nhat.biotech.view.io_hatches.item.ItemInputHatchMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemInputHatchBlockEntity extends ItemHatchBlockEntity {
     public ItemInputHatchBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.ITEM_INPUT_HATCH.get(), pPos, pBlockState);
+        super(BiotechBlockEntityTypes.ITEM_INPUT_HATCH.get(), pPos, pBlockState);
     }
     @Override
     public Component getDisplayName() {

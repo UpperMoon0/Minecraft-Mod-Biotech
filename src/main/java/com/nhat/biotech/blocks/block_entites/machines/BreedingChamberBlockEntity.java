@@ -1,15 +1,15 @@
 package com.nhat.biotech.blocks.block_entites.machines;
 
-import com.nhat.biotech.blocks.ModBlocks;
-import com.nhat.biotech.blocks.block_entites.ModBlockEntities;
+import com.nhat.biotech.blocks.BiotechBlocks;
+import com.nhat.biotech.blocks.block_entites.BiotechBlockEntityTypes;
 import com.nhat.biotech.blocks.block_entites.hatches.EnergyInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.FluidInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemOutputHatchBlockEntity;
 import com.nhat.biotech.networking.BreedingChamberPacket;
-import com.nhat.biotech.networking.ModPackets;
-import com.nhat.biotech.recipes.BiotechRecipe;
-import com.nhat.biotech.recipes.BreedingChamberRecipe;
+import com.nhat.biotech.networking.BiotechPackets;
+import com.nhat.biotech.recipes.BaseBiotechRecipeHandler;
+import com.nhat.biotech.recipes.BreedingChamberRecipeHandler;
 import com.nhat.biotech.view.machines.BreedingChamberMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,20 +28,25 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.jetbrains.annotations.NotNull;
 
-public class BreedingChamberBlockEntity extends AbstractMachineBlockEntity {
+public class BreedingChamberBlockEntity extends BaseMachineBlockEntity {
+
     private ItemInputHatchBlockEntity itemInputHatch1;
     private ItemInputHatchBlockEntity itemInputHatch2;
     private ItemInputHatchBlockEntity itemInputHatch3;
     private ItemOutputHatchBlockEntity itemOutputHatch;
     private EnergyInputHatchBlockEntity energyInputHatch;
     private FluidInputHatchBlockEntity fluidInputHatch;
+
     public BreedingChamberBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.BREEDING_CHAMBER.get(), pos, state);
+        super(BiotechBlockEntityTypes.BREEDING_CHAMBER.get(), pos, state);
         translateKey = "menu.title.biotech.breeder";
     }
     @Override
-    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
+    public AbstractContainerMenu createMenu(int pContainerId,
+                                            @NotNull Inventory pPlayerInventory,
+                                            @NotNull Player pPlayer) {
         return new BreedingChamberMenu(pContainerId, pPlayerInventory, this);
     }
 
@@ -62,12 +67,16 @@ public class BreedingChamberBlockEntity extends AbstractMachineBlockEntity {
         int fluidCapacity = fluidInputHatch.TANK_CAPACITY;
         FluidStack fluidStored = inputFluidHandler.getFluidInTank(0);
 
-        if (recipe.isEmpty()) {
+        if (recipeHandler.isEmpty()) {
             energyConsumed = 0;
-            recipe = level.getRecipeManager().getAllRecipesFor(BreedingChamberRecipe.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
+            recipeHandler = level.getRecipeManager().getAllRecipesFor(BreedingChamberRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
         } else {
-            BreedingChamberRecipe breedingChamber = (BreedingChamberRecipe) recipe.get();
-            recipeEnergyCost = breedingChamber.getTotalEnergy();
+            BreedingChamberRecipeHandler recipeHandler = (BreedingChamberRecipeHandler) this.recipeHandler.get();
+            recipeEnergyCost = recipeHandler.getTotalEnergy();
+
+            if (energyConsumed == 0) {
+                recipeHandler.consumeIngredients(combinedInputItemHandler, inputFluidHandler);
+            }
 
             if (energyStorage.getEnergyStored() >= energyConsumeRate) {
                 int energyToConsume = Math.min(energyConsumeRate, recipeEnergyCost - energyConsumed);
@@ -77,12 +86,12 @@ public class BreedingChamberBlockEntity extends AbstractMachineBlockEntity {
 
             if (energyConsumed == recipeEnergyCost) {
                 energyConsumed = 0;
-                breedingChamber.craft(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null);
+                recipeHandler.assemble(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null);
 
-                recipe = level.getRecipeManager().getAllRecipesFor(BreedingChamberRecipe.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
+                this.recipeHandler = level.getRecipeManager().getAllRecipesFor(BreedingChamberRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
         }
 
-        ModPackets.sendToClients(new BreedingChamberPacket(
+        BiotechPackets.sendToClients(new BreedingChamberPacket(
                 energyCapacity,
                 energyStored,
                 energyConsumeRate,
@@ -92,7 +101,7 @@ public class BreedingChamberBlockEntity extends AbstractMachineBlockEntity {
                 fluidStored,
                 isStructureValid,
                 blockPos,
-                recipe.map(BiotechRecipe::getRecipeContainer).orElse(null)
+                recipeHandler.map(BaseBiotechRecipeHandler::getRecipe).orElse(null)
         ));
     }
 
@@ -128,11 +137,11 @@ public class BreedingChamberBlockEntity extends AbstractMachineBlockEntity {
     protected Block[][][] getPattern()
     {
         Block a = Blocks.AIR,
-                b = ModBlocks.BIOTECH_MACHINE_CASING.get(),
-                c = ModBlocks.ITEM_INPUT_HATCH.get(),
-                d = ModBlocks.ITEM_OUTPUT_HATCH.get(),
-                e = ModBlocks.FLUID_INPUT_HATCH.get(),
-                f = ModBlocks.ENERGY_INPUT_HATCH.get(),
+                b = BiotechBlocks.BIOTECH_MACHINE_CASING.get(),
+                c = BiotechBlocks.ITEM_INPUT_HATCH.get(),
+                d = BiotechBlocks.ITEM_OUTPUT_HATCH.get(),
+                e = BiotechBlocks.FLUID_INPUT_HATCH.get(),
+                f = BiotechBlocks.ENERGY_INPUT_HATCH.get(),
                 g = Blocks.PINK_CONCRETE,
                 h = Blocks.PINK_STAINED_GLASS,
                 i = Blocks.GLOWSTONE,

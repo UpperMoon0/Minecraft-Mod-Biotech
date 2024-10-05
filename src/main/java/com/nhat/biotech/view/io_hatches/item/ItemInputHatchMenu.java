@@ -1,6 +1,6 @@
 package com.nhat.biotech.view.io_hatches.item;
 
-import com.nhat.biotech.view.ModMenus;
+import com.nhat.biotech.view.BiotechMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -12,6 +12,6 @@ public class ItemInputHatchMenu extends ItemHatchMenu{
         this(pContainerId, inventory, Objects.requireNonNull(inventory.player.level().getBlockEntity(friendlyByteBuf.readBlockPos())));
     }
     public ItemInputHatchMenu(int pContainerId, Inventory inventory, BlockEntity blockEntity) {
-        super(ModMenus.ITEM_INPUT_HATCH.get(), pContainerId, inventory, blockEntity);
+        super(BiotechMenus.ITEM_INPUT_HATCH.get(), pContainerId, inventory, blockEntity);
     }
 }

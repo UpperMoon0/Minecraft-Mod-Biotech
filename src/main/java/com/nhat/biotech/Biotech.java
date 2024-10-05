@@ -1,14 +1,14 @@
 package com.nhat.biotech;
 
 import com.mojang.logging.LogUtils;
-import com.nhat.biotech.blocks.ModBlocks;
-import com.nhat.biotech.blocks.block_entites.ModBlockEntities;
+import com.nhat.biotech.blocks.BiotechBlocks;
+import com.nhat.biotech.blocks.block_entites.BiotechBlockEntityTypes;
 import com.nhat.biotech.creative_tabs.ModCreativeTabs;
-import com.nhat.biotech.items.ModItems;
-import com.nhat.biotech.networking.ModPackets;
-import com.nhat.biotech.recipes.ModRecipes;
+import com.nhat.biotech.items.BiotechItems;
+import com.nhat.biotech.networking.BiotechPackets;
+import com.nhat.biotech.recipes.BiotechRecipes;
 import com.nhat.biotech.utils.ScreenInit;
-import com.nhat.biotech.view.ModMenus;
+import com.nhat.biotech.view.BiotechMenus;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -40,22 +40,22 @@ public class Biotech
         modEventBus.addListener(this::commonSetup);
 
         // Register the Deferred Register to the mod event bus so blocks get registered
-        ModBlocks.BLOCKS.register(modEventBus);
+        BiotechBlocks.BLOCKS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so block entities get registered
-        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        BiotechBlockEntityTypes.BLOCK_ENTITIES.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so items get registered
-        ModItems.ITEMS.register(modEventBus);
+        BiotechItems.ITEMS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so tabs get registered
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so menus get registered
-        ModMenus.MENUS.register(modEventBus);
+        BiotechMenus.MENUS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so recipes get registered
-        ModRecipes.SERIALIZERS.register(modEventBus);
+        BiotechRecipes.SERIALIZERS.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -69,7 +69,7 @@ public class Biotech
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        ModPackets.register();
+        BiotechPackets.register();
     }
 
     // Add the example block item to the building blocks tab

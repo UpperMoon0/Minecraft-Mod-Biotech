@@ -1,6 +1,6 @@
 package com.nhat.biotech.view.io_hatches.item;
 
-import com.nhat.biotech.blocks.ModBlocks;
+import com.nhat.biotech.blocks.BiotechBlocks;
 import com.nhat.biotech.view.BiotechMenu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -38,7 +38,7 @@ public class ItemHatchMenu extends BiotechMenu {
     }
     @Override
     public boolean stillValid(Player pPlayer) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, ModBlocks.ITEM_INPUT_HATCH.get())
-                || stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, ModBlocks.ITEM_OUTPUT_HATCH.get());
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, BiotechBlocks.ITEM_INPUT_HATCH.get())
+                || stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, BiotechBlocks.ITEM_OUTPUT_HATCH.get());
     }
 }

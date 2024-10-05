@@ -1,6 +1,6 @@
 package com.nhat.biotech.utils;
 
-import com.nhat.biotech.items.ModItems;
+import com.nhat.biotech.items.BiotechItems;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
@@ -13,11 +13,11 @@ public record RAnimals() {
 
     static {
         ADULT_ANIMAL = new LinkedHashSet<>() {{
-            add(ModItems.COW.get());
-            add(ModItems.CHICKEN.get());
-            add(ModItems.PIG.get());
-            add(ModItems.SHEEP.get());
-            add(ModItems.RABBIT.get());
+            add(BiotechItems.COW.get());
+            add(BiotechItems.CHICKEN.get());
+            add(BiotechItems.PIG.get());
+            add(BiotechItems.SHEEP.get());
+            add(BiotechItems.RABBIT.get());
         }};
         FOOD = new LinkedHashSet<>() {{
             add(Items.WHEAT);

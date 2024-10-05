@@ -1,6 +1,6 @@
 package com.nhat.biotech.view.io_hatches.fluid;
 
-import com.nhat.biotech.blocks.ModBlocks;
+import com.nhat.biotech.blocks.BiotechBlocks;
 import com.nhat.biotech.blocks.block_entites.hatches.FluidHatchBlockEntity;
 import com.nhat.biotech.view.BiotechMenu;
 import net.minecraft.world.entity.player.Inventory;
@@ -55,7 +55,7 @@ public abstract class FluidHatchMenu extends BiotechMenu {
     }
     @Override
     public boolean stillValid(Player pPlayer) {
-        return stillValid(ContainerLevelAccess.create(LEVEL, BLOCK_ENTITY.getBlockPos()), pPlayer, ModBlocks.FLUID_INPUT_HATCH.get())
-                || stillValid(ContainerLevelAccess.create(LEVEL, BLOCK_ENTITY.getBlockPos()), pPlayer, ModBlocks.FLUID_OUTPUT_HATCH.get());
+        return stillValid(ContainerLevelAccess.create(LEVEL, BLOCK_ENTITY.getBlockPos()), pPlayer, BiotechBlocks.FLUID_INPUT_HATCH.get())
+                || stillValid(ContainerLevelAccess.create(LEVEL, BLOCK_ENTITY.getBlockPos()), pPlayer, BiotechBlocks.FLUID_OUTPUT_HATCH.get());
     }
 }

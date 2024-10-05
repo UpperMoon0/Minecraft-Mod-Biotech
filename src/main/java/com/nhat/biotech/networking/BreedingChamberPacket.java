@@ -1,9 +1,10 @@
 package com.nhat.biotech.networking;
 
 import com.nhat.biotech.blocks.block_entites.machines.BreedingChamberBlockEntity;
-import com.nhat.biotech.recipes.RecipeContainer;
+import com.nhat.biotech.recipes.BiotechRecipe;
 import com.nhat.biotech.view.machines.BreedingChamberMenu;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fluids.FluidStack;
@@ -11,18 +12,21 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class BreedingChamberPacket extends MachinePacket {
-    private final int energyCapacity;
-    private final int energyStored;
-    private final int energyConsumeRate;
-    private final int consumedEnergy;
-    private final int recipeEnergyCost;
+public class BreedingChamberPacket extends MultiblockMachinePacket {
+
     private final int fluidCapacity;
     private final FluidStack fluidStored;
-    private final boolean isStructureValid;
-    private final BlockPos pos;
-    private final RecipeContainer recipeContainer;
-    public BreedingChamberPacket(int energyCapacity, int energyStored, int energyConsumeRate, int consumedEnergy, int recipeEnergyCost, int fluidCapacity, FluidStack fluidStored, boolean isStructureValid, BlockPos pos, RecipeContainer recipeEntity) {
+
+    public BreedingChamberPacket(int energyCapacity,
+                                 int energyStored,
+                                 int energyConsumeRate,
+                                 int consumedEnergy,
+                                 int recipeEnergyCost,
+                                 int fluidCapacity,
+                                 FluidStack fluidStored,
+                                 boolean isStructureValid,
+                                 BlockPos pos,
+                                 BiotechRecipe recipe) {
         this.energyCapacity = energyCapacity;
         this.energyStored = energyStored;
         this.energyConsumeRate = energyConsumeRate;
@@ -32,8 +36,9 @@ public class BreedingChamberPacket extends MachinePacket {
         this.fluidStored = fluidStored;
         this.isStructureValid = isStructureValid;
         this.pos = pos;
-        this.recipeContainer = recipeEntity;
+        this.recipe = recipe;
     }
+
     public BreedingChamberPacket(FriendlyByteBuf buf) {
         this.energyCapacity = buf.readInt();
         this.energyStored = buf.readInt();
@@ -46,11 +51,12 @@ public class BreedingChamberPacket extends MachinePacket {
         this.pos = buf.readBlockPos();
         boolean hasRecipe = buf.readBoolean();
         if(hasRecipe) {
-            this.recipeContainer = RecipeContainer.fromBuf(buf);
+            this.recipe = BiotechRecipe.fromBuf(buf);
         } else {
-            this.recipeContainer = null;
+            this.recipe = null;
         }
     }
+
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeInt(energyCapacity);
         buf.writeInt(energyStored);
@@ -61,17 +67,21 @@ public class BreedingChamberPacket extends MachinePacket {
         buf.writeFluidStack(fluidStored);
         buf.writeBoolean(isStructureValid);
         buf.writeBlockPos(pos);
-        boolean hasRecipe = recipeContainer != null;
+        boolean hasRecipe = recipe != null;
         buf.writeBoolean(hasRecipe);
         if(hasRecipe) {
-            recipeContainer.writeToBuf(buf);
+            recipe.writeToBuf(buf);
         }
     }
+
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             if(Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof BreedingChamberBlockEntity) {
-                if(Minecraft.getInstance().player.containerMenu instanceof BreedingChamberMenu menu && menu.getBlockEntity().getBlockPos().equals(pos)) {
+                LocalPlayer player = Minecraft.getInstance().player;
+                if(player != null
+                        && player.containerMenu instanceof BreedingChamberMenu menu
+                        && menu.getBlockEntity().getBlockPos().equals(pos)) {
                     menu.setEnergyCapacity(energyCapacity);
                     menu.setEnergyStored(energyStored);
                     menu.setEnergyConsumeRate(energyConsumeRate);
@@ -80,7 +90,7 @@ public class BreedingChamberPacket extends MachinePacket {
                     menu.setFluidCapacity(fluidCapacity);
                     menu.setFluidStored(fluidStored);
                     menu.setStructureValid(isStructureValid);
-                    menu.setRecipeEntity(recipeContainer);
+                    menu.setRecipeEntity(recipe);
                 }
             }
         });

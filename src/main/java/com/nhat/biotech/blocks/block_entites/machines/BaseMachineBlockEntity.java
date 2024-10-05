@@ -1,7 +1,7 @@
 package com.nhat.biotech.blocks.block_entites.machines;
 
-import com.nhat.biotech.blocks.MachineBlock;
-import com.nhat.biotech.recipes.BiotechRecipe;
+import com.nhat.biotech.blocks.BaseMachineBlock;
+import com.nhat.biotech.recipes.BaseBiotechRecipeHandler;
 import com.nhat.biotech.utils.MultiblockUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,55 +19,85 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public abstract class AbstractMachineBlockEntity extends BlockEntity implements MenuProvider {
+public abstract class BaseMachineBlockEntity extends BlockEntity implements MenuProvider {
+
+    // Tracks the amount of energy consumed by the machine
     protected int energyConsumed;
+
+    // Stores the energy cost required to complete the current recipe
     protected int recipeEnergyCost;
+
+    // Indicates if the structure (multiblock) is valid or not
     protected boolean isStructureValid;
+
+    // Translation key for display purposes (used for GUI, etc.)
     protected String translateKey;
-    protected Optional<? extends BiotechRecipe> recipe = Optional.empty();
-    public AbstractMachineBlockEntity(BlockEntityType<? extends AbstractMachineBlockEntity> pType, BlockPos pPos, BlockState pBlockState) {
+
+    // Holds the current recipe being processed, if any
+    protected Optional<? extends BaseBiotechRecipeHandler> recipeHandler = Optional.empty();
+
+    // Constructor for the machine block entity, sets its position and block state
+    public BaseMachineBlockEntity(BlockEntityType<? extends BaseMachineBlockEntity> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
     }
+
+    // Provides the display name for this machine, used in GUIs or in-game messages
     @Override
     public @NotNull Component getDisplayName() {
         return Component.translatable(translateKey);
     }
+
+    // Loads persistent data from the NBT tag when the world loads
     @Override
     public void load(@NotNull CompoundTag pTag) {
         super.load(pTag);
-        energyConsumed = pTag.getInt("usedEnergy");
+        energyConsumed = pTag.getInt("energyConsumed");
     }
+
+    // Saves additional persistent data like energy consumed to the NBT tag
     @Override
     protected void saveAdditional(@NotNull CompoundTag pTag) {
         super.saveAdditional(pTag);
-        pTag.putInt("usedEnergy", energyConsumed);
+        pTag.putInt("energyConsumed", energyConsumed);
     }
-    public static <T extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, T bEntity) {
-        AbstractMachineBlockEntity blockEntity = (AbstractMachineBlockEntity) bEntity;
 
+    // Server-side tick method that handles updates to the block entity every tick
+    public static <T extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, T bEntity) {
+        BaseMachineBlockEntity blockEntity = (BaseMachineBlockEntity) bEntity;
+
+        // Only process on the server side (not client)
         if (!level.isClientSide) {
+            // Validate the multiblock structure based on a pattern
             blockEntity.isStructureValid = MultiblockUtils.checkMultiblock(level, blockPos, blockState, blockEntity.getPattern(), 2);
 
+            // If the multiblock structure is valid, continue processing the recipe
             if (blockEntity.isStructureValid) {
                 blockEntity.setHatches(blockPos, level);
                 blockEntity.processRecipe(level, blockPos);
 
+                // Mark the block state as changed
                 setChanged(level, blockPos, blockState);
             } else {
+                // Reset energy and recipe cost if the structure is invalid
                 blockEntity.energyConsumed = 0;
                 blockEntity.recipeEnergyCost = 0;
             }
 
+            // Update block state to indicate if the machine is operating (has a recipe)
             BlockState state;
-            if (blockEntity.recipe.isPresent()) {
-                state = blockState.setValue(MachineBlock.OPERATING, Boolean.TRUE);
+            if (blockEntity.recipeHandler.isPresent()) {
+                state = blockState.setValue(BaseMachineBlock.OPERATING, Boolean.TRUE);
             } else {
-                state = blockState.setValue(MachineBlock.OPERATING, Boolean.FALSE);
+                state = blockState.setValue(BaseMachineBlock.OPERATING, Boolean.FALSE);
             }
             level.setBlock(blockPos, state, 3);
         }
     }
+
+    // Abstract method that each machine block entity must implement to process its recipe
     protected abstract void processRecipe(Level level, BlockPos blockPos);
+
+    // Rotates the position offsets of hatches based on the block's facing direction
     protected Vec3i rotateHatchesOffset(Vec3i southOffset, Direction direction) {
         return switch (direction) {
             case NORTH -> new BlockPos(-southOffset.getX(), southOffset.getY(), -southOffset.getZ());
@@ -76,10 +106,15 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
             default -> southOffset;
         };
     }
+
+    // Abstract method to set the hatches in the machine's structure
     protected abstract void setHatches(BlockPos blockPos, Level level);
+
+    // Returns the facing property of the block (e.g., north, south, east, west)
     protected DirectionProperty getFacingProperty() {
-        return MachineBlock.FACING;
+        return BaseMachineBlock.FACING;
     }
 
+    // Abstract method to define the pattern for the multiblock structure
     protected abstract Block[][][] getPattern();
 }

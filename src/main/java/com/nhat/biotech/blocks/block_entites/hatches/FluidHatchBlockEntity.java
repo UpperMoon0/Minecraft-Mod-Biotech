@@ -3,7 +3,7 @@ package com.nhat.biotech.blocks.block_entites.hatches;
 import com.nhat.biotech.blocks.IOHatchBlock;
 import com.nhat.biotech.blocks.block_entites.CapabilityBlockEntity;
 import com.nhat.biotech.networking.FluidHatchPacket;
-import com.nhat.biotech.networking.ModPackets;
+import com.nhat.biotech.networking.BiotechPackets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
@@ -79,7 +79,7 @@ public abstract class FluidHatchBlockEntity extends CapabilityBlockEntity {
         FluidHatchBlockEntity blockEntity = (FluidHatchBlockEntity) t;
         if (!level.isClientSide()) {
             blockEntity.bucketHandling(blockEntity);
-            ModPackets.sendToClients(new FluidHatchPacket(blockEntity.tank.getFluid(), blockPos));
+            BiotechPackets.sendToClients(new FluidHatchPacket(blockEntity.tank.getFluid(), blockPos));
             setChanged(level, blockPos, blockState);
         }
     }
