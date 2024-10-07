@@ -1,7 +1,7 @@
 package com.nhat.biotech.blocks;
 
 import com.mojang.logging.LogUtils;
-import com.nhat.biotech.blocks.block_entites.machines.BaseMachineBlockEntity;
+import com.nhat.biotech.blocks.block_entites.machines.MachineBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,15 +27,15 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 
-public abstract class BaseMachineBlock extends BaseEntityBlock {
+public class MachineBlock extends BaseEntityBlock {
     public static final BooleanProperty OPERATING = BooleanProperty.create("operating");
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
-    private final Class<? extends BaseMachineBlockEntity> blockEntityClass;
+    private final Class<? extends MachineBlockEntity> blockEntityClass;
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    protected BaseMachineBlock(Class<? extends BaseMachineBlockEntity> blockEntityClass) {
+    public MachineBlock(Class<? extends MachineBlockEntity> blockEntityClass) {
         super(BlockBehaviour.Properties.copy(Blocks.GRAY_CONCRETE).strength(2f).sound(SoundType.METAL));
         this.blockEntityClass = blockEntityClass;
         this.registerDefaultState(this.stateDefinition.any()
@@ -45,7 +45,7 @@ public abstract class BaseMachineBlock extends BaseEntityBlock {
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         try {
             return blockEntityClass.getConstructor(BlockPos.class, BlockState.class).newInstance(pos, state);
         } catch (NoSuchMethodException e) {
@@ -98,8 +98,8 @@ public abstract class BaseMachineBlock extends BaseEntityBlock {
                                                                   @NotNull BlockState pState,
                                                                   @NotNull BlockEntityType<U> pBlockEntityType) {
         return pLevel.isClientSide ? null : (level, blockPos, blockState, blockEntity) -> {
-            if (blockEntity instanceof BaseMachineBlockEntity) {
-                BaseMachineBlockEntity.serverTick(level, blockPos, blockState, blockEntity);
+            if (blockEntity instanceof MachineBlockEntity) {
+                MachineBlockEntity.serverTick(level, blockPos, blockState, blockEntity);
             }
         };
     }

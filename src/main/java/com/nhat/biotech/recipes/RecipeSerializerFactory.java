@@ -12,7 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Optional;
 
-public class RecipeSerializerFactory<T extends BaseBiotechRecipeHandler<T> & RecipeFactory<T>> {
+public class RecipeSerializerFactory<T extends BiotechRecipeHandler<T> & RecipeFactory<T>> {
     private static final Gson GSON = new Gson();
 
     public RecipeSerializer<T> createSerializer(RecipeFactory<T> factory) {

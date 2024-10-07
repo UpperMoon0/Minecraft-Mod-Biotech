@@ -1,7 +1,7 @@
 package com.nhat.biotech.blocks.block_entites.machines;
 
-import com.nhat.biotech.blocks.BaseMachineBlock;
-import com.nhat.biotech.recipes.BaseBiotechRecipeHandler;
+import com.nhat.biotech.blocks.MachineBlock;
+import com.nhat.biotech.recipes.BiotechRecipeHandler;
 import com.nhat.biotech.utils.MultiblockUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public abstract class BaseMachineBlockEntity extends BlockEntity implements MenuProvider {
+public abstract class MachineBlockEntity extends BlockEntity implements MenuProvider {
 
     // Tracks the amount of energy consumed by the machine
     protected int energyConsumed;
@@ -34,10 +34,10 @@ public abstract class BaseMachineBlockEntity extends BlockEntity implements Menu
     protected String translateKey;
 
     // Holds the current recipe being processed, if any
-    protected Optional<? extends BaseBiotechRecipeHandler> recipeHandler = Optional.empty();
+    protected Optional<? extends BiotechRecipeHandler<?>> recipeHandler = Optional.empty();
 
     // Constructor for the machine block entity, sets its position and block state
-    public BaseMachineBlockEntity(BlockEntityType<? extends BaseMachineBlockEntity> pType, BlockPos pPos, BlockState pBlockState) {
+    public MachineBlockEntity(BlockEntityType<? extends MachineBlockEntity> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
     }
 
@@ -63,12 +63,12 @@ public abstract class BaseMachineBlockEntity extends BlockEntity implements Menu
 
     // Server-side tick method that handles updates to the block entity every tick
     public static <T extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, T bEntity) {
-        BaseMachineBlockEntity blockEntity = (BaseMachineBlockEntity) bEntity;
+        MachineBlockEntity blockEntity = (MachineBlockEntity) bEntity;
 
         // Only process on the server side (not client)
         if (!level.isClientSide) {
             // Validate the multiblock structure based on a pattern
-            blockEntity.isStructureValid = MultiblockUtils.checkMultiblock(level, blockPos, blockState, blockEntity.getPattern(), 2);
+            blockEntity.isStructureValid = MultiblockUtils.checkMultiblock(level, blockPos, blockState, blockEntity.getStructurePattern(), 2);
 
             // If the multiblock structure is valid, continue processing the recipe
             if (blockEntity.isStructureValid) {
@@ -86,9 +86,9 @@ public abstract class BaseMachineBlockEntity extends BlockEntity implements Menu
             // Update block state to indicate if the machine is operating (has a recipe)
             BlockState state;
             if (blockEntity.recipeHandler.isPresent()) {
-                state = blockState.setValue(BaseMachineBlock.OPERATING, Boolean.TRUE);
+                state = blockState.setValue(MachineBlock.OPERATING, Boolean.TRUE);
             } else {
-                state = blockState.setValue(BaseMachineBlock.OPERATING, Boolean.FALSE);
+                state = blockState.setValue(MachineBlock.OPERATING, Boolean.FALSE);
             }
             level.setBlock(blockPos, state, 3);
         }
@@ -112,9 +112,9 @@ public abstract class BaseMachineBlockEntity extends BlockEntity implements Menu
 
     // Returns the facing property of the block (e.g., north, south, east, west)
     protected DirectionProperty getFacingProperty() {
-        return BaseMachineBlock.FACING;
+        return MachineBlock.FACING;
     }
 
     // Abstract method to define the pattern for the multiblock structure
-    protected abstract Block[][][] getPattern();
+    protected abstract Block[][][] getStructurePattern();
 }

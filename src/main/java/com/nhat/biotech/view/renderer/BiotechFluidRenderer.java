@@ -7,7 +7,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 
-public class BiotechFluidRenderer extends AbstractFluidRenderer {
+public class BiotechFluidRenderer extends BaseFluidRenderer {
 
     public void renderFluid(PoseStack poseStack, int x, int y, int width, int height, FluidStack fluidStack) {
         RenderSystem.enableBlend();

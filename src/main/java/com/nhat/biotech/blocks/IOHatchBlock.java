@@ -45,18 +45,13 @@ public class IOHatchBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        switch (type) {
-            case 0:
-                return new ItemInputHatchBlockEntity(pPos, pState);
-            case 1:
-                return new ItemOutputHatchBlockEntity(pPos, pState);
-            case 2:
-                return new FluidInputHatchBlockEntity(pPos, pState);
-            case 3:
-                return new FluidOutputHatchBlockEntity(pPos, pState);
-            default:
-                return new EnergyInputHatchBlockEntity(pPos, pState);
-        }
+        return switch (type) {
+            case 0 -> new ItemInputHatchBlockEntity(pPos, pState);
+            case 1 -> new ItemOutputHatchBlockEntity(pPos, pState);
+            case 2 -> new FluidInputHatchBlockEntity(pPos, pState);
+            case 3 -> new FluidOutputHatchBlockEntity(pPos, pState);
+            default -> new EnergyInputHatchBlockEntity(pPos, pState);
+        };
     }
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {

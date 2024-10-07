@@ -1,6 +1,6 @@
 package com.nhat.biotech.blocks.block_entites.hatches;
 
-import com.nhat.biotech.blocks.block_entites.BiotechBlockEntityTypes;
+import com.nhat.biotech.blocks.block_entites.BlockEntityRegistries;
 import com.nhat.biotech.view.io_hatches.fluid.FluidOutputHatchMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class FluidOutputHatchBlockEntity extends FluidHatchBlockEntity {
     public FluidOutputHatchBlockEntity(BlockPos pos, BlockState state) {
-        super(BiotechBlockEntityTypes.FLUID_OUTPUT_HATCH.get(), pos, state);
+        super(BlockEntityRegistries.FLUID_OUTPUT_HATCH.get(), pos, state);
     }
     @Override
     public Component getDisplayName() {

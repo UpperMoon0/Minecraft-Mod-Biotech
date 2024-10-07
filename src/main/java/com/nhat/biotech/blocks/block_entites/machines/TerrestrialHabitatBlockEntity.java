@@ -1,11 +1,15 @@
 package com.nhat.biotech.blocks.block_entites.machines;
 
-import com.nhat.biotech.blocks.BiotechBlocks;
-import com.nhat.biotech.blocks.block_entites.BiotechBlockEntityTypes;
+import com.nhat.biotech.blocks.BlockRegistries;
 import com.nhat.biotech.blocks.block_entites.hatches.EnergyInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.FluidInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemOutputHatchBlockEntity;
+import com.nhat.biotech.networking.BiotechPackets;
+import com.nhat.biotech.networking.TerrestrialHabitatPacket;
+import com.nhat.biotech.recipes.BiotechRecipeHandler;
+import com.nhat.biotech.recipes.TerrestrialHabitatRecipeHandler;
+import com.nhat.biotech.view.machines.TerrestrialHabitatMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -16,25 +20,89 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.jetbrains.annotations.NotNull;
 
-public class TerrestrialHabitatBlockEntity extends BaseMachineBlockEntity {
+public class TerrestrialHabitatBlockEntity extends MachineBlockEntity {
+
     private ItemInputHatchBlockEntity itemInputHatch1;
     private ItemInputHatchBlockEntity itemInputHatch2;
     private ItemInputHatchBlockEntity itemInputHatch3;
     private ItemOutputHatchBlockEntity itemOutputHatch;
     private EnergyInputHatchBlockEntity energyInputHatch;
     private FluidInputHatchBlockEntity fluidInputHatch;
+
     public TerrestrialHabitatBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(BiotechBlockEntityTypes.TERRESTRIAL_HABITAT.get(), pPos, pBlockState);
+        super(MachineRegistries.TERRESTRIAL_HABITAT.blockEntity().get(), pPos, pBlockState);
         translateKey = "menu.title.biotech.terrestrial_habitat";
     }
 
     @Override
+    public AbstractContainerMenu createMenu(int pContainerId,
+                                            @NotNull Inventory pPlayerInventory,
+                                            @NotNull Player pPlayer) {
+        return new TerrestrialHabitatMenu(pContainerId, pPlayerInventory, this);
+    }
+
+    @Override
     protected void processRecipe(Level level, BlockPos blockPos) {
-        if (isStructureValid) {
-            System.out.println("TerrestrialHabitatBlockEntity.processRecipe");
+        IItemHandler combinedInputItemHandler = new CombinedInvWrapper(
+                (IItemHandlerModifiable) itemInputHatch1.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new),
+                (IItemHandlerModifiable) itemInputHatch2.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new),
+                (IItemHandlerModifiable) itemInputHatch3.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new)
+        );
+        IItemHandler outputItemHandler = itemOutputHatch.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new);
+        IFluidHandler inputFluidHandler = fluidInputHatch.getCapability(ForgeCapabilities.FLUID_HANDLER).orElseThrow(NullPointerException::new);
+        IEnergyStorage energyStorage = energyInputHatch.getCapability(ForgeCapabilities.ENERGY).orElseThrow(NullPointerException::new);
+
+        int energyCapacity = energyInputHatch.ENERGY_CAPACITY;
+        int energyStored = energyStorage.getEnergyStored();
+        int energyConsumeRate = energyInputHatch.ENERGY_THROUGHPUT;
+        int fluidCapacity = fluidInputHatch.TANK_CAPACITY;
+        FluidStack fluidStored = inputFluidHandler.getFluidInTank(0);
+
+        if (recipeHandler.isEmpty()) {
+            energyConsumed = 0;
+            recipeHandler = level.getRecipeManager().getAllRecipesFor(TerrestrialHabitatRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
+        } else {
+            TerrestrialHabitatRecipeHandler recipeHandler = (TerrestrialHabitatRecipeHandler) this.recipeHandler.get();
+            recipeEnergyCost = recipeHandler.getTotalEnergy();
+
+            if (energyConsumed == 0) {
+                recipeHandler.consumeIngredients(combinedInputItemHandler, inputFluidHandler);
+            }
+
+            if (energyStorage.getEnergyStored() >= energyConsumeRate) {
+                int energyToConsume = Math.min(energyConsumeRate, recipeEnergyCost - energyConsumed);
+                energyConsumed += energyToConsume;
+                energyStorage.extractEnergy(energyToConsume, false);
+            }
+
+            if (energyConsumed == recipeEnergyCost) {
+                energyConsumed = 0;
+                recipeHandler.assemble(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null);
+
+                this.recipeHandler = level.getRecipeManager().getAllRecipesFor(TerrestrialHabitatRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
         }
+
+        BiotechPackets.sendToClients(new TerrestrialHabitatPacket(
+                energyCapacity,
+                energyStored,
+                energyConsumeRate,
+                energyConsumed,
+                recipeEnergyCost,
+                fluidCapacity,
+                fluidStored,
+                isStructureValid,
+                blockPos,
+                recipeHandler.map(BiotechRecipeHandler::getRecipe).orElse(null)
+        ));
     }
 
     @Override
@@ -67,13 +135,13 @@ public class TerrestrialHabitatBlockEntity extends BaseMachineBlockEntity {
     }
 
     @Override
-    protected Block[][][] getPattern() {
+    protected Block[][][] getStructurePattern() {
         Block a = Blocks.AIR,
-                b = BiotechBlocks.BIOTECH_MACHINE_CASING.get(),
-                c = BiotechBlocks.ITEM_INPUT_HATCH.get(),
-                d = BiotechBlocks.ITEM_OUTPUT_HATCH.get(),
-                e = BiotechBlocks.FLUID_INPUT_HATCH.get(),
-                f = BiotechBlocks.ENERGY_INPUT_HATCH.get(),
+                b = BlockRegistries.BIOTECH_MACHINE_CASING.get(),
+                c = BlockRegistries.ITEM_INPUT_HATCH.get(),
+                d = BlockRegistries.ITEM_OUTPUT_HATCH.get(),
+                e = BlockRegistries.FLUID_INPUT_HATCH.get(),
+                f = BlockRegistries.ENERGY_INPUT_HATCH.get(),
                 g = Blocks.YELLOW_CONCRETE,
                 h = Blocks.YELLOW_STAINED_GLASS,
                 i = Blocks.GLOWSTONE,
@@ -135,11 +203,5 @@ public class TerrestrialHabitatBlockEntity extends BaseMachineBlockEntity {
                         {b, b, b, b, b, b, b}
                 }
         };
-    }
-
-    @Nullable
-    @Override
-    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-        return null;
     }
 }

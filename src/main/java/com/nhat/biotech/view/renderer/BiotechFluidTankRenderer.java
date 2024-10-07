@@ -7,7 +7,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 
-public class BiotechFluidTankRenderer extends AbstractFluidRenderer {
+public class BiotechFluidTankRenderer extends BaseFluidRenderer {
     private final long capacity;
     private final int width;
     private final int height;

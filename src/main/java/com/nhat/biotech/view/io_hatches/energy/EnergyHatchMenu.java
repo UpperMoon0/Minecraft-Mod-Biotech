@@ -1,6 +1,6 @@
 package com.nhat.biotech.view.io_hatches.energy;
 
-import com.nhat.biotech.blocks.BiotechBlocks;
+import com.nhat.biotech.blocks.BlockRegistries;
 import com.nhat.biotech.view.BiotechMenu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +27,7 @@ public class EnergyHatchMenu extends BiotechMenu {
     }
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, BiotechBlocks.ENERGY_INPUT_HATCH.get());
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, BlockRegistries.ENERGY_INPUT_HATCH.get());
     }
     public int getEnergy() {
         return energy;

@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
-public class TerrestrialHabitatRecipeHandler extends BaseBiotechRecipeHandler<TerrestrialHabitatRecipeHandler> {
+public class TerrestrialHabitatRecipeHandler extends BiotechRecipeHandler<TerrestrialHabitatRecipeHandler> {
     public static final RecipeSerializer<TerrestrialHabitatRecipeHandler> SERIALIZER =
             new RecipeSerializerFactory<TerrestrialHabitatRecipeHandler>().createSerializer(TerrestrialHabitatRecipeHandler::new);
 

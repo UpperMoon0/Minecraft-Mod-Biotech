@@ -17,13 +17,13 @@ import net.minecraftforge.items.IItemHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseBiotechRecipeHandler<T extends BaseBiotechRecipeHandler<T>> implements Recipe<Container>, RecipeFactory<T> {
+public abstract class BiotechRecipeHandler<T extends BiotechRecipeHandler<T>> implements Recipe<Container>, RecipeFactory<T> {
     protected final ResourceLocation id;
     protected final BiotechRecipe recipe;
     private final RecipeSerializer<T> serializer;
     private final RecipeType<T> type;
 
-    protected BaseBiotechRecipeHandler(ResourceLocation id, BiotechRecipe recipe, RecipeSerializer<T> serializer, RecipeType<T> type) {
+    protected BiotechRecipeHandler(ResourceLocation id, BiotechRecipe recipe, RecipeSerializer<T> serializer, RecipeType<T> type) {
         this.id = id;
         this.recipe = recipe;
         this.serializer = serializer;

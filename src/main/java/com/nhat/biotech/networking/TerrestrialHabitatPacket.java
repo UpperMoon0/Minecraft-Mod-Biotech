@@ -1,8 +1,8 @@
 package com.nhat.biotech.networking;
 
-import com.nhat.biotech.blocks.block_entites.machines.BreedingChamberBlockEntity;
+import com.nhat.biotech.blocks.block_entites.machines.TerrestrialHabitatBlockEntity;
 import com.nhat.biotech.recipes.BiotechRecipe;
-import com.nhat.biotech.view.machines.BreedingChamberMenu;
+import com.nhat.biotech.view.machines.TerrestrialHabitatMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -12,12 +12,12 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class BreedingChamberPacket extends MultiblockMachinePacket {
+public class TerrestrialHabitatPacket extends MultiblockMachinePacket {
 
     private final int fluidCapacity;
     private final FluidStack fluidStored;
 
-    public BreedingChamberPacket(int energyCapacity,
+    public TerrestrialHabitatPacket(int energyCapacity,
                                  int energyStored,
                                  int energyConsumeRate,
                                  int consumedEnergy,
@@ -39,7 +39,7 @@ public class BreedingChamberPacket extends MultiblockMachinePacket {
         this.recipe = recipe;
     }
 
-    public BreedingChamberPacket(FriendlyByteBuf buf) {
+    public TerrestrialHabitatPacket(FriendlyByteBuf buf) {
         this.energyCapacity = buf.readInt();
         this.energyStored = buf.readInt();
         this.energyConsumeRate = buf.readInt();
@@ -77,10 +77,10 @@ public class BreedingChamberPacket extends MultiblockMachinePacket {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            if(Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof BreedingChamberBlockEntity) {
+            if(Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof TerrestrialHabitatBlockEntity) {
                 LocalPlayer player = Minecraft.getInstance().player;
                 if(player != null
-                        && player.containerMenu instanceof BreedingChamberMenu menu
+                        && player.containerMenu instanceof TerrestrialHabitatMenu menu
                         && menu.getBlockEntity().getBlockPos().equals(pos)) {
                     menu.setEnergyCapacity(energyCapacity);
                     menu.setEnergyStored(energyStored);

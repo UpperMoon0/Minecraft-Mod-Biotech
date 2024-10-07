@@ -28,6 +28,7 @@ public class BiotechItemRenderer {
         minecraft = Minecraft.getInstance();
         bufferSource = minecraft.renderBuffers().bufferSource();
     }
+
     public void render(PoseStack poseStack, int x, int y, ItemStack itemStack) {
         if (!itemStack.isEmpty()) {
             Level level = minecraft.level;

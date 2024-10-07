@@ -1,14 +1,13 @@
 package com.nhat.biotech.blocks.block_entites.machines;
 
-import com.nhat.biotech.blocks.BiotechBlocks;
-import com.nhat.biotech.blocks.block_entites.BiotechBlockEntityTypes;
+import com.nhat.biotech.blocks.BlockRegistries;
 import com.nhat.biotech.blocks.block_entites.hatches.EnergyInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.FluidInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemOutputHatchBlockEntity;
 import com.nhat.biotech.networking.BreedingChamberPacket;
 import com.nhat.biotech.networking.BiotechPackets;
-import com.nhat.biotech.recipes.BaseBiotechRecipeHandler;
+import com.nhat.biotech.recipes.BiotechRecipeHandler;
 import com.nhat.biotech.recipes.BreedingChamberRecipeHandler;
 import com.nhat.biotech.view.machines.BreedingChamberMenu;
 import net.minecraft.core.BlockPos;
@@ -30,7 +29,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 
-public class BreedingChamberBlockEntity extends BaseMachineBlockEntity {
+public class BreedingChamberBlockEntity extends MachineBlockEntity {
 
     private ItemInputHatchBlockEntity itemInputHatch1;
     private ItemInputHatchBlockEntity itemInputHatch2;
@@ -40,7 +39,7 @@ public class BreedingChamberBlockEntity extends BaseMachineBlockEntity {
     private FluidInputHatchBlockEntity fluidInputHatch;
 
     public BreedingChamberBlockEntity(BlockPos pos, BlockState state) {
-        super(BiotechBlockEntityTypes.BREEDING_CHAMBER.get(), pos, state);
+        super(MachineRegistries.BREEDING_CHAMBER.blockEntity().get(), pos, state);
         translateKey = "menu.title.biotech.breeder";
     }
     @Override
@@ -101,7 +100,7 @@ public class BreedingChamberBlockEntity extends BaseMachineBlockEntity {
                 fluidStored,
                 isStructureValid,
                 blockPos,
-                recipeHandler.map(BaseBiotechRecipeHandler::getRecipe).orElse(null)
+                recipeHandler.map(BiotechRecipeHandler::getRecipe).orElse(null)
         ));
     }
 
@@ -134,14 +133,14 @@ public class BreedingChamberBlockEntity extends BaseMachineBlockEntity {
         }
     }
     @Override
-    protected Block[][][] getPattern()
+    protected Block[][][] getStructurePattern()
     {
         Block a = Blocks.AIR,
-                b = BiotechBlocks.BIOTECH_MACHINE_CASING.get(),
-                c = BiotechBlocks.ITEM_INPUT_HATCH.get(),
-                d = BiotechBlocks.ITEM_OUTPUT_HATCH.get(),
-                e = BiotechBlocks.FLUID_INPUT_HATCH.get(),
-                f = BiotechBlocks.ENERGY_INPUT_HATCH.get(),
+                b = BlockRegistries.BIOTECH_MACHINE_CASING.get(),
+                c = BlockRegistries.ITEM_INPUT_HATCH.get(),
+                d = BlockRegistries.ITEM_OUTPUT_HATCH.get(),
+                e = BlockRegistries.FLUID_INPUT_HATCH.get(),
+                f = BlockRegistries.ENERGY_INPUT_HATCH.get(),
                 g = Blocks.PINK_CONCRETE,
                 h = Blocks.PINK_STAINED_GLASS,
                 i = Blocks.GLOWSTONE,

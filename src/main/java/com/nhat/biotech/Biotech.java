@@ -1,8 +1,9 @@
 package com.nhat.biotech;
 
 import com.mojang.logging.LogUtils;
-import com.nhat.biotech.blocks.BiotechBlocks;
-import com.nhat.biotech.blocks.block_entites.BiotechBlockEntityTypes;
+import com.nhat.biotech.blocks.BlockRegistries;
+import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
+import com.nhat.biotech.blocks.block_entites.BlockEntityRegistries;
 import com.nhat.biotech.creative_tabs.ModCreativeTabs;
 import com.nhat.biotech.items.BiotechItems;
 import com.nhat.biotech.networking.BiotechPackets;
@@ -39,11 +40,14 @@ public class Biotech
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        // Register the Deferred Register to the mod event bus so blocks get registered
-        BiotechBlocks.BLOCKS.register(modEventBus);
+        // Register blocks
+        BlockRegistries.BLOCKS.register(modEventBus);
 
-        // Register the Deferred Register to the mod event bus so block entities get registered
-        BiotechBlockEntityTypes.BLOCK_ENTITIES.register(modEventBus);
+        // Register block entities
+        BlockEntityRegistries.BLOCK_ENTITIES.register(modEventBus);
+
+        // Register machines
+        MachineRegistries.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so items get registered
         BiotechItems.ITEMS.register(modEventBus);
