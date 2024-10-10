@@ -1,0 +1,15 @@
+{
+  "name": "Fluid Hatches",
+  "icon": "biotech:fluid_input_hatch",
+  "category": "biotech:getting_started",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Your animals also need to drink, so there needs to be a way to insert water into the machine."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The Fluid Input Hatch and Fluid Output Hatch can each hold 32,000 mB."
+    }
+  ]
+}
