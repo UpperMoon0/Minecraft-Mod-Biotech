@@ -3,6 +3,8 @@ package com.nhat.biotech.networking;
 import com.nhat.biotech.blocks.block_entites.hatches.EnergyHatchBlockEntity;
 import com.nhat.biotech.view.io_hatches.energy.EnergyHatchMenu;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -31,10 +33,12 @@ public class EnergyPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof EnergyHatchBlockEntity blockEntity) {
+            ClientLevel level = Minecraft.getInstance().level;
+            if(level != null && level.getBlockEntity(pos) instanceof EnergyHatchBlockEntity blockEntity) {
                 blockEntity.setEnergy(energy);
 
-                if(Minecraft.getInstance().player.containerMenu instanceof EnergyHatchMenu menu &&
+                LocalPlayer player = Minecraft.getInstance().player;
+                if(player != null && player.containerMenu instanceof EnergyHatchMenu menu &&
                         menu.getBlockEntity().getBlockPos().equals(pos)) {
                     menu.setEnergy(energy);
                 }

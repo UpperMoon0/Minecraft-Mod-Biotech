@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +19,10 @@ public class EnergyHatchScreen<T extends EnergyHatchMenu> extends AbstractContai
     }
 
     @Override
-    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
+    protected void renderLabels(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
         super.renderLabels(pGuiGraphics, pMouseX, pMouseY);
         if (isHovering(80, 17, 16, 52, pMouseX, pMouseY)) {
-            pGuiGraphics.renderTooltip(font, List.of(Component.literal(menu.getEnergy() + " / " + 128000 + " FE")), Optional.empty(), pMouseX - leftPos, pMouseY - topPos);
+            pGuiGraphics.renderTooltip(font, List.of(Component.literal(menu.getEnergy() + " / " + menu.getBlockEntity().ENERGY_CAPACITY + " FE")), Optional.empty(), pMouseX - leftPos, pMouseY - topPos);
         }
         if (menu.getCarried().isEmpty() && hoveredSlot != null && hoveredSlot.hasItem()) {
             ItemStack itemstack = hoveredSlot.getItem();
@@ -29,7 +30,7 @@ public class EnergyHatchScreen<T extends EnergyHatchMenu> extends AbstractContai
         }
     }
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         renderBackground(graphics);
         graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         if (menu.getEnergy() > 0) {

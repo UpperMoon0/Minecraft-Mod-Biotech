@@ -9,7 +9,7 @@ import com.nhat.biotech.networking.BreedingChamberPacket;
 import com.nhat.biotech.networking.BiotechPackets;
 import com.nhat.biotech.recipes.BiotechRecipeHandler;
 import com.nhat.biotech.recipes.BreedingChamberRecipeHandler;
-import com.nhat.biotech.view.machines.BreedingChamberMenu;
+import com.nhat.biotech.view.machines.menu.BreedingChamberMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -40,7 +40,7 @@ public class BreedingChamberBlockEntity extends MachineBlockEntity {
 
     public BreedingChamberBlockEntity(BlockPos pos, BlockState state) {
         super(MachineRegistries.BREEDING_CHAMBER.blockEntity().get(), pos, state);
-        translateKey = "menu.title.biotech.breeder";
+        translateKey = "menu.title.biotech." + MachineRegistries.BREEDING_CHAMBER.id();
     }
     @Override
     public AbstractContainerMenu createMenu(int pContainerId,

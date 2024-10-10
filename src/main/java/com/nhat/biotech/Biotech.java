@@ -5,9 +5,8 @@ import com.nhat.biotech.blocks.BlockRegistries;
 import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
 import com.nhat.biotech.blocks.block_entites.BlockEntityRegistries;
 import com.nhat.biotech.creative_tabs.ModCreativeTabs;
-import com.nhat.biotech.items.BiotechItems;
+import com.nhat.biotech.items.ItemRegistries;
 import com.nhat.biotech.networking.BiotechPackets;
-import com.nhat.biotech.recipes.BiotechRecipes;
 import com.nhat.biotech.utils.ScreenInit;
 import com.nhat.biotech.view.BiotechMenus;
 import net.minecraftforge.api.distmarker.Dist;
@@ -50,16 +49,13 @@ public class Biotech
         MachineRegistries.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so items get registered
-        BiotechItems.ITEMS.register(modEventBus);
+        ItemRegistries.ITEMS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so tabs get registered
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so menus get registered
         BiotechMenus.MENUS.register(modEventBus);
-
-        // Register the Deferred Register to the mod event bus so recipes get registered
-        BiotechRecipes.SERIALIZERS.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);

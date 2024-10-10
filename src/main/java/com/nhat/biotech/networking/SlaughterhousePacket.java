@@ -1,8 +1,10 @@
 package com.nhat.biotech.networking;
 
-import com.nhat.biotech.blocks.block_entites.machines.TerrestrialHabitatBlockEntity;
+import com.nhat.biotech.blocks.block_entites.machines.BreedingChamberBlockEntity;
+import com.nhat.biotech.blocks.block_entites.machines.SlaughterhouseBlockEntity;
 import com.nhat.biotech.recipes.BiotechRecipe;
-import com.nhat.biotech.view.machines.menu.TerrestrialHabitatMenu;
+import com.nhat.biotech.view.machines.menu.BreedingChamberMenu;
+import com.nhat.biotech.view.machines.menu.SlaughterhouseMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -12,21 +14,21 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class TerrestrialHabitatPacket extends MultiblockMachinePacket {
+public class SlaughterhousePacket extends MultiblockMachinePacket {
 
     private final int fluidCapacity;
     private final FluidStack fluidStored;
 
-    public TerrestrialHabitatPacket(int energyCapacity,
-                                 int energyStored,
-                                 int energyConsumeRate,
-                                 int consumedEnergy,
-                                 int recipeEnergyCost,
-                                 int fluidCapacity,
-                                 FluidStack fluidStored,
-                                 boolean isStructureValid,
-                                 BlockPos pos,
-                                 BiotechRecipe recipe) {
+    public SlaughterhousePacket(int energyCapacity,
+                                int energyStored,
+                                int energyConsumeRate,
+                                int consumedEnergy,
+                                int recipeEnergyCost,
+                                int fluidCapacity,
+                                FluidStack fluidStored,
+                                boolean isStructureValid,
+                                BlockPos pos,
+                                BiotechRecipe recipe) {
         this.energyCapacity = energyCapacity;
         this.energyStored = energyStored;
         this.energyConsumeRate = energyConsumeRate;
@@ -39,7 +41,7 @@ public class TerrestrialHabitatPacket extends MultiblockMachinePacket {
         this.recipe = recipe;
     }
 
-    public TerrestrialHabitatPacket(FriendlyByteBuf buf) {
+    public SlaughterhousePacket(FriendlyByteBuf buf) {
         this.energyCapacity = buf.readInt();
         this.energyStored = buf.readInt();
         this.energyConsumeRate = buf.readInt();
@@ -77,10 +79,10 @@ public class TerrestrialHabitatPacket extends MultiblockMachinePacket {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            if(Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof TerrestrialHabitatBlockEntity) {
+            if(Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof SlaughterhouseBlockEntity) {
                 LocalPlayer player = Minecraft.getInstance().player;
                 if(player != null
-                        && player.containerMenu instanceof TerrestrialHabitatMenu menu
+                        && player.containerMenu instanceof SlaughterhouseMenu menu
                         && menu.getBlockEntity().getBlockPos().equals(pos)) {
                     menu.setEnergyCapacity(energyCapacity);
                     menu.setEnergyStored(energyStored);
@@ -96,3 +98,4 @@ public class TerrestrialHabitatPacket extends MultiblockMachinePacket {
         });
     }
 }
+

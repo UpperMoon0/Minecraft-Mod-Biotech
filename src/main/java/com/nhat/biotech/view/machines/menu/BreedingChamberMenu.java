@@ -1,15 +1,14 @@
-package com.nhat.biotech.view.machines;
+package com.nhat.biotech.view.machines.menu;
 
 import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
-import com.nhat.biotech.blocks.block_entites.machines.TerrestrialHabitatBlockEntity;
+import com.nhat.biotech.blocks.block_entites.machines.BreedingChamberBlockEntity;
 import com.nhat.biotech.recipes.BiotechRecipe;
 import com.nhat.biotech.view.BiotechMenu;
-import com.nhat.biotech.view.BiotechMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,10 +17,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class TerrestrialHabitatMenu extends BiotechMenu {
+public class BreedingChamberMenu extends BiotechMenu {
 
     private final Level level;
-    private final TerrestrialHabitatBlockEntity blockEntity;
+    private final BreedingChamberBlockEntity blockEntity;
     private final BlockPos pos;
 
     private FluidStack fluidStored;
@@ -35,7 +34,7 @@ public class TerrestrialHabitatMenu extends BiotechMenu {
     private boolean isStructureValid;
 
     // Getters
-    public TerrestrialHabitatBlockEntity getBlockEntity() {
+    public BreedingChamberBlockEntity getBlockEntity() {
         return blockEntity;
     }
     public int getEnergyCapacity() {
@@ -61,6 +60,9 @@ public class TerrestrialHabitatMenu extends BiotechMenu {
     }
     public BiotechRecipe getRecipe() {
         return recipe;
+    }
+    public int getRecipeEnergyCost() {
+        return recipeEnergyCost;
     }
 
     // Setters
@@ -92,14 +94,14 @@ public class TerrestrialHabitatMenu extends BiotechMenu {
         this.recipe = recipeEntity;
     }
 
-    public TerrestrialHabitatMenu(int pContainerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
+    public BreedingChamberMenu(int pContainerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
         this(pContainerId, inventory, Objects.requireNonNull(inventory.player.level().getBlockEntity(friendlyByteBuf.readBlockPos())));
     }
 
-    public TerrestrialHabitatMenu(int i, Inventory inventory, BlockEntity blockEntity) {
-        super(BiotechMenus.TERRESTRIAL_HABITAT.get(), i);
+    public BreedingChamberMenu(int i, Inventory inventory, BlockEntity blockEntity) {
+        super(MachineRegistries.BREEDING_CHAMBER.menu().get(), i);
         this.level = inventory.player.level();
-        this.blockEntity = (TerrestrialHabitatBlockEntity) blockEntity;
+        this.blockEntity = (BreedingChamberBlockEntity) blockEntity;
         this.pos = blockEntity.getBlockPos();
     }
 
@@ -110,22 +112,7 @@ public class TerrestrialHabitatMenu extends BiotechMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return stillValid(ContainerLevelAccess.create(level, pos), player, MachineRegistries.TERRESTRIAL_HABITAT.block().get());
-    }
-
-    public int getEnergyHeight()
-    {
-        int energyHeight = energyStored * 76 / energyCapacity;
-
-        if (energyHeight == 0 && energyStored > 0) {
-            energyHeight = 1;
-        }
-
-        return energyHeight;
-    }
-
-    public int getProgressWidth() {
-        return recipeEnergyCost == 0? 0 : energyConsumed * 19 / recipeEnergyCost;
+        return stillValid(ContainerLevelAccess.create(level, pos), player, MachineRegistries.BREEDING_CHAMBER.block().get());
     }
 
     public boolean getIsOperating() {

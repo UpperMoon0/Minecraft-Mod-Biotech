@@ -2,7 +2,7 @@ package com.nhat.biotech.networking;
 
 import com.nhat.biotech.blocks.block_entites.machines.BreedingChamberBlockEntity;
 import com.nhat.biotech.recipes.BiotechRecipe;
-import com.nhat.biotech.view.machines.BreedingChamberMenu;
+import com.nhat.biotech.view.machines.menu.BreedingChamberMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;

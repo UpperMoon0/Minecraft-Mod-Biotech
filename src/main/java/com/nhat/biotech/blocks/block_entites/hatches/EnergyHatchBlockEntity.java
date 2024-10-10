@@ -19,8 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class EnergyHatchBlockEntity extends CapabilityBlockEntity {
-    public final int ENERGY_THROUGHPUT = 128;
-    public final int ENERGY_CAPACITY = ENERGY_THROUGHPUT * 1000;
+    public final int ENERGY_THROUGHPUT = 512;
+    public final int ENERGY_CAPACITY = ENERGY_THROUGHPUT * 1200;
 
     protected final EnergyStorage energyStorage = new EnergyStorage(ENERGY_CAPACITY);
 

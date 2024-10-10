@@ -1,6 +1,6 @@
 package com.nhat.biotech.blocks;
 
-import com.nhat.biotech.items.BiotechItems;
+import com.nhat.biotech.items.ItemRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.*;
@@ -34,10 +34,10 @@ public class NetTrapBlock extends Block {
                 entity.remove(Entity.RemovalReason.KILLED);
 
                 if (!((Cow) entity).isBaby()) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(BiotechItems.COW.get()));
+                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ItemRegistries.COW.get()));
                     level.addFreshEntity(itemEntity);
                 } else {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(BiotechItems.BABY_COW.get()));
+                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ItemRegistries.BABY_COW.get()));
                     level.addFreshEntity(itemEntity);
                 }
             }
@@ -47,10 +47,10 @@ public class NetTrapBlock extends Block {
                 entity.remove(Entity.RemovalReason.KILLED);
 
                 if (!((Chicken) entity).isBaby()) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(BiotechItems.CHICKEN.get()));
+                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ItemRegistries.CHICKEN.get()));
                     level.addFreshEntity(itemEntity);
                 } else {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(BiotechItems.BABY_CHICKEN.get()));
+                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ItemRegistries.BABY_CHICKEN.get()));
                     level.addFreshEntity(itemEntity);
                 }
             }
@@ -60,10 +60,10 @@ public class NetTrapBlock extends Block {
                 entity.remove(Entity.RemovalReason.KILLED);
 
                 if (!((Pig) entity).isBaby()) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(BiotechItems.PIG.get()));
+                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ItemRegistries.PIG.get()));
                     level.addFreshEntity(itemEntity);
                 } else {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(BiotechItems.BABY_PIG.get()));
+                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ItemRegistries.BABY_PIG.get()));
                     level.addFreshEntity(itemEntity);
                 }
             }
@@ -73,10 +73,10 @@ public class NetTrapBlock extends Block {
                 entity.remove(Entity.RemovalReason.KILLED);
 
                 if (!((Sheep) entity).isBaby()) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(BiotechItems.SHEEP.get()));
+                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ItemRegistries.SHEEP.get()));
                     level.addFreshEntity(itemEntity);
                 } else {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(BiotechItems.BABY_SHEEP.get()));
+                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ItemRegistries.BABY_SHEEP.get()));
                     level.addFreshEntity(itemEntity);
                 }
             }
@@ -86,10 +86,10 @@ public class NetTrapBlock extends Block {
                 entity.remove(Entity.RemovalReason.KILLED);
 
                 if (!((Rabbit) entity).isBaby()) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(BiotechItems.RABBIT.get()));
+                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ItemRegistries.RABBIT.get()));
                     level.addFreshEntity(itemEntity);
                 } else {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(BiotechItems.BABY_RABBIT.get()));
+                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ItemRegistries.BABY_RABBIT.get()));
                     level.addFreshEntity(itemEntity);
                 }
             }

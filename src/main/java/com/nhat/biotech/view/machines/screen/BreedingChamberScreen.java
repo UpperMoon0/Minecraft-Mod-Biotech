@@ -1,8 +1,9 @@
-package com.nhat.biotech.view.machines;
+package com.nhat.biotech.view.machines.screen;
 
 import com.nhat.biotech.Biotech;
+import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
 import com.nhat.biotech.recipes.BiotechRecipe;
-import com.nhat.biotech.utils.Machines;
+import com.nhat.biotech.view.machines.menu.BreedingChamberMenu;
 import com.nhat.biotech.view.renderer.BiotechFluidRenderer;
 import com.nhat.biotech.view.renderer.BiotechFluidTankRenderer;
 import com.nhat.biotech.view.renderer.BiotechItemRenderer;
@@ -13,12 +14,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 
 public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamberMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/" + Machines.BREEDING_CHAMBER_ID + ".png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/" + MachineRegistries.BREEDING_CHAMBER.id() + ".png");
+    private static final int MAX_PROGRESS_WIDTH = 19;
+    private static final int PROGRESS_HEIGHT = 19;
+
     public BreedingChamberScreen(BreedingChamberMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
     }
@@ -30,7 +35,7 @@ public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamb
     }
     
     @Override
-    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
+    protected void renderLabels(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
         int energyConsumeRate = 0;
 
         if (this.menu.getIsOperating()) {
@@ -111,18 +116,19 @@ public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamb
             }
         }
 
-        int x = 106 - font.width("Breeding Chamber") / 2;
-        pGuiGraphics.drawString(font, "Breeding Chamber", x, 3, 0x3F3F3F, false);
+        String machineName = "Breeding Chamber";
+        int x = 106 - font.width(machineName) / 2;
+        pGuiGraphics.drawString(font, machineName, x, 3, 0x3F3F3F, false);
     }
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         renderBackground(graphics);
         graphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         if (menu.getStructureValid())
         {
             if (menu.getEnergyStored() > 0) {
-                int energyHeight = menu.getEnergyHeight();
+                int energyHeight = getEnergyHeight();
                 graphics.blit(TEXTURE, leftPos + 4, topPos + 119 - energyHeight, 212, 95 - energyHeight, 9, energyHeight);
             }
             if (!menu.getFluidStored().isEmpty())
@@ -131,7 +137,7 @@ public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamb
                 fTankRenderer.renderFluid(graphics.pose() , leftPos + 196, topPos + 28, menu.getFluidStored());
             }
             if (this.menu.getIsOperating()) {
-                graphics.blit(TEXTURE, this.leftPos + 88, this.topPos + 28, 212, 0, this.menu.getProgressWidth() + 1, 19);
+                graphics.blit(TEXTURE, this.leftPos + 88, this.topPos + 28, 212, 0, getProgressWidth() + 1, PROGRESS_HEIGHT);
 
                 BiotechItemRenderer animalItemRenderer = new BiotechItemRenderer(48, 48);
                 ItemStack currentAnimal = menu.getRecipe().getItemIngredients()[0];
@@ -146,5 +152,20 @@ public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamb
                 fluidRenderer.renderFluid(graphics.pose(), this.leftPos + 31, this.topPos + 131, 20, 20, currentFluid);
             }
         }
+    }
+
+    public int getEnergyHeight()
+    {
+        int energyHeight = menu.getEnergyStored() * 76 / menu.getEnergyCapacity();
+
+        if (energyHeight == 0 && menu.getEnergyStored() > 0) {
+            energyHeight = 1;
+        }
+
+        return energyHeight;
+    }
+
+    public int getProgressWidth() {
+        return menu.getRecipeEnergyCost() == 0? 0 : menu.getEnergyConsumed() * MAX_PROGRESS_WIDTH / menu.getRecipeEnergyCost();
     }
 }

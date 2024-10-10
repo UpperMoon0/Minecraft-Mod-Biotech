@@ -47,6 +47,12 @@ public class BiotechPackets {
                 .encoder(TerrestrialHabitatPacket::toBytes)
                 .consumerMainThread(TerrestrialHabitatPacket::handle)
                 .add();
+
+        net.messageBuilder(SlaughterhousePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SlaughterhousePacket::new)
+                .encoder(SlaughterhousePacket::toBytes)
+                .consumerMainThread(SlaughterhousePacket::handle)
+                .add();
     }
     public static <MSG> void sendToClients(MSG message) {
         INSTANCE.send(PacketDistributor.ALL.noArg(), message);

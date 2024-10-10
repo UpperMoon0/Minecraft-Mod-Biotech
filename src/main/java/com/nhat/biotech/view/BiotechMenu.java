@@ -11,6 +11,7 @@ public abstract class BiotechMenu extends AbstractContainerMenu {
     protected BiotechMenu(@Nullable MenuType<?> pMenuType, int pContainerId) {
         super(pMenuType, pContainerId);
     }
+
     protected void addInventorySlots(Inventory inventory) {
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
@@ -21,6 +22,7 @@ public abstract class BiotechMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(inventory, col, 8 + col * 18, 142));
         }
     }
+
     protected ItemStack adaptiveQuickMoveStack(int pIndex, int containerSlotsCount, int outputIndexStart) {
         // Get the clicked slot
         Slot slot = this.slots.get(pIndex);

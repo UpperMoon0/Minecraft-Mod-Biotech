@@ -1,7 +1,7 @@
 package com.nhat.biotech.creative_tabs;
 
 import com.nhat.biotech.Biotech;
-import com.nhat.biotech.items.BiotechItems;
+import com.nhat.biotech.items.ItemRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -14,9 +14,9 @@ public class ModCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Biotech.MODID);
     public static final RegistryObject<CreativeModeTab> BIOTECH_TAB = CREATIVE_MODE_TABS.register("biotech", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> BiotechItems.NET_TRAP_ITEM.get().getDefaultInstance())
+            .icon(() -> ItemRegistries.NET_TRAP_ITEM.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                for (RegistryObject<Item> i : BiotechItems.ITEM_SET) {
+                for (RegistryObject<Item> i : ItemRegistries.ITEM_SET) {
                     output.accept(i.get());
                 }
             })

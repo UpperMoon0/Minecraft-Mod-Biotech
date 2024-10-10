@@ -6,10 +6,10 @@ import com.nhat.biotech.blocks.block_entites.hatches.FluidInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemOutputHatchBlockEntity;
 import com.nhat.biotech.networking.BiotechPackets;
-import com.nhat.biotech.networking.TerrestrialHabitatPacket;
+import com.nhat.biotech.networking.SlaughterhousePacket;
 import com.nhat.biotech.recipes.BiotechRecipeHandler;
-import com.nhat.biotech.recipes.TerrestrialHabitatRecipeHandler;
-import com.nhat.biotech.view.machines.menu.TerrestrialHabitatMenu;
+import com.nhat.biotech.recipes.SlaughterhouseRecipeHandler;
+import com.nhat.biotech.view.machines.menu.SlaughterhouseMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -29,33 +29,30 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 
-public class TerrestrialHabitatBlockEntity extends MachineBlockEntity {
+public class SlaughterhouseBlockEntity extends MachineBlockEntity {
 
     private ItemInputHatchBlockEntity itemInputHatch1;
     private ItemInputHatchBlockEntity itemInputHatch2;
-    private ItemInputHatchBlockEntity itemInputHatch3;
     private ItemOutputHatchBlockEntity itemOutputHatch;
     private EnergyInputHatchBlockEntity energyInputHatch;
     private FluidInputHatchBlockEntity fluidInputHatch;
 
-    public TerrestrialHabitatBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(MachineRegistries.TERRESTRIAL_HABITAT.blockEntity().get(), pPos, pBlockState);
+    public SlaughterhouseBlockEntity(BlockPos pos, BlockState state) {
+        super(MachineRegistries.SLAUGHTERHOUSE.blockEntity().get(), pos, state);
         translateKey = "menu.title.biotech." + MachineRegistries.SLAUGHTERHOUSE.id();
     }
-
     @Override
     public AbstractContainerMenu createMenu(int pContainerId,
                                             @NotNull Inventory pPlayerInventory,
                                             @NotNull Player pPlayer) {
-        return new TerrestrialHabitatMenu(pContainerId, pPlayerInventory, this);
+        return new SlaughterhouseMenu(pContainerId, pPlayerInventory, this);
     }
 
     @Override
     protected void processRecipe(Level level, BlockPos blockPos) {
         IItemHandler combinedInputItemHandler = new CombinedInvWrapper(
                 (IItemHandlerModifiable) itemInputHatch1.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new),
-                (IItemHandlerModifiable) itemInputHatch2.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new),
-                (IItemHandlerModifiable) itemInputHatch3.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new)
+                (IItemHandlerModifiable) itemInputHatch2.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new)
         );
         IItemHandler outputItemHandler = itemOutputHatch.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new);
         IFluidHandler inputFluidHandler = fluidInputHatch.getCapability(ForgeCapabilities.FLUID_HANDLER).orElseThrow(NullPointerException::new);
@@ -69,9 +66,9 @@ public class TerrestrialHabitatBlockEntity extends MachineBlockEntity {
 
         if (recipeHandler.isEmpty()) {
             energyConsumed = 0;
-            recipeHandler = level.getRecipeManager().getAllRecipesFor(TerrestrialHabitatRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
+            recipeHandler = level.getRecipeManager().getAllRecipesFor(SlaughterhouseRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
         } else {
-            TerrestrialHabitatRecipeHandler recipeHandler = (TerrestrialHabitatRecipeHandler) this.recipeHandler.get();
+            SlaughterhouseRecipeHandler recipeHandler = (SlaughterhouseRecipeHandler) this.recipeHandler.get();
             recipeEnergyCost = recipeHandler.getTotalEnergy();
 
             if (energyConsumed == 0) {
@@ -88,10 +85,10 @@ public class TerrestrialHabitatBlockEntity extends MachineBlockEntity {
                 energyConsumed = 0;
                 recipeHandler.assemble(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null);
 
-                this.recipeHandler = level.getRecipeManager().getAllRecipesFor(TerrestrialHabitatRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
+                this.recipeHandler = level.getRecipeManager().getAllRecipesFor(SlaughterhouseRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
         }
 
-        BiotechPackets.sendToClients(new TerrestrialHabitatPacket(
+        BiotechPackets.sendToClients(new SlaughterhousePacket(
                 energyCapacity,
                 energyStored,
                 energyConsumeRate,
@@ -110,13 +107,12 @@ public class TerrestrialHabitatBlockEntity extends MachineBlockEntity {
         Direction facing = getBlockState().getValue(getFacingProperty());
 
         // Define the south offset
-        Vec3i[] southOffset = {
-                new Vec3i(-3, -1, -1),
-                new Vec3i(-3, -1, -3),
-                new Vec3i(-3, -1, -5),
-                new Vec3i(3, -1, -3),
-                new Vec3i(0, -1, -6),
-                new Vec3i(-2, -1, -6)
+        Vec3i[] southOffset = new Vec3i[]{
+                new Vec3i(-2, -1, -1),
+                new Vec3i(-2, -1, -3),
+                new Vec3i(2, -1, -2),
+                new Vec3i(1, -1, -4),
+                new Vec3i(-1, -1, -4)
         };
 
         // Rotate the south offset and get the hatches
@@ -126,81 +122,74 @@ public class TerrestrialHabitatBlockEntity extends MachineBlockEntity {
             switch (i) {
                 case 0 -> itemInputHatch1 = (ItemInputHatchBlockEntity) level.getBlockEntity(hatchPos);
                 case 1 -> itemInputHatch2 = (ItemInputHatchBlockEntity) level.getBlockEntity(hatchPos);
-                case 2 -> itemInputHatch3 = (ItemInputHatchBlockEntity) level.getBlockEntity(hatchPos);
-                case 3 -> itemOutputHatch = (ItemOutputHatchBlockEntity) level.getBlockEntity(hatchPos);
-                case 4 -> energyInputHatch = (EnergyInputHatchBlockEntity) level.getBlockEntity(hatchPos);
-                case 5 -> fluidInputHatch = (FluidInputHatchBlockEntity) level.getBlockEntity(hatchPos);
+                case 2 -> itemOutputHatch = (ItemOutputHatchBlockEntity) level.getBlockEntity(hatchPos);
+                case 3 -> energyInputHatch = (EnergyInputHatchBlockEntity) level.getBlockEntity(hatchPos);
+                case 4 -> fluidInputHatch = (FluidInputHatchBlockEntity) level.getBlockEntity(hatchPos);
             }
         }
     }
-
     @Override
-    protected Block[][][] getStructurePattern() {
+    protected Block[][][] getStructurePattern()
+    {
         Block a = Blocks.AIR,
                 b = BlockRegistries.BIOTECH_MACHINE_CASING.get(),
                 c = BlockRegistries.ITEM_INPUT_HATCH.get(),
                 d = BlockRegistries.ITEM_OUTPUT_HATCH.get(),
                 e = BlockRegistries.FLUID_INPUT_HATCH.get(),
                 f = BlockRegistries.ENERGY_INPUT_HATCH.get(),
-                g = Blocks.YELLOW_CONCRETE,
-                h = Blocks.YELLOW_STAINED_GLASS,
-                i = Blocks.GLOWSTONE,
-                j = Blocks.GRASS_BLOCK;
+                g = Blocks.RED_CONCRETE,
+                h = Blocks.RED_STAINED_GLASS,
+                i = Blocks.GLOWSTONE;
 
         return new Block[][][]{
                 {
-                        {g, h, h, g, a, a, a},
-                        {h, i, i, h, a, a, a},
-                        {h, i, i, h, a, a, a},
-                        {g, h, h, g, a, a, a},
-                        {a, a, a, a, a, a, a},
-                        {a, a, a, a, a, a, a},
-                        {a, a, a, a, a, a, a}
+                        {g, h, g, a, a},
+                        {h, a, h, a, a},
+                        {g, h, g, a, a},
+                        {a, a, a, a, a},
+                        {a, a, a, a, a}
                 },
                 {
-                        {b, b, b, b, a, a, a},
-                        {b, a, a, b, a, a, a},
-                        {b, a, a, b, a, a, a},
-                        {b, b, b, b, a, a, a},
-                        {a, a, a, a, a, a, a},
-                        {a, a, a, a, a, a, a},
-                        {a, a, a, a, a, a, a}
+                        {b, b, b, a, a},
+                        {b, a, b, a, a},
+                        {b, b, b, a, a},
+                        {a, a, a, a, a},
+                        {a, a, a, a, a}
                 },
                 {
-                        {b, b, b, b, a, a, a},
-                        {b, a, a, b, a, a, a},
-                        {b, a, a, b, a, a, a},
-                        {b, a, a, b, a, a, a},
-                        {a, a, a, a, a, a, a},
-                        {a, a, a, a, a, a, a},
-                        {a, a, a, a, a, a, a}
+                        {b, b, b, a, a},
+                        {b, a, b, a, a},
+                        {b, b, b, a, a},
+                        {a, a, a, a, a},
+                        {a, a, a, a, a}
                 },
                 {
-                        {b, b, b, b, h, h, g},
-                        {b, a, a, b, a, a, h},
-                        {b, a, a, b, a, a, h},
-                        {b, a, a, b, a, a, h},
-                        {h, a, a, a, a, a, h},
-                        {h, a, a, a, a, a, h},
-                        {g, h, h, h, h, h, g}
+                        {b, b, b, g, a},
+                        {b, i, i, h, a},
+                        {b, i, i, h, a},
+                        {b, b, b, h, a},
+                        {g, h, h, g, a}
                 },
                 {
-                        {b, b, b, b, b, b, b},
-                        {b, a, a, b, a, a, b},
-                        {b, a, a, b, a, a, b},
-                        {b, a, a, b, a, a, b},
-                        {b, a, a, a, a, a, b},
-                        {b, a, a, a, a, a, b},
-                        {b, b, b, null, b, b, b}
+                        {b, b, b, b, b},
+                        {b, a, a, a, b},
+                        {b, a, a, a, b},
+                        {b, a, a, a, b},
+                        {b, b, b, b, b}
                 },
                 {
-                        {b, e, b, f, b, b, b},
-                        {c, b, b, b, j, j, b},
-                        {b, b, b, b, j, j, b},
-                        {c, b, b, b, j, j, d},
-                        {b, j, j, j, j, j, b},
-                        {c, j, j, j, j, j, b},
-                        {b, b, b, b, b, b, b}
+                        {b, b, b, b, b},
+                        {b, a, a, a, b},
+                        {b, a, a, a, b},
+                        {b, a, a, a, b},
+                        {b, b, null, b, b}
+                },
+                {
+                        {b, e, b, f, b},
+                        {c, b, b, b, b},
+                        {b, b, b, b, d},
+                        {c, b, b, b, b},
+                        {b, b, b, b, b}
                 }
         };
     }

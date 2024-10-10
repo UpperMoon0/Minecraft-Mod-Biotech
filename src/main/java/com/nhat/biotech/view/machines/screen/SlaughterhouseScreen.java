@@ -1,8 +1,9 @@
-package com.nhat.biotech.view.machines;
+package com.nhat.biotech.view.machines.screen;
 
 import com.nhat.biotech.Biotech;
+import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
 import com.nhat.biotech.recipes.BiotechRecipe;
-import com.nhat.biotech.utils.Machines;
+import com.nhat.biotech.view.machines.menu.SlaughterhouseMenu;
 import com.nhat.biotech.view.renderer.BiotechFluidRenderer;
 import com.nhat.biotech.view.renderer.BiotechFluidTankRenderer;
 import com.nhat.biotech.view.renderer.BiotechItemRenderer;
@@ -13,14 +14,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 
-public class TerrestrialHabitatScreen extends AbstractContainerScreen<TerrestrialHabitatMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/" + Machines.TERRESTRIAL_HABITAT_ID + ".png");
+public class SlaughterhouseScreen extends AbstractContainerScreen<SlaughterhouseMenu> {
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/" + MachineRegistries.SLAUGHTERHOUSE.id() + ".png");
+    private static final int MAX_PROGRESS_WIDTH = 24;
+    private static final int PROGRESS_HEIGHT = 24;
 
-    public TerrestrialHabitatScreen(TerrestrialHabitatMenu menu, Inventory inventory, Component component) {
+    public SlaughterhouseScreen(SlaughterhouseMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
     }
 
@@ -31,7 +35,7 @@ public class TerrestrialHabitatScreen extends AbstractContainerScreen<Terrestria
     }
 
     @Override
-    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
+    protected void renderLabels(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
         int energyConsumeRate = 0;
 
         if (this.menu.getIsOperating()) {
@@ -42,16 +46,8 @@ public class TerrestrialHabitatScreen extends AbstractContainerScreen<Terrestria
             String animalName = animalRawName.substring(1, animalRawName.length() - 1);
             pGuiGraphics.drawCenteredString(font, animalName, 70, 76, 0xFFFFFF);
 
-            String foodRawName = recipe.getItemIngredients()[1].getDisplayName().getString();
-            String foodName = foodRawName.substring(1, foodRawName.length() - 1);
-            if (isHovering(31, 98, 20, 20, pMouseX, pMouseY)) {
-                pGuiGraphics.renderTooltip(font, List.of(Component.literal(foodName)), Optional.empty(), pMouseX - leftPos, pMouseY - topPos);
-            }
-            int foodCount = recipe.getItemIngredients()[1].getCount();
-            pGuiGraphics.drawCenteredString(font, String.valueOf(foodCount), 95, 104, 0xFFFFFF);
-
             String fluidName = recipe.getFluidIngredients()[0].getDisplayName().getString();
-            if (isHovering(31, 131, 20, 20, pMouseX, pMouseY)) {
+            if (isHovering(31, 98, 20, 20, pMouseX, pMouseY)) {
                 pGuiGraphics.renderTooltip(font, List.of(Component.literal(fluidName)), Optional.empty(), pMouseX - leftPos, pMouseY - topPos);
             }
             int fluidAmount = recipe.getFluidIngredients()[0].getAmount();
@@ -112,41 +108,52 @@ public class TerrestrialHabitatScreen extends AbstractContainerScreen<Terrestria
             }
         }
 
-        int x = 106 - font.width("Terrestrial Habitat") / 2;
-        pGuiGraphics.drawString(font, "Terrestrial Habitat", x, 3, 0x3F3F3F, false);
+        String machineName = "Slaughterhouse";
+        int x = 106 - font.width(machineName) / 2;
+        pGuiGraphics.drawString(font, machineName, x, 3, 0x3F3F3F, false);
     }
-
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         renderBackground(graphics);
-        graphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
         if (menu.getStructureValid())
         {
             if (menu.getEnergyStored() > 0) {
-                int energyHeight = menu.getEnergyHeight();
-                graphics.blit(TEXTURE, leftPos + 4, topPos + 119 - energyHeight, 212, 95 - energyHeight, 9, energyHeight);
+                int energyHeight = getEnergyHeight();
+                graphics.blit(TEXTURE, leftPos + 4, topPos + 119 - energyHeight, 212, 100 - energyHeight, 9, energyHeight);
             }
             if (!menu.getFluidStored().isEmpty())
             {
                 BiotechFluidTankRenderer fTankRenderer = new BiotechFluidTankRenderer(menu.getFluidCapacity(), 12, 75);
                 fTankRenderer.renderFluid(graphics.pose() , leftPos + 196, topPos + 28, menu.getFluidStored());
             }
-            if (this.menu.getIsOperating()) {
-                graphics.blit(TEXTURE, this.leftPos + 88, this.topPos + 28, 212, 0, this.menu.getProgressWidth() + 1, 19);
+            if (menu.getIsOperating()) {
+                graphics.blit(TEXTURE, leftPos + 86, topPos + 26, 212, 0, getProgressWidth() + 1, PROGRESS_HEIGHT);
 
                 BiotechItemRenderer animalItemRenderer = new BiotechItemRenderer(48, 48);
                 ItemStack currentAnimal = menu.getRecipe().getItemIngredients()[0];
                 animalItemRenderer.render(graphics.pose(), leftPos + 46, topPos + 35, currentAnimal);
 
-                BiotechItemRenderer foodItemRenderer = new BiotechItemRenderer(20, 20);
-                ItemStack currentFood = menu.getRecipe().getItemIngredients()[1];
-                foodItemRenderer.render(graphics.pose(), this.leftPos + 33, this.topPos + 100, currentFood);
-
                 FluidStack currentFluid = menu.getRecipe().getFluidIngredients()[0];
                 BiotechFluidRenderer fluidRenderer = new BiotechFluidRenderer();
-                fluidRenderer.renderFluid(graphics.pose(), this.leftPos + 31, this.topPos + 131, 20, 20, currentFluid);
+                fluidRenderer.renderFluid(graphics.pose(), leftPos + 31, topPos + 96, 20, 20, currentFluid);
             }
         }
+    }
+
+    public int getEnergyHeight()
+    {
+        int energyHeight = menu.getEnergyStored() * 76 / menu.getEnergyCapacity();
+
+        if (energyHeight == 0 && menu.getEnergyStored() > 0) {
+            energyHeight = 1;
+        }
+
+        return energyHeight;
+    }
+
+    public int getProgressWidth() {
+        return menu.getRecipeEnergyCost() == 0? 0 : menu.getEnergyConsumed() * MAX_PROGRESS_WIDTH / menu.getRecipeEnergyCost();
     }
 }
