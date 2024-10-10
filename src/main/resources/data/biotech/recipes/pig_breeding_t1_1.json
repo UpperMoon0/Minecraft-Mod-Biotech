@@ -6,23 +6,23 @@
       "Count": 2
     },
     {
-      "id": "minecraft:potato",
-      "Count": 2
+      "id": "minecraft:carrot",
+      "Count": 16
     }
   ],
   "itemConsumed": [false, true],
   "itemResult": [
     {
       "id": "biotech:baby_pig",
-      "Count": 1
+      "Count": 8
     }
   ],
   "fluid": [
     {
       "FluidName": "minecraft:water",
-      "Amount": 1000
+      "Amount": 4000
     }
   ],
   "fluidResult": [],
-  "energy": 12800
+  "energy": 120000
 }

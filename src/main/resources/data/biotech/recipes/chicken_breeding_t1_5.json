@@ -2,27 +2,27 @@
   "type": "biotech:breeding_chamber",
   "item": [
     {
-      "id": "biotech:rabbit",
+      "id": "biotech:chicken",
       "Count": 2
     },
     {
-      "id": "minecraft:dandelion",
-      "Count": 2
+      "id": "minecraft:torchflower_seeds",
+      "Count": 16
     }
   ],
   "itemConsumed": [false, true],
   "itemResult": [
     {
-      "id": "biotech:baby_rabbit",
-      "Count": 1
+      "id": "biotech:baby_chicken",
+      "Count": 8
     }
   ],
   "fluid": [
     {
       "FluidName": "minecraft:water",
-      "Amount": 1000
+      "Amount": 4000
     }
   ],
   "fluidResult": [],
-  "energy": 12800
+  "energy": 120000
 }
