@@ -1,0 +1,28 @@
+{
+  "type": "biotech:slaughterhouse",
+  "item": [
+    {
+      "id": "biotech:pig",
+      "Count": 1
+    }
+  ],
+  "itemConsumed": [true],
+  "itemResult": [
+    {
+      "id": "minecraft:porkchop",
+      "Count": 4
+    },
+    {
+      "id": "minecraft:bone",
+      "Count": 1
+    }
+  ],
+  "fluid": [
+    {
+      "FluidName": "minecraft:water",
+      "Amount": 1000
+    }
+  ],
+  "fluidResult": [],
+  "energy": 10000
+}

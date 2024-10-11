@@ -1,0 +1,41 @@
+{
+  "name": "Slaughterhouse",
+  "icon": "biotech:slaughterhouse",
+  "category": "biotech:getting_started",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The slaughterhouse processes adult animals into products. Each animal yields more drops than when killed normally.$(br)$(br)Provide the adult animal, along with water and energy, for the machine to function."
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [ "     ", "     ", "  CPC", "  P P", "  CPC" ],
+          [ "     ", "     ", "  BBB", "  B B", "  BBB" ],
+          [ "     ", "     ", "  BBB", "  B B", "  BBB" ],
+          [ "     ", "CPPPC", "PBGGB", "PBGGB", "CBBBB" ],
+          [ "BBBBB", "B   B", "B   B", "B   B", "BBBBB" ],
+          [ "BBBBB", "B   B", "M 0 B", "B   B", "BBBBB" ],
+          [ "BBOBB", "BBBBE", "BBBBB", "BBBBF", "BIBIB" ]
+        ],
+        "mapping": {
+          "C": "minecraft:red_concrete",
+          "P": "minecraft:red_stained_glass",
+          "G": "minecraft:glowstone",
+          "B": "biotech:biotech_machine_casing",
+          "M": "biotech:slaughterhouse[facing=north]",
+          "I": "biotech:item_input_hatch[facing=east]",
+          "O": "biotech:item_output_hatch[facing=west]",
+          "F": "biotech:fluid_input_hatch[facing=south]",
+          "E": "biotech:energy_input_hatch[facing=south]"
+        },
+        "symmetrical": true
+      }
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "biotech:slaughterhouse"
+    }
+  ]
+}

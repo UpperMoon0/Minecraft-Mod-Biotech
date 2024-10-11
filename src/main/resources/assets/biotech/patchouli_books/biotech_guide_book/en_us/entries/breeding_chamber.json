@@ -24,13 +24,17 @@
           "D": "minecraft:grass_block",
           "B": "biotech:biotech_machine_casing",
           "M": "biotech:breeding_chamber[facing=north]",
-          "I": "biotech:item_input_hatch[facing=west]",
-          "O": "biotech:item_output_hatch[facing=east]",
+          "I": "biotech:item_input_hatch[facing=east]",
+          "O": "biotech:item_output_hatch[facing=west]",
           "F": "biotech:fluid_input_hatch[facing=south]",
           "E": "biotech:energy_input_hatch[facing=south]"
         },
         "symmetrical": true
       }
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "biotech:breeding_chamber"
     }
   ]
 }

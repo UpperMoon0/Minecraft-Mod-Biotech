@@ -1,0 +1,28 @@
+{
+  "type": "biotech:terrestrial_habitat",
+  "item": [
+    {
+      "id": "biotech:baby_pig",
+      "Count": 1
+    },
+    {
+      "id": "minecraft:carrot",
+      "Count": 4
+    }
+  ],
+  "itemConsumed": [true, true],
+  "itemResult": [
+    {
+      "id": "biotech:pig",
+      "Count": 1
+    }
+  ],
+  "fluid": [
+    {
+      "FluidName": "minecraft:water",
+      "Amount": 2000
+    }
+  ],
+  "fluidResult": [],
+  "energy": 36000
+}

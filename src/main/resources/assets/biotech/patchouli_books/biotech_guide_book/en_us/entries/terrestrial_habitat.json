@@ -1,0 +1,41 @@
+{
+  "name": "Terrestrial Habitat",
+  "icon": "biotech:terrestrial_habitat",
+  "category": "biotech:getting_started",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Terrestrial Habitat rapidly grows baby animals into adults.$(br)$(br)Provide the machine with the baby animal, along with their respective food, water, and energy to operate."
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [ "       ", "       ", "       ", "   CPPC", "   PGGP", "   PGGP", "   CPPC" ],
+          [ "       ", "       ", "       ", "   BBBB", "   B  B", "   B  B", "   BBBB" ],
+          [ "       ", "       ", "       ", "   BBBB", "      B", "      B", "   BBBB" ],
+          [ "CPPPPPC", "P     P", "P     P", "P  BBBB", "P     B", "P     B", "CPPBBBB" ],
+          [ "BBBBBBB", "B     B", "B     B", "M 0BBBB", "B     B", "B     B", "BBBBBBB" ],
+          [ "BBBOBBB", "BDDDDDB", "BDDDDDB", "BDDBBBE", "BDDBBBB", "BDDBBBF", "BIBIBIB" ]
+        ],
+        "mapping": {
+          "C": "minecraft:yellow_concrete",
+          "P": "minecraft:yellow_stained_glass",
+          "G": "minecraft:glowstone",
+          "D": "minecraft:grass_block",
+          "B": "biotech:biotech_machine_casing",
+          "M": "biotech:terrestrial_habitat[facing=north]",
+          "I": "biotech:item_input_hatch[facing=east]",
+          "O": "biotech:item_output_hatch[facing=west]",
+          "F": "biotech:fluid_input_hatch[facing=south]",
+          "E": "biotech:energy_input_hatch[facing=south]"
+        },
+        "symmetrical": true
+      }
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "biotech:terrestrial_habitat"
+    }
+  ]
+}
