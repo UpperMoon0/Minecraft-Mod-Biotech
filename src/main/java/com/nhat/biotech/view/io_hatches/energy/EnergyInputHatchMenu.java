@@ -1,6 +1,5 @@
 package com.nhat.biotech.view.io_hatches.energy;
 
-import com.ewyboy.itank.common.register.Register;
 import com.nhat.biotech.blocks.block_entites.hatches.EnergyHatchBlockEntity;
 import com.nhat.biotech.view.BiotechMenus;
 import net.minecraft.network.FriendlyByteBuf;

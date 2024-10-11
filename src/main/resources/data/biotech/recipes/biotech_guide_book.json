@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "N": {
+      "item": "biotech:net_trap"
+    },
+    "B": {
+      "item": "minecraft:book"
+    }
+  },
+  "pattern": [
+    "BN"
+  ],
+  "result": {
+    "item": "biotech:biotech_guide_book"
+  },
+  "show_notification": true
+}
