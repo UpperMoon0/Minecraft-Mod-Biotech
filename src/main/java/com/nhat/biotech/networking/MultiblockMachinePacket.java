@@ -1,6 +1,6 @@
 package com.nhat.biotech.networking;
 
-import com.nhat.biotech.recipes.BiotechRecipe;
+import com.nhat.biotech.recipes.BiotechRecipeData;
 import net.minecraft.core.BlockPos;
 
 public abstract class MultiblockMachinePacket {
@@ -12,5 +12,5 @@ public abstract class MultiblockMachinePacket {
     protected int recipeEnergyCost;
     protected boolean isStructureValid;
     protected BlockPos pos;
-    protected BiotechRecipe recipe;
+    protected BiotechRecipeData recipe;
 }

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FluidInputHatchBlockEntity extends FluidHatchBlockEntity {
@@ -15,12 +16,12 @@ public class FluidInputHatchBlockEntity extends FluidHatchBlockEntity {
         super(BlockEntityRegistries.FLUID_INPUT_HATCH.get(), pos, state);
     }
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         return Component.translatable("menu.title.biotech.fluid_input_hatch");
     }
-    @Nullable
+
     @Override
-    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
+    public AbstractContainerMenu createMenu(int pContainerId, @NotNull Inventory pPlayerInventory, @NotNull Player pPlayer) {
         return new FluidInputHatchMenu(pContainerId, pPlayerInventory, this);
     }
 }

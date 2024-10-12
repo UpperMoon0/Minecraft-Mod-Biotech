@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class EnergyHatchScreen<T extends EnergyHatchMenu> extends AbstractContainerScreen<T> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/energy_hatch.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/energy_hatch.png");
     public EnergyHatchScreen(T menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
     }

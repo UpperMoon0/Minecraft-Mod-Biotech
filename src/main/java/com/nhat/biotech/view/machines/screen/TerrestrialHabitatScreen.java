@@ -2,7 +2,7 @@ package com.nhat.biotech.view.machines.screen;
 
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
-import com.nhat.biotech.recipes.BiotechRecipe;
+import com.nhat.biotech.recipes.BiotechRecipeData;
 import com.nhat.biotech.view.machines.menu.TerrestrialHabitatMenu;
 import com.nhat.biotech.view.renderer.BiotechFluidRenderer;
 import com.nhat.biotech.view.renderer.BiotechFluidTankRenderer;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class TerrestrialHabitatScreen extends AbstractContainerScreen<TerrestrialHabitatMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/" + MachineRegistries.TERRESTRIAL_HABITAT.id() + ".png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/" + MachineRegistries.TERRESTRIAL_HABITAT.id() + ".png");
     private static final int MAX_PROGRESS_WIDTH = 19;
     private static final int PROGRESS_HEIGHT = 11;
 
@@ -41,7 +41,7 @@ public class TerrestrialHabitatScreen extends AbstractContainerScreen<Terrestria
         if (this.menu.getIsOperating()) {
             energyConsumeRate = menu.getEnergyConsumeRate();
 
-            BiotechRecipe recipe = menu.getRecipe();
+            BiotechRecipeData recipe = menu.getRecipe();
             String animalRawName = recipe.getItemIngredients()[0].getDisplayName().getString();
             String animalName = animalRawName.substring(1, animalRawName.length() - 1);
             pGuiGraphics.drawCenteredString(font, animalName, 70, 76, 0xFFFFFF);

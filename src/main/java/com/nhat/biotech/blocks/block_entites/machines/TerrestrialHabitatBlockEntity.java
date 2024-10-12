@@ -7,8 +7,8 @@ import com.nhat.biotech.blocks.block_entites.hatches.ItemInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemOutputHatchBlockEntity;
 import com.nhat.biotech.networking.BiotechPackets;
 import com.nhat.biotech.networking.TerrestrialHabitatPacket;
-import com.nhat.biotech.recipes.BiotechRecipeHandler;
-import com.nhat.biotech.recipes.TerrestrialHabitatRecipeHandler;
+import com.nhat.biotech.recipes.BiotechRecipe;
+import com.nhat.biotech.recipes.TerrestrialHabitatRecipe;
 import com.nhat.biotech.view.machines.menu.TerrestrialHabitatMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -69,9 +69,9 @@ public class TerrestrialHabitatBlockEntity extends MachineBlockEntity {
 
         if (recipeHandler.isEmpty()) {
             energyConsumed = 0;
-            recipeHandler = level.getRecipeManager().getAllRecipesFor(TerrestrialHabitatRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
+            recipeHandler = level.getRecipeManager().getAllRecipesFor(TerrestrialHabitatRecipe.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
         } else {
-            TerrestrialHabitatRecipeHandler recipeHandler = (TerrestrialHabitatRecipeHandler) this.recipeHandler.get();
+            TerrestrialHabitatRecipe recipeHandler = (TerrestrialHabitatRecipe) this.recipeHandler.get();
             recipeEnergyCost = recipeHandler.getTotalEnergy();
 
             if (energyConsumed == 0) {
@@ -88,7 +88,7 @@ public class TerrestrialHabitatBlockEntity extends MachineBlockEntity {
                 energyConsumed = 0;
                 recipeHandler.assemble(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null);
 
-                this.recipeHandler = level.getRecipeManager().getAllRecipesFor(TerrestrialHabitatRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
+                this.recipeHandler = level.getRecipeManager().getAllRecipesFor(TerrestrialHabitatRecipe.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
         }
 
         BiotechPackets.sendToClients(new TerrestrialHabitatPacket(
@@ -101,7 +101,7 @@ public class TerrestrialHabitatBlockEntity extends MachineBlockEntity {
                 fluidStored,
                 isStructureValid,
                 blockPos,
-                recipeHandler.map(BiotechRecipeHandler::getRecipe).orElse(null)
+                recipeHandler.map(BiotechRecipe::getRecipe).orElse(null)
         ));
     }
 

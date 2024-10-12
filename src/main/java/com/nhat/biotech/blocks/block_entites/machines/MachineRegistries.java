@@ -3,10 +3,10 @@ package com.nhat.biotech.blocks.block_entites.machines;
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.blocks.MachineBlock;
 import com.nhat.biotech.items.ItemRegistries;
-import com.nhat.biotech.recipes.BiotechRecipeHandler;
-import com.nhat.biotech.recipes.BreedingChamberRecipeHandler;
-import com.nhat.biotech.recipes.SlaughterhouseRecipeHandler;
-import com.nhat.biotech.recipes.TerrestrialHabitatRecipeHandler;
+import com.nhat.biotech.recipes.BiotechRecipe;
+import com.nhat.biotech.recipes.BreedingChamberRecipe;
+import com.nhat.biotech.recipes.SlaughterhouseRecipe;
+import com.nhat.biotech.recipes.TerrestrialHabitatRecipe;
 import com.nhat.biotech.view.BiotechMenu;
 import com.nhat.biotech.view.machines.menu.BreedingChamberMenu;
 import com.nhat.biotech.view.machines.menu.SlaughterhouseMenu;
@@ -38,42 +38,42 @@ import java.util.List;
 
 public class MachineRegistries {
 
-    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPE_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Biotech.MODID);
-    private static final DeferredRegister<Item> ITEM_REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, Biotech.MODID);
-    private static final DeferredRegister<MenuType<?>> MENU_REGISTER = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Biotech.MODID);
-    private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER_REGISTER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Biotech.MODID);
-    private static final DeferredRegister<Block> BLOCK_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Biotech.MODID);
+    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPE_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Biotech.MOD_ID);
+    private static final DeferredRegister<Item> ITEM_REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, Biotech.MOD_ID);
+    private static final DeferredRegister<MenuType<?>> MENU_REGISTER = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Biotech.MOD_ID);
+    private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER_REGISTER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Biotech.MOD_ID);
+    private static final DeferredRegister<Block> BLOCK_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Biotech.MOD_ID);
 
     private static final List<Runnable> SCREEN_REGISTRIES = new ArrayList<>();
 
-    public static MachineRegistry<BreedingChamberBlockEntity, BreedingChamberMenu, BreedingChamberRecipeHandler> BREEDING_CHAMBER = register(
+    public static MachineRegistry<BreedingChamberBlockEntity, BreedingChamberMenu, BreedingChamberRecipe> BREEDING_CHAMBER = register(
             "breeding_chamber",
             BreedingChamberBlockEntity.class,
             BreedingChamberMenu::new,
             BreedingChamberScreen::new,
-            BreedingChamberRecipeHandler.SERIALIZER
+            BreedingChamberRecipe.SERIALIZER
     );
 
-    public static MachineRegistry<TerrestrialHabitatBlockEntity, TerrestrialHabitatMenu, TerrestrialHabitatRecipeHandler> TERRESTRIAL_HABITAT = register(
+    public static MachineRegistry<TerrestrialHabitatBlockEntity, TerrestrialHabitatMenu, TerrestrialHabitatRecipe> TERRESTRIAL_HABITAT = register(
             "terrestrial_habitat",
             TerrestrialHabitatBlockEntity.class,
             TerrestrialHabitatMenu::new,
             TerrestrialHabitatScreen::new,
-            TerrestrialHabitatRecipeHandler.SERIALIZER
+            TerrestrialHabitatRecipe.SERIALIZER
     );
 
-    public static MachineRegistry<SlaughterhouseBlockEntity, SlaughterhouseMenu, SlaughterhouseRecipeHandler> SLAUGHTERHOUSE = register(
+    public static MachineRegistry<SlaughterhouseBlockEntity, SlaughterhouseMenu, SlaughterhouseRecipe> SLAUGHTERHOUSE = register(
             "slaughterhouse",
             SlaughterhouseBlockEntity.class,
             SlaughterhouseMenu::new,
             SlaughterhouseScreen::new,
-            SlaughterhouseRecipeHandler.SERIALIZER
+            SlaughterhouseRecipe.SERIALIZER
     );
 
     public static <T extends MachineBlockEntity,
             U extends BiotechMenu,
             V extends AbstractContainerScreen<U>,
-            Y extends BiotechRecipeHandler<Y>>
+            Y extends BiotechRecipe<Y>>
     MachineRegistry<T, U, Y> register(
             String id,
             Class<T> blockEntityClass,
@@ -119,7 +119,7 @@ public class MachineRegistries {
         }
     }
 
-    public record MachineRegistry<T extends MachineBlockEntity, U extends BiotechMenu, Y extends BiotechRecipeHandler<Y>>(
+    public record MachineRegistry<T extends MachineBlockEntity, U extends BiotechMenu, Y extends BiotechRecipe<Y>>(
             String id,
             RegistryObject<Block> block,
             RegistryObject<BlockEntityType<T>> blockEntity,

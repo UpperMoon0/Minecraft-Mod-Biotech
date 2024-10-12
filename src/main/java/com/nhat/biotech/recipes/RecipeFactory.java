@@ -2,6 +2,6 @@ package com.nhat.biotech.recipes;
 
 import net.minecraft.resources.ResourceLocation;
 
-public interface RecipeFactory<T extends BiotechRecipeHandler> {
-    T create(ResourceLocation id, BiotechRecipe recipeContainer);
+public interface RecipeFactory<T extends BiotechRecipe> {
+    T create(ResourceLocation id, BiotechRecipeData recipeContainer);
 }

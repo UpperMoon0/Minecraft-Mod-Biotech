@@ -7,8 +7,8 @@ import com.nhat.biotech.blocks.block_entites.hatches.ItemInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemOutputHatchBlockEntity;
 import com.nhat.biotech.networking.BiotechPackets;
 import com.nhat.biotech.networking.SlaughterhousePacket;
-import com.nhat.biotech.recipes.BiotechRecipeHandler;
-import com.nhat.biotech.recipes.SlaughterhouseRecipeHandler;
+import com.nhat.biotech.recipes.BiotechRecipe;
+import com.nhat.biotech.recipes.SlaughterhouseRecipe;
 import com.nhat.biotech.view.machines.menu.SlaughterhouseMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -66,9 +66,9 @@ public class SlaughterhouseBlockEntity extends MachineBlockEntity {
 
         if (recipeHandler.isEmpty()) {
             energyConsumed = 0;
-            recipeHandler = level.getRecipeManager().getAllRecipesFor(SlaughterhouseRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
+            recipeHandler = level.getRecipeManager().getAllRecipesFor(SlaughterhouseRecipe.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
         } else {
-            SlaughterhouseRecipeHandler recipeHandler = (SlaughterhouseRecipeHandler) this.recipeHandler.get();
+            SlaughterhouseRecipe recipeHandler = (SlaughterhouseRecipe) this.recipeHandler.get();
             recipeEnergyCost = recipeHandler.getTotalEnergy();
 
             if (energyConsumed == 0) {
@@ -85,7 +85,7 @@ public class SlaughterhouseBlockEntity extends MachineBlockEntity {
                 energyConsumed = 0;
                 recipeHandler.assemble(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null);
 
-                this.recipeHandler = level.getRecipeManager().getAllRecipesFor(SlaughterhouseRecipeHandler.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
+                this.recipeHandler = level.getRecipeManager().getAllRecipesFor(SlaughterhouseRecipe.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
         }
 
         BiotechPackets.sendToClients(new SlaughterhousePacket(
@@ -98,7 +98,7 @@ public class SlaughterhouseBlockEntity extends MachineBlockEntity {
                 fluidStored,
                 isStructureValid,
                 blockPos,
-                recipeHandler.map(BiotechRecipeHandler::getRecipe).orElse(null)
+                recipeHandler.map(BiotechRecipe::getRecipe).orElse(null)
         ));
     }
 

@@ -1,7 +1,7 @@
 package com.nhat.biotech.networking;
 
 import com.nhat.biotech.blocks.block_entites.machines.TerrestrialHabitatBlockEntity;
-import com.nhat.biotech.recipes.BiotechRecipe;
+import com.nhat.biotech.recipes.BiotechRecipeData;
 import com.nhat.biotech.view.machines.menu.TerrestrialHabitatMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -26,7 +26,7 @@ public class TerrestrialHabitatPacket extends MultiblockMachinePacket {
                                  FluidStack fluidStored,
                                  boolean isStructureValid,
                                  BlockPos pos,
-                                 BiotechRecipe recipe) {
+                                 BiotechRecipeData recipe) {
         this.energyCapacity = energyCapacity;
         this.energyStored = energyStored;
         this.energyConsumeRate = energyConsumeRate;
@@ -51,7 +51,7 @@ public class TerrestrialHabitatPacket extends MultiblockMachinePacket {
         this.pos = buf.readBlockPos();
         boolean hasRecipe = buf.readBoolean();
         if(hasRecipe) {
-            this.recipe = BiotechRecipe.fromBuf(buf);
+            this.recipe = BiotechRecipeData.fromBuf(buf);
         } else {
             this.recipe = null;
         }

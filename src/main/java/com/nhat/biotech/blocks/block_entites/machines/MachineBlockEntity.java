@@ -1,7 +1,7 @@
 package com.nhat.biotech.blocks.block_entites.machines;
 
 import com.nhat.biotech.blocks.MachineBlock;
-import com.nhat.biotech.recipes.BiotechRecipeHandler;
+import com.nhat.biotech.recipes.BiotechRecipe;
 import com.nhat.biotech.utils.MultiblockUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,7 +34,7 @@ public abstract class MachineBlockEntity extends BlockEntity implements MenuProv
     protected String translateKey;
 
     // Holds the current recipe being processed, if any
-    protected Optional<? extends BiotechRecipeHandler<?>> recipeHandler = Optional.empty();
+    protected Optional<? extends BiotechRecipe<?>> recipeHandler = Optional.empty();
 
     // Constructor for the machine block entity, sets its position and block state
     public MachineBlockEntity(BlockEntityType<? extends MachineBlockEntity> pType, BlockPos pPos, BlockState pBlockState) {

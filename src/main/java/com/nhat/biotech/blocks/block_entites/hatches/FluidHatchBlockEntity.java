@@ -30,19 +30,22 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class FluidHatchBlockEntity extends CapabilityBlockEntity {
-    public final int TANK_CAPACITY = FluidType.BUCKET_VOLUME * 32;
+    public static final int TANK_CAPACITY = FluidType.BUCKET_VOLUME * 32;
+
     protected final ItemStackHandler slots = new ItemStackHandler(2) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
+
     protected FluidTank tank = new FluidTank(TANK_CAPACITY) {
         @Override
         protected void onContentsChanged() {
             setChanged();
         }
     };
+
     protected final LazyOptional<IItemHandler> lazySlots = LazyOptional.of(() -> slots);
 
     protected final LazyOptional<IFluidHandler> lazyTank = LazyOptional.of(() -> tank);
@@ -53,8 +56,7 @@ public abstract class FluidHatchBlockEntity extends CapabilityBlockEntity {
     }
 
     @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing)
+    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing)
     {
         if (capability == ForgeCapabilities.FLUID_HANDLER)
             if (facing == getBlockState().getValue(IOHatchBlock.FACING) || facing == null)
@@ -110,6 +112,7 @@ public abstract class FluidHatchBlockEntity extends CapabilityBlockEntity {
             }
         });
     }
+
     public void setFluid(FluidStack fluidStack) {
         tank.setFluid(fluidStack);
     }

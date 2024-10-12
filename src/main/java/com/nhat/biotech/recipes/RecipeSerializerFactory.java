@@ -12,14 +12,14 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Optional;
 
-public class RecipeSerializerFactory<T extends BiotechRecipeHandler<T> & RecipeFactory<T>> {
+public class RecipeSerializerFactory<T extends BiotechRecipe<T> & RecipeFactory<T>> {
     private static final Gson GSON = new Gson();
 
     public RecipeSerializer<T> createSerializer(RecipeFactory<T> factory) {
         return new RecipeSerializer<T>() {
             @Override
             public T fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-                BiotechRecipe recipeContainer = getRecipeContainerFromJson(pSerializedRecipe);
+                BiotechRecipeData recipeContainer = getRecipeContainerFromJson(pSerializedRecipe);
                 return factory.create(pRecipeId, recipeContainer);
             }
 
@@ -35,13 +35,13 @@ public class RecipeSerializerFactory<T extends BiotechRecipeHandler<T> & RecipeF
 
                 int totalEnergy = pBuffer.readInt();
 
-                BiotechRecipe recipeContainer = new BiotechRecipe(itemIngredients, ingredientsConsumable, itemResults, fluidIngredients, fluidResults, totalEnergy);
+                BiotechRecipeData recipeContainer = new BiotechRecipeData(itemIngredients, ingredientsConsumable, itemResults, fluidIngredients, fluidResults, totalEnergy);
                 return factory.create(pRecipeId, recipeContainer);
             }
 
             @Override
             public void toNetwork(FriendlyByteBuf pBuffer, T pRecipe) {
-                BiotechRecipe recipeContainer = pRecipe.getRecipe();
+                BiotechRecipeData recipeContainer = pRecipe.getRecipe();
 
                 writeItemStackArray(pBuffer, recipeContainer.getItemIngredients());
                 writeBooleanArray(pBuffer, recipeContainer.getIngredientsConsumable());
@@ -56,7 +56,7 @@ public class RecipeSerializerFactory<T extends BiotechRecipeHandler<T> & RecipeF
         };
     }
 
-    private static BiotechRecipe getRecipeContainerFromJson(JsonObject pSerializedRecipe) {
+    private static BiotechRecipeData getRecipeContainerFromJson(JsonObject pSerializedRecipe) {
         ItemStack[] itemIngredients = readItemStackArrayFromJson(pSerializedRecipe.getAsJsonArray("item"));
         boolean[] ingredientsConsumable = GSON.fromJson(pSerializedRecipe.getAsJsonArray("itemConsumed"), boolean[].class);
 
@@ -67,7 +67,7 @@ public class RecipeSerializerFactory<T extends BiotechRecipeHandler<T> & RecipeF
 
         int totalEnergy = pSerializedRecipe.get("energy").getAsInt();
 
-        return new BiotechRecipe(itemIngredients, ingredientsConsumable, itemResults, fluidIngredients, fluidResults, totalEnergy);
+        return new BiotechRecipeData(itemIngredients, ingredientsConsumable, itemResults, fluidIngredients, fluidResults, totalEnergy);
     }
 
     private static ItemStack[] readItemStackArray(FriendlyByteBuf pBuffer) {

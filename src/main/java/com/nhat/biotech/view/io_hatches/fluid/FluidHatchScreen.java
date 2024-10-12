@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class FluidHatchScreen<T extends FluidHatchMenu> extends AbstractContainerScreen<T> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/fluid_hatch.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/fluid_hatch.png");
     private BiotechFluidTankRenderer renderer;
     public FluidHatchScreen(T menu, Inventory inventory, Component component) {
         super(menu, inventory, component);

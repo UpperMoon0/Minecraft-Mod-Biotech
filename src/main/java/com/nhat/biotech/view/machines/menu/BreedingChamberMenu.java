@@ -2,7 +2,7 @@ package com.nhat.biotech.view.machines.menu;
 
 import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
 import com.nhat.biotech.blocks.block_entites.machines.BreedingChamberBlockEntity;
-import com.nhat.biotech.recipes.BiotechRecipe;
+import com.nhat.biotech.recipes.BiotechRecipeData;
 import com.nhat.biotech.view.BiotechMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -24,7 +24,7 @@ public class BreedingChamberMenu extends BiotechMenu {
     private final BlockPos pos;
 
     private FluidStack fluidStored;
-    private BiotechRecipe recipe;
+    private BiotechRecipeData recipe;
     private int energyCapacity;
     private int energyStored;
     private int energyConsumeRate;
@@ -58,7 +58,7 @@ public class BreedingChamberMenu extends BiotechMenu {
     public boolean getStructureValid() {
         return isStructureValid;
     }
-    public BiotechRecipe getRecipe() {
+    public BiotechRecipeData getRecipe() {
         return recipe;
     }
     public int getRecipeEnergyCost() {
@@ -90,7 +90,7 @@ public class BreedingChamberMenu extends BiotechMenu {
     public void setStructureValid(boolean structureValid) {
         isStructureValid = structureValid;
     }
-    public void setRecipe(BiotechRecipe recipeEntity) {
+    public void setRecipe(BiotechRecipeData recipeEntity) {
         this.recipe = recipeEntity;
     }
 

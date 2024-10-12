@@ -1,0 +1,63 @@
+package com.nhat.biotech.jei;
+
+import com.nhat.biotech.Biotech;
+import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
+import com.nhat.biotech.recipes.BreedingChamberRecipe;
+import com.nhat.biotech.recipes.SlaughterhouseRecipe;
+import com.nhat.biotech.recipes.TerrestrialHabitatRecipe;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.registration.IModIngredientRegistration;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+@JeiPlugin
+public class BiotechJEIPlugin implements IModPlugin {
+
+    @Override
+    public @NotNull ResourceLocation getPluginUid() {
+        return new ResourceLocation(Biotech.MOD_ID, "jei_plugin");
+    }
+
+    @Override
+    public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
+        registration.addRecipeCategories(new BreedingChamberCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new TerrestrialHabitatCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new SlaughterhouseCategory(registration.getJeiHelpers().getGuiHelper()));
+    }
+
+    @Override
+    public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(new ItemStack(MachineRegistries.BREEDING_CHAMBER.blockItem().get()), BreedingChamberCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(MachineRegistries.TERRESTRIAL_HABITAT.blockItem().get()), TerrestrialHabitatCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(MachineRegistries.SLAUGHTERHOUSE.blockItem().get()), SlaughterhouseCategory.TYPE);
+    }
+
+    @Override
+    public void registerRecipes(@NotNull IRecipeRegistration registration) {
+
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level == null) {
+            return;
+        }
+        RecipeManager recipeManager = level.getRecipeManager();
+
+        List<BreedingChamberRecipe> breedingRecipes = recipeManager.getAllRecipesFor(BreedingChamberRecipe.TYPE);
+        registration.addRecipes(BreedingChamberCategory.TYPE, breedingRecipes);
+
+        List<TerrestrialHabitatRecipe> terrestrialRecipes = recipeManager.getAllRecipesFor(TerrestrialHabitatRecipe.TYPE);
+        registration.addRecipes(TerrestrialHabitatCategory.TYPE, terrestrialRecipes);
+
+        List<SlaughterhouseRecipe> slaughterhouseRecipes = recipeManager.getAllRecipesFor(SlaughterhouseRecipe.TYPE);
+        registration.addRecipes(SlaughterhouseCategory.TYPE, slaughterhouseRecipes);
+    }
+}

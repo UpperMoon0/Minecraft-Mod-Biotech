@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 public abstract class ItemHatchScreen<T extends ItemHatchMenu> extends AbstractContainerScreen<T> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MODID, "textures/gui/item_hatch.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/item_hatch.png");
 
     public ItemHatchScreen(T menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
