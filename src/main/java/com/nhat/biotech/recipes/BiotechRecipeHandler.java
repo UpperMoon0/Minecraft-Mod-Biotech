@@ -159,33 +159,80 @@ public abstract class BiotechRecipeHandler<T extends BiotechRecipeHandler<T>> im
      * @return            True if there is enough space for the result, false otherwise
      */
     private boolean outputSpaceAvailable(IItemHandler outputSlots, IFluidHandler outputTanks) {
-        // Check if the item output slots have enough space for the result
-        for (ItemStack result : recipe.getItemResults()) {
-            boolean canInsertItem = false;
+        if (outputSlots != null) {
+            int availableEmptyItemSlots = 0;
+            int availableItemSpace;
+
+            // Calculate the total number of empty slots for items
             for (int i = 0; i < outputSlots.getSlots(); i++) {
                 ItemStack slot = outputSlots.getStackInSlot(i);
-                if (slot.isEmpty() || (slot.getItem().equals(result.getItem()) && slot.getCount() < slot.getMaxStackSize())) {
-                    canInsertItem = true;
-                    break;
+                if (slot.isEmpty()) {
+                    availableEmptyItemSlots++;
                 }
             }
-            if (!canInsertItem) {
-                return false;
+
+            // Check if the item output slots have enough space for the result
+            for (ItemStack result : recipe.getItemResults()) {
+                availableItemSpace = 0;
+                int maxStackSize = result.getMaxStackSize();
+
+                // Calculate the available space in non-empty slots for the current result item
+                for (int i = 0; i < outputSlots.getSlots(); i++) {
+                    ItemStack slot = outputSlots.getStackInSlot(i);
+                    if (!slot.isEmpty() && slot.getItem().equals(result.getItem())) {
+                        availableItemSpace += (maxStackSize - slot.getCount());
+                    }
+                }
+
+                // Calculate the total available space including empty slots
+                int totalAvailableSpace = availableItemSpace + (availableEmptyItemSlots * maxStackSize);
+
+                // Check if the total available space is sufficient for the result item
+                if (totalAvailableSpace < result.getCount()) {
+                    return false;
+                }
+
+                // Update the remaining empty slots for the next result item
+                int remainingCount = result.getCount() - availableItemSpace;
+                if (remainingCount > 0) {
+                    availableEmptyItemSlots -= (int) Math.ceil((double) remainingCount / maxStackSize);
+                }
             }
         }
 
-        // Check if the fluid output tanks have enough space for the result
-        for (FluidStack result : recipe.getFluidResults()) {
-            boolean canInsertFluid = false;
+        if (outputTanks != null) {
+            int availableEmptyTankSpace = 0;
+            int availableFluidSpace;
+
+            // Calculate the total available empty space for fluids
             for (int i = 0; i < outputTanks.getTanks(); i++) {
                 FluidStack tankFluid = outputTanks.getFluidInTank(i);
-                if (tankFluid.isEmpty() || (tankFluid.getFluid().equals(result.getFluid()) && tankFluid.getAmount() + result.getAmount() <= outputTanks.getTankCapacity(i))) {
-                    canInsertFluid = true;
-                    break;
+                if (tankFluid.isEmpty()) {
+                    availableEmptyTankSpace += outputTanks.getTankCapacity(i);
                 }
             }
-            if (!canInsertFluid) {
-                return false;
+
+            // Check if the fluid output tanks have enough space for the result
+            for (FluidStack result : recipe.getFluidResults()) {
+                availableFluidSpace = 0;
+
+                for (int i = 0; i < outputTanks.getTanks(); i++) {
+                    FluidStack tankFluid = outputTanks.getFluidInTank(i);
+                    if (!tankFluid.isEmpty() && tankFluid.getFluid().equals(result.getFluid())) {
+                        availableFluidSpace += (outputTanks.getTankCapacity(i) - tankFluid.getAmount());
+                    }
+                }
+
+                // Check if the total available space is sufficient for the result fluid
+                if (availableEmptyTankSpace + availableFluidSpace < result.getAmount()) {
+                    return false;
+                }
+
+                // Update the remaining empty tanks for the next result fluid
+                int remainingAmount = result.getAmount() - availableFluidSpace;
+                if (remainingAmount > 0) {
+                    availableEmptyTankSpace -= remainingAmount;
+                }
             }
         }
 
