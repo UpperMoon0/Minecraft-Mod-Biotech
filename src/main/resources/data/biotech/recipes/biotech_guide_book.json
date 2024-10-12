@@ -1,19 +1,15 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "type": "patchouli:shaped_book_recipe",
+  "pattern": [
+    "$#"
+  ],
   "key": {
-    "N": {
-      "item": "biotech:net_trap"
-    },
-    "B": {
+    "$": {
       "item": "minecraft:book"
+    },
+    "#": {
+      "item": "biotech:biotech_machine_casing"
     }
   },
-  "pattern": [
-    "BN"
-  ],
-  "result": {
-    "item": "biotech:biotech_guide_book"
-  },
-  "show_notification": true
+  "book": "biotech:biotech_guide_book"
 }

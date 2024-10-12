@@ -145,19 +145,19 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:1.20.1-47.3.11"
 
-    //implementation fg.deobf("curse.maven:pipez-443900:4629656")
-    //implementation fg.deobf("curse.maven:rubidium-574856:4573226")
-    //implementation fg.deobf("curse.maven:journeymap-32274:4655325")
-    //implementation fg.deobf("curse.maven:iron-chests-228756:4614852")
-    //implementation fg.deobf("curse.maven:itank-256991:4647928")
-    //implementation fg.deobf("curse.maven:generatorgalore-691049:4661531")
+    implementation fg.deobf("curse.maven:pipez-443900:4629656")
+    implementation fg.deobf("curse.maven:rubidium-574856:4573226")
+    implementation fg.deobf("curse.maven:journeymap-32274:4655325")
+    implementation fg.deobf("curse.maven:iron-chests-228756:4614852")
+    implementation fg.deobf("curse.maven:itank-256991:4647928")
+    implementation fg.deobf("curse.maven:generatorgalore-691049:4661531")
     implementation fg.deobf("curse.maven:patchouli-306770:4966125")
 
     // compile against the JEI API but do not include it at runtime
-    //compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
-    //compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge
-    //runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
