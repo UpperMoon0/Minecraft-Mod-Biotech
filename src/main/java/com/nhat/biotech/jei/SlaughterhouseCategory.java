@@ -3,7 +3,6 @@ package com.nhat.biotech.jei;
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
 import com.nhat.biotech.recipes.SlaughterhouseRecipe;
-import com.nhat.biotech.recipes.TerrestrialHabitatRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -32,7 +31,7 @@ public class SlaughterhouseCategory implements IRecipeCategory<SlaughterhouseRec
     private final IDrawable icon;
 
     public SlaughterhouseCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(TEXTURE, 0, 0, 130, 38);
+        this.background = helper.createDrawable(TEXTURE, 0, 0, 132, 38);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MachineRegistries.SLAUGHTERHOUSE.blockItem().get()));
     }
 
@@ -67,7 +66,7 @@ public class SlaughterhouseCategory implements IRecipeCategory<SlaughterhouseRec
         builder.addSlot(RecipeIngredientRole.INPUT, 23, 21).addFluidStack(fluidIngredient.getFluid(), fluidIngredient.getAmount()).setFluidRenderer(fluidIngredient.getAmount(), false, 16, 16);
 
         for (int i = 0; i < itemOutputs.size(); i++) {
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 79 + (i % 3) * 17, 3 + (i / 3) * 17).addIngredients(itemOutputs.get(i));
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 80 + (i % 3) * 17, 3 + (i / 3) * 17).addIngredients(itemOutputs.get(i));
         }
     }
 }
