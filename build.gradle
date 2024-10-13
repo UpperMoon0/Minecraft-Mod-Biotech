@@ -146,12 +146,10 @@ dependencies {
     minecraft "net.minecraftforge:forge:1.20.1-47.3.11"
 
     implementation fg.deobf("curse.maven:pipez-443900:4629656")
-    implementation fg.deobf("curse.maven:rubidium-574856:4573226")
-    implementation fg.deobf("curse.maven:journeymap-32274:4655325")
-    implementation fg.deobf("curse.maven:iron-chests-228756:4614852")
     implementation fg.deobf("curse.maven:itank-256991:4647928")
     implementation fg.deobf("curse.maven:generatorgalore-691049:4661531")
     implementation fg.deobf("curse.maven:patchouli-306770:4966125")
+    implementation 'com.google.code.gson:gson:2.11.0'
 
     // compile against the JEI API but do not include it at runtime
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
