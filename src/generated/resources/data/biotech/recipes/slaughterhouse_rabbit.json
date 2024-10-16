@@ -1,0 +1,34 @@
+{
+  "type": "biotech:slaughterhouse",
+  "itemInputs": [
+    {
+      "id": "biotech:rabbit",
+      "Count": 1
+    }
+  ],
+  "itemConsumed": [
+    true
+  ],
+  "itemOutputs": [
+    {
+      "id": "minecraft:rabbit",
+      "Count": 2
+    },
+    {
+      "id": "minecraft:rabbit_hide",
+      "Count": 2
+    },
+    {
+      "id": "minecraft:rabbit_foot",
+      "Count": 1
+    }
+  ],
+  "fluidInputs": [
+    {
+      "FluidName": "minecraft:water",
+      "Amount": 200
+    }
+  ],
+  "fluidOutputs": [],
+  "energy": 16000
+}

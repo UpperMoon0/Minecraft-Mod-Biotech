@@ -24,21 +24,27 @@ public class BiotechRecipeData implements Serializable {
         this.fluidResults = fluidOutputs;
         this.totalEnergy = totalEnergy;
     }
+
     public ItemStack[] getItemIngredients() {
         return itemIngredients;
     }
+
     public boolean[] getIngredientsConsumable() {
         return ingredientsConsumable;
     }
+
     public ItemStack[] getItemResults() {
         return itemResults;
     }
+
     public FluidStack[] getFluidIngredients() {
         return fluidIngredients;
     }
+
     public FluidStack[] getFluidResults() {
         return fluidResults;
     }
+
     public int getTotalEnergy() {
         return totalEnergy;
     }

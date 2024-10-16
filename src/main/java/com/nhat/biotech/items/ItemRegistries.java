@@ -12,7 +12,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ItemRegistries {
+
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Biotech.MOD_ID);
+
     public static final RegistryObject<Item> NET_TRAP_ITEM = ITEMS.register("net_trap", () -> new BlockItem(BlockRegistries.NET_TRAP.get(), new Item.Properties()));
     public static final RegistryObject<Item> BIOTECH_MACHINE_CASING = ITEMS.register("biotech_machine_casing", () -> new BlockItem(BlockRegistries.BIOTECH_MACHINE_CASING.get(), new Item.Properties()));
     public static final RegistryObject<Item> ITEM_INPUT_HATCH = ITEMS.register("item_input_hatch", () -> new BlockItem(BlockRegistries.ITEM_INPUT_HATCH.get(), new Item.Properties()));

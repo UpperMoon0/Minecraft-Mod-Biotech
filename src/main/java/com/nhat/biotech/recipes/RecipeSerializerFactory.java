@@ -19,8 +19,8 @@ public class RecipeSerializerFactory<T extends BiotechRecipe<T> & RecipeFactory<
         return new RecipeSerializer<T>() {
             @Override
             public T fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-                BiotechRecipeData recipeContainer = getRecipeContainerFromJson(pSerializedRecipe);
-                return factory.create(pRecipeId, recipeContainer);
+                BiotechRecipeData recipeData = getRecipeDataFromJson(pSerializedRecipe);
+                return factory.create(pRecipeId, recipeData);
             }
 
             @Override
@@ -56,14 +56,14 @@ public class RecipeSerializerFactory<T extends BiotechRecipe<T> & RecipeFactory<
         };
     }
 
-    private static BiotechRecipeData getRecipeContainerFromJson(JsonObject pSerializedRecipe) {
-        ItemStack[] itemIngredients = readItemStackArrayFromJson(pSerializedRecipe.getAsJsonArray("item"));
+    private static BiotechRecipeData getRecipeDataFromJson(JsonObject pSerializedRecipe) {
+        ItemStack[] itemIngredients = readItemStackArrayFromJson(pSerializedRecipe.getAsJsonArray("itemInputs"));
         boolean[] ingredientsConsumable = GSON.fromJson(pSerializedRecipe.getAsJsonArray("itemConsumed"), boolean[].class);
 
-        ItemStack[] itemResults = readItemStackArrayFromJson(pSerializedRecipe.getAsJsonArray("itemResult"));
+        ItemStack[] itemResults = readItemStackArrayFromJson(pSerializedRecipe.getAsJsonArray("itemOutputs"));
 
-        FluidStack[] fluidIngredients = readFluidStackArrayFromJson(pSerializedRecipe.getAsJsonArray("fluid"));
-        FluidStack[] fluidResults = readFluidStackArrayFromJson(pSerializedRecipe.getAsJsonArray("fluidResult"));
+        FluidStack[] fluidIngredients = readFluidStackArrayFromJson(pSerializedRecipe.getAsJsonArray("fluidInputs"));
+        FluidStack[] fluidResults = readFluidStackArrayFromJson(pSerializedRecipe.getAsJsonArray("fluidOutputs"));
 
         int totalEnergy = pSerializedRecipe.get("energy").getAsInt();
 

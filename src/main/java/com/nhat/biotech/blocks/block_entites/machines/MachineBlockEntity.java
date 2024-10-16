@@ -2,7 +2,7 @@ package com.nhat.biotech.blocks.block_entites.machines;
 
 import com.nhat.biotech.blocks.MachineBlock;
 import com.nhat.biotech.recipes.BiotechRecipe;
-import com.nhat.biotech.utils.MultiblockUtils;
+import com.nhat.biotech.utils.MultiblockHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -68,7 +68,7 @@ public abstract class MachineBlockEntity extends BlockEntity implements MenuProv
         // Only process on the server side (not client)
         if (!level.isClientSide) {
             // Validate the multiblock structure based on a pattern
-            blockEntity.isStructureValid = MultiblockUtils.checkMultiblock(level, blockPos, blockState, blockEntity.getStructurePattern(), 2);
+            blockEntity.isStructureValid = MultiblockHelper.checkMultiblock(level, blockPos, blockState, blockEntity.getStructurePattern(), 2);
 
             // If the multiblock structure is valid, continue processing the recipe
             if (blockEntity.isStructureValid) {

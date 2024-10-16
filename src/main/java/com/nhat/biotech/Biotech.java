@@ -7,8 +7,13 @@ import com.nhat.biotech.blocks.block_entites.BlockEntityRegistries;
 import com.nhat.biotech.creative_tabs.ModCreativeTabs;
 import com.nhat.biotech.items.ItemRegistries;
 import com.nhat.biotech.networking.BiotechPackets;
-import com.nhat.biotech.utils.ScreenInit;
 import com.nhat.biotech.view.BiotechMenus;
+import com.nhat.biotech.view.io_hatches.energy.EnergyInputHatchScreen;
+import com.nhat.biotech.view.io_hatches.fluid.FluidInputHatchScreen;
+import com.nhat.biotech.view.io_hatches.fluid.FluidOutputHatchScreen;
+import com.nhat.biotech.view.io_hatches.item.ItemInputHatchScreen;
+import com.nhat.biotech.view.io_hatches.item.ItemOutputHatchScreen;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -29,6 +34,7 @@ public class Biotech
 {
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "biotech";
+
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -75,14 +81,14 @@ public class Biotech
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
+
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
+
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -92,7 +98,11 @@ public class Biotech
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            ScreenInit.init();
+            MenuScreens.register(BiotechMenus.ITEM_INPUT_HATCH.get(), ItemInputHatchScreen::new);
+            MenuScreens.register(BiotechMenus.ITEM_OUTPUT_HATCH.get(), ItemOutputHatchScreen::new);
+            MenuScreens.register(BiotechMenus.FLUID_INPUT_HATCH.get(), FluidInputHatchScreen::new);
+            MenuScreens.register(BiotechMenus.FLUID_OUTPUT_HATCH.get(), FluidOutputHatchScreen::new);
+            MenuScreens.register(BiotechMenus.ENERGY_INPUT_HATCH.get(), EnergyInputHatchScreen::new);
         }
     }
 }

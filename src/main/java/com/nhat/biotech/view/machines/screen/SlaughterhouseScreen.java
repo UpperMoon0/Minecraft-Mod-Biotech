@@ -62,7 +62,7 @@ public class SlaughterhouseScreen extends AbstractContainerScreen<Slaughterhouse
                                 Component.literal("Stored Energy:"),
                                 Component.literal(menu.getEnergyStored() + " / " + menu.getEnergyCapacity() + " FE"),
                                 Component.literal("Consuming: "),
-                                Component.literal(energyConsumeRate+ " FE/t")
+                                Component.literal(energyConsumeRate + " FE / t")
                         ),
                         Optional.empty(),
                         pMouseX - leftPos,

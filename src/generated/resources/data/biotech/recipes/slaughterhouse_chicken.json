@@ -1,0 +1,30 @@
+{
+  "type": "biotech:slaughterhouse",
+  "itemInputs": [
+    {
+      "id": "biotech:chicken",
+      "Count": 1
+    }
+  ],
+  "itemConsumed": [
+    true
+  ],
+  "itemOutputs": [
+    {
+      "id": "minecraft:chicken",
+      "Count": 2
+    },
+    {
+      "id": "minecraft:feather",
+      "Count": 3
+    }
+  ],
+  "fluidInputs": [
+    {
+      "FluidName": "minecraft:water",
+      "Amount": 200
+    }
+  ],
+  "fluidOutputs": [],
+  "energy": 16000
+}

@@ -1,0 +1,31 @@
+{
+  "type": "biotech:breeding_chamber",
+  "itemInputs": [
+    {
+      "id": "biotech:chicken",
+      "Count": 2
+    },
+    {
+      "id": "minecraft:pitcher_pod",
+      "Count": 2
+    }
+  ],
+  "itemConsumed": [
+    true,
+    false
+  ],
+  "itemOutputs": [
+    {
+      "id": "biotech:baby_chicken",
+      "Count": 1
+    }
+  ],
+  "fluidInputs": [
+    {
+      "FluidName": "minecraft:water",
+      "Amount": 200
+    }
+  ],
+  "fluidOutputs": [],
+  "energy": 20000
+}
