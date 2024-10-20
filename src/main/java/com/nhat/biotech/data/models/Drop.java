@@ -1,4 +1,4 @@
-package com.nhat.biotech.data;
+package com.nhat.biotech.data.models;
 
 public record Drop(String id, int count, float chance) {
 

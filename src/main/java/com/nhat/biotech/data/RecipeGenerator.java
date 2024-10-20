@@ -3,6 +3,9 @@ package com.nhat.biotech.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nhat.biotech.Biotech;
+import com.nhat.biotech.data.models.Creature;
+import com.nhat.biotech.data.models.Drop;
+import com.nhat.biotech.data.models.Food;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,8 +44,8 @@ public class RecipeGenerator extends DataGenerator {
                         new ItemJson(food.id(), 2)
                 };
                 boolean[] itemConsumed = new boolean[]{
-                        true,
-                        false
+                        false,
+                        true
                 };
                 FluidJson[] fluidInputs = new FluidJson[]{
                         new FluidJson(Data.FLUID_WATER, 200)

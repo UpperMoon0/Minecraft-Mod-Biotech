@@ -1,5 +1,9 @@
 package com.nhat.biotech.data;
 
+import com.nhat.biotech.data.models.Creature;
+import com.nhat.biotech.data.models.Drop;
+import com.nhat.biotech.data.models.Food;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;

@@ -11,8 +11,8 @@
     }
   ],
   "itemConsumed": [
-    true,
-    false
+    false,
+    true
   ],
   "itemOutputs": [
     {

@@ -1,4 +1,4 @@
-package com.nhat.biotech.data;
+package com.nhat.biotech.data.models;
 
 import com.nhat.biotech.Biotech;
 

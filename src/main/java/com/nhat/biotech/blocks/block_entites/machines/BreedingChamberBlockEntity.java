@@ -5,6 +5,7 @@ import com.nhat.biotech.blocks.block_entites.hatches.EnergyInputHatchBlockEntity
 import com.nhat.biotech.blocks.block_entites.hatches.FluidInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemInputHatchBlockEntity;
 import com.nhat.biotech.blocks.block_entites.hatches.ItemOutputHatchBlockEntity;
+import com.nhat.biotech.data.models.StructurePattern;
 import com.nhat.biotech.networking.BreedingChamberPacket;
 import com.nhat.biotech.networking.BiotechPackets;
 import com.nhat.biotech.recipes.BiotechRecipe;
@@ -39,7 +40,7 @@ public class BreedingChamberBlockEntity extends MachineBlockEntity {
     private FluidInputHatchBlockEntity fluidInputHatch;
 
     public BreedingChamberBlockEntity(BlockPos pos, BlockState state) {
-        super(MachineRegistries.BREEDING_CHAMBER.blockEntity().get(), pos, state);
+        super(MachineRegistries.BREEDING_CHAMBER.blockEntity().get(), pos, state, 2);
         translateKey = "menu.title.biotech." + MachineRegistries.BREEDING_CHAMBER.id();
     }
     @Override
@@ -63,7 +64,7 @@ public class BreedingChamberBlockEntity extends MachineBlockEntity {
         int energyCapacity = energyInputHatch.ENERGY_CAPACITY;
         int energyStored = energyStorage.getEnergyStored();
         int energyConsumeRate = energyInputHatch.ENERGY_THROUGHPUT;
-        int fluidCapacity = fluidInputHatch.TANK_CAPACITY;
+        int fluidCapacity = FluidInputHatchBlockEntity.TANK_CAPACITY;
         FluidStack fluidStored = inputFluidHandler.getFluidInTank(0);
 
         if (recipeHandler.isEmpty()) {
@@ -133,7 +134,7 @@ public class BreedingChamberBlockEntity extends MachineBlockEntity {
         }
     }
     @Override
-    protected Block[][][] getStructurePattern()
+    protected StructurePattern getStructurePattern()
     {
         Block a = Blocks.AIR,
                 b = BlockRegistries.BIOTECH_MACHINE_CASING.get(),
@@ -146,7 +147,7 @@ public class BreedingChamberBlockEntity extends MachineBlockEntity {
                 i = Blocks.GLOWSTONE,
                 j = Blocks.GRASS_BLOCK;
 
-        return new Block[][][]{
+        Block[][][] blockArray =  new Block[][][]{
                 {
                         {a, a, h, b, h, a, a},
                         {a, a, h, i, h, a, a},
@@ -193,5 +194,7 @@ public class BreedingChamberBlockEntity extends MachineBlockEntity {
                         {b, b, b, b, b, b, b}
                 }
         };
+
+        return new StructurePattern(blockArray, true);
     }
 }

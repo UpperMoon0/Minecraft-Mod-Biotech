@@ -1,8 +1,8 @@
 package com.nhat.biotech.blocks.block_entites.machines;
 
 import com.nhat.biotech.blocks.MachineBlock;
+import com.nhat.biotech.data.models.StructurePattern;
 import com.nhat.biotech.recipes.BiotechRecipe;
-import com.nhat.biotech.utils.MultiblockHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -10,7 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,6 +19,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public abstract class MachineBlockEntity extends BlockEntity implements MenuProvider {
+
+    // Stores the structure pattern for the multiblock machine
+    protected StructurePattern structurePattern;
+
+    private final int controllerHeight;
 
     // Tracks the amount of energy consumed by the machine
     protected int energyConsumed;
@@ -37,8 +41,10 @@ public abstract class MachineBlockEntity extends BlockEntity implements MenuProv
     protected Optional<? extends BiotechRecipe<?>> recipeHandler = Optional.empty();
 
     // Constructor for the machine block entity, sets its position and block state
-    public MachineBlockEntity(BlockEntityType<? extends MachineBlockEntity> pType, BlockPos pPos, BlockState pBlockState) {
+    public MachineBlockEntity(BlockEntityType<? extends MachineBlockEntity> pType, BlockPos pPos, BlockState pBlockState, int controllerHeight) {
         super(pType, pPos, pBlockState);
+        this.structurePattern = getStructurePattern();
+        this.controllerHeight = controllerHeight;
     }
 
     // Provides the display name for this machine, used in GUIs or in-game messages
@@ -68,7 +74,7 @@ public abstract class MachineBlockEntity extends BlockEntity implements MenuProv
         // Only process on the server side (not client)
         if (!level.isClientSide) {
             // Validate the multiblock structure based on a pattern
-            blockEntity.isStructureValid = MultiblockHelper.checkMultiblock(level, blockPos, blockState, blockEntity.getStructurePattern(), 2);
+            blockEntity.isStructureValid = blockEntity.checkMultiblock(level, blockPos, blockState);
 
             // If the multiblock structure is valid, continue processing the recipe
             if (blockEntity.isStructureValid) {
@@ -116,5 +122,9 @@ public abstract class MachineBlockEntity extends BlockEntity implements MenuProv
     }
 
     // Abstract method to define the pattern for the multiblock structure
-    protected abstract Block[][][] getStructurePattern();
+    protected abstract StructurePattern getStructurePattern();
+
+    public boolean checkMultiblock(Level level, BlockPos blockPos, BlockState blockState) {
+        return structurePattern.check(level, blockPos, blockState, controllerHeight);
+    }
 }
