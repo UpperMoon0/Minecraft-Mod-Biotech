@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class Data {
+public class CreatureData {
 
     public final static Creature CREATURE_CHICKEN = new Creature("chicken");
     public final static Creature CREATURE_COW = new Creature("cow");
@@ -56,21 +56,26 @@ public class Data {
     public final static HashMap<Creature, List<Drop>> DROPS = new HashMap<>() {{
         put(CREATURE_CHICKEN, List.of(
                 new Drop("minecraft:chicken", 2),
+                new Drop("minecraft:bone", 1),
                 new Drop("minecraft:feather", 3)
         ));
         put(CREATURE_COW, List.of(
                 new Drop("minecraft:beef", 4),
+                new Drop("minecraft:bone", 2),
                 new Drop("minecraft:leather", 3)
         ));
         put(CREATURE_PIG, List.of(
-                new Drop("minecraft:porkchop", 4)
+                new Drop("minecraft:porkchop", 4),
+                new Drop("minecraft:bone", 2)
         ));
         put(CREATURE_SHEEP, List.of(
                 new Drop("minecraft:mutton", 3),
+                new Drop("minecraft:bone", 2),
                 new Drop("minecraft:white_wool", 1)
         ));
         put(CREATURE_RABBIT, List.of(
                 new Drop("minecraft:rabbit", 2),
+                new Drop("minecraft:bone", 1),
                 new Drop("minecraft:rabbit_hide", 2),
                 new Drop("minecraft:rabbit_foot", 1, 0.13f)
         ));

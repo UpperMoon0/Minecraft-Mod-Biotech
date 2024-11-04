@@ -1,7 +1,7 @@
 package com.nhat.biotech.view.io_hatches.item;
 
 import com.nhat.biotech.blocks.BlockRegistries;
-import com.nhat.biotech.view.BiotechMenu;
+import com.nhat.biotech.view.machines.menu.MachineMenu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class ItemHatchMenu extends BiotechMenu {
+public class ItemHatchMenu extends MachineMenu {
     private final BlockEntity blockEntity;
     private final Level level;
     public ItemHatchMenu(MenuType menu, int pContainerId, Inventory inventory, BlockEntity blockEntity) {

@@ -3,7 +3,6 @@ package com.nhat.biotech.view.machines.menu;
 import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
 import com.nhat.biotech.blocks.block_entites.machines.TerrestrialHabitatBlockEntity;
 import com.nhat.biotech.recipes.BiotechRecipeData;
-import com.nhat.biotech.view.BiotechMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class TerrestrialHabitatMenu extends BiotechMenu {
+public class TerrestrialHabitatMenu extends MachineMenu {
 
     private final Level level;
     private final TerrestrialHabitatBlockEntity blockEntity;

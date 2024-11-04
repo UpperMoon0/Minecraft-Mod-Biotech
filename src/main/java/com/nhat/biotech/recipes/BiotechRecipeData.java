@@ -33,7 +33,7 @@ public class BiotechRecipeData implements Serializable {
         return ingredientsConsumable;
     }
 
-    public ItemStack[] getItemResults() {
+    public ItemStack[] getItemOutputs() {
         return itemResults;
     }
 
@@ -41,7 +41,7 @@ public class BiotechRecipeData implements Serializable {
         return fluidIngredients;
     }
 
-    public FluidStack[] getFluidResults() {
+    public FluidStack[] getFluidOutputs() {
         return fluidResults;
     }
 

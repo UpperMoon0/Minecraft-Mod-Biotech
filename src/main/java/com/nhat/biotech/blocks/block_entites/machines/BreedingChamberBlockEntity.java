@@ -133,8 +133,9 @@ public class BreedingChamberBlockEntity extends MachineBlockEntity {
             }
         }
     }
+
     @Override
-    protected StructurePattern getStructurePattern()
+    public StructurePattern getStructurePattern()
     {
         Block a = Blocks.AIR,
                 b = BlockRegistries.BIOTECH_MACHINE_CASING.get(),
@@ -195,6 +196,6 @@ public class BreedingChamberBlockEntity extends MachineBlockEntity {
                 }
         };
 
-        return new StructurePattern(blockArray, true);
+        return new StructurePattern(blockArray, false);
     }
 }

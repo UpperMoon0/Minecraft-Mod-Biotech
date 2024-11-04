@@ -2,7 +2,7 @@ package com.nhat.biotech.view.io_hatches.fluid;
 
 import com.nhat.biotech.blocks.BlockRegistries;
 import com.nhat.biotech.blocks.block_entites.hatches.FluidHatchBlockEntity;
-import com.nhat.biotech.view.BiotechMenu;
+import com.nhat.biotech.view.machines.menu.MachineMenu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class FluidHatchMenu extends BiotechMenu {
+public abstract class FluidHatchMenu extends MachineMenu {
     private final FluidHatchBlockEntity BLOCK_ENTITY;
     private final Level LEVEL;
     private FluidStack fluidStack;

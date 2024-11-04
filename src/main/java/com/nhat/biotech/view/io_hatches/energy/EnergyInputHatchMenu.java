@@ -1,7 +1,6 @@
 package com.nhat.biotech.view.io_hatches.energy;
 
-import com.nhat.biotech.blocks.block_entites.hatches.EnergyHatchBlockEntity;
-import com.nhat.biotech.view.BiotechMenus;
+import com.nhat.biotech.view.MenuRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -14,6 +13,6 @@ public class EnergyInputHatchMenu extends EnergyHatchMenu {
     }
 
     public EnergyInputHatchMenu(int pContainerId, Inventory inventory, BlockEntity blockEntity) {
-        super(BiotechMenus.ENERGY_INPUT_HATCH.get(), pContainerId, inventory, blockEntity);
+        super(MenuRegistries.ENERGY_INPUT_HATCH.get(), pContainerId, inventory, blockEntity);
     }
 }

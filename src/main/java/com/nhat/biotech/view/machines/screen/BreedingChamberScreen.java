@@ -44,7 +44,7 @@ public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamb
             BiotechRecipeData recipe = menu.getRecipe();
             String animalRawName = recipe.getItemIngredients()[0].getDisplayName().getString();
             String animalName = animalRawName.substring(1, animalRawName.length() - 1);
-            pGuiGraphics.drawCenteredString(font, animalName, 70, 76, 0xFFFFFF);
+            pGuiGraphics.drawCenteredString(font, animalName, 106, 76, 0xFFFFFF);
 
             String foodRawName = recipe.getItemIngredients()[1].getDisplayName().getString();
             String foodName = foodRawName.substring(1, foodRawName.length() - 1);
@@ -139,13 +139,17 @@ public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamb
             if (this.menu.getIsOperating()) {
                 graphics.blit(TEXTURE, this.leftPos + 88, this.topPos + 28, 212, 0, getProgressWidth() + 1, PROGRESS_HEIGHT);
 
-                BiotechItemRenderer animalItemRenderer = new BiotechItemRenderer(48, 48);
+                BiotechItemRenderer animalItemRenderer = new BiotechItemRenderer(32, 32);
                 ItemStack currentAnimal = menu.getRecipe().getItemIngredients()[0];
                 animalItemRenderer.render(graphics.pose(), leftPos + 46, topPos + 35, currentAnimal);
 
                 BiotechItemRenderer foodItemRenderer = new BiotechItemRenderer(20, 20);
                 ItemStack currentFood = menu.getRecipe().getItemIngredients()[1];
                 foodItemRenderer.render(graphics.pose(), this.leftPos + 33, this.topPos + 100, currentFood);
+
+                BiotechItemRenderer outputItemRenderer = new BiotechItemRenderer(32, 32);
+                ItemStack currentOutput = menu.getRecipe().getItemOutputs()[0];
+                outputItemRenderer.render(graphics.pose(), this.leftPos + 142, this.topPos + 33, currentOutput);
 
                 FluidStack currentFluid = menu.getRecipe().getFluidIngredients()[0];
                 BiotechFluidRenderer fluidRenderer = new BiotechFluidRenderer();

@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class EnergyInputHatchBlockEntity extends EnergyHatchBlockEntity {
+
     public EnergyInputHatchBlockEntity(BlockPos pos, BlockState state)
     {
         super(BlockEntityRegistries.ENERGY_INPUT_HATCH.get(), pos, state);

@@ -7,7 +7,7 @@ import com.nhat.biotech.recipes.BiotechRecipe;
 import com.nhat.biotech.recipes.BreedingChamberRecipe;
 import com.nhat.biotech.recipes.SlaughterhouseRecipe;
 import com.nhat.biotech.recipes.TerrestrialHabitatRecipe;
-import com.nhat.biotech.view.BiotechMenu;
+import com.nhat.biotech.view.machines.menu.MachineMenu;
 import com.nhat.biotech.view.machines.menu.BreedingChamberMenu;
 import com.nhat.biotech.view.machines.menu.SlaughterhouseMenu;
 import com.nhat.biotech.view.machines.screen.BreedingChamberScreen;
@@ -71,7 +71,7 @@ public class MachineRegistries {
     );
 
     public static <T extends MachineBlockEntity,
-            U extends BiotechMenu,
+            U extends MachineMenu,
             V extends AbstractContainerScreen<U>,
             Y extends BiotechRecipe<Y>>
     MachineRegistry<T, U, Y> register(
@@ -80,7 +80,8 @@ public class MachineRegistries {
             IContainerFactory<U> containerFactory,
             MenuScreens.ScreenConstructor<U, V> screenConstructor,
             RecipeSerializer<Y> recipeSerializer
-    ) {
+    )
+    {
         BlockEntityType.BlockEntitySupplier<T> blockEntitySupplier = (pos, state) -> {
             try {
                 return blockEntityClass.getConstructor(BlockPos.class, BlockState.class).newInstance(pos, state);
@@ -119,7 +120,7 @@ public class MachineRegistries {
         }
     }
 
-    public record MachineRegistry<T extends MachineBlockEntity, U extends BiotechMenu, Y extends BiotechRecipe<Y>>(
+    public record MachineRegistry<T extends MachineBlockEntity, U extends MachineMenu, Y extends BiotechRecipe<Y>>(
             String id,
             RegistryObject<Block> block,
             RegistryObject<BlockEntityType<T>> blockEntity,

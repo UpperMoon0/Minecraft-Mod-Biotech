@@ -37,7 +37,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
     @Override
     public T create(ResourceLocation id, BiotechRecipeData recipeContainer) {
         if (recipeContainer == null) {
-            throw new IllegalArgumentException("RecipeContainer cannot be null");
+            throw new IllegalArgumentException("Recipe data cannot be null");
         }
         return createInstance(id, recipeContainer);
     }
@@ -77,7 +77,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
     }
 
     public List<Ingredient> getItemOutputs() {
-        ItemStack[] items = recipe.getItemResults();
+        ItemStack[] items = recipe.getItemOutputs();
         List<Ingredient> ingredients = NonNullList.create();
         for (ItemStack itemStack : items) {
             ingredients.add(Ingredient.of(itemStack));
@@ -86,7 +86,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
     }
 
     public List<FluidStack> getFluidOutputs() {
-        return List.of(recipe.getFluidResults());
+        return List.of(recipe.getFluidOutputs());
     }
 
     /**
@@ -202,7 +202,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
             }
 
             // Check if the item output slots have enough space for the result
-            for (ItemStack result : recipe.getItemResults()) {
+            for (ItemStack result : recipe.getItemOutputs()) {
                 availableItemSpace = 0;
                 int maxStackSize = result.getMaxStackSize();
 
@@ -243,7 +243,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
             }
 
             // Check if the fluid output tanks have enough space for the result
-            for (FluidStack result : recipe.getFluidResults()) {
+            for (FluidStack result : recipe.getFluidOutputs()) {
                 availableFluidSpace = 0;
 
                 for (int i = 0; i < outputTanks.getTanks(); i++) {
@@ -271,8 +271,8 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
 
     public void assemble(IItemHandler inputSlots, IFluidHandler inputTanks, IItemHandler outputSlots, IFluidHandler outputTanks) {
         // Insert the item results into the output slots
-        if (recipe.getItemResults() != null) {
-            for (ItemStack result : recipe.getItemResults()) {
+        if (recipe.getItemOutputs() != null) {
+            for (ItemStack result : recipe.getItemOutputs()) {
                 for (int i = 0; i < outputSlots.getSlots(); i++) {
                     ItemStack slotStack = outputSlots.getStackInSlot(i);
                     if (slotStack.isEmpty()) {
@@ -287,8 +287,8 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
         }
 
         // Insert the fluid results into the output tanks
-        if (recipe.getFluidResults() != null) {
-            for (FluidStack result : recipe.getFluidResults()) {
+        if (recipe.getFluidOutputs() != null) {
+            for (FluidStack result : recipe.getFluidOutputs()) {
                 for (int i = 0; i < outputTanks.getTanks(); i++) {
                     FluidStack tankFluid = outputTanks.getFluidInTank(i);
                     if (tankFluid.isEmpty()) {

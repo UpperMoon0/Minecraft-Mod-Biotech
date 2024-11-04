@@ -33,10 +33,10 @@ public class RecipeGenerator extends DataGenerator {
         String machineId = "breeding_chamber";
         String type = Biotech.MOD_ID + ":" + machineId;
 
-        List<Creature> creatures = Data.CREATURES;
+        List<Creature> creatures = CreatureData.CREATURES;
 
         for (Creature creature : creatures) {
-            List<Food> foods = Data.FOODS.get(creature);
+            List<Food> foods = CreatureData.FOODS.get(creature);
 
             for (Food food : foods) {
                 ItemJson[] itemInputs = new ItemJson[]{
@@ -48,7 +48,7 @@ public class RecipeGenerator extends DataGenerator {
                         true
                 };
                 FluidJson[] fluidInputs = new FluidJson[]{
-                        new FluidJson(Data.FLUID_WATER, 200)
+                        new FluidJson(CreatureData.FLUID_WATER, 200)
                 };
                 ItemJson[] itemOutputs = new ItemJson[]{
                         new ItemJson(creature.babyId(), 1)
@@ -71,10 +71,10 @@ public class RecipeGenerator extends DataGenerator {
         String machineId = "terrestrial_habitat";
         String type = Biotech.MOD_ID + ":" + machineId;
 
-        List<Creature> creatures = Data.CREATURES;
+        List<Creature> creatures = CreatureData.CREATURES;
 
         for (Creature creature : creatures) {
-            List<Food> foods = Data.FOODS.get(creature);
+            List<Food> foods = CreatureData.FOODS.get(creature);
 
             for (Food food : foods) {
                 ItemJson[] itemInputs = new ItemJson[]{
@@ -86,7 +86,7 @@ public class RecipeGenerator extends DataGenerator {
                         true
                 };
                 FluidJson[] fluidInputs = new FluidJson[]{
-                        new FluidJson(Data.FLUID_WATER, 500)
+                        new FluidJson(CreatureData.FLUID_WATER, 500)
                 };
                 ItemJson[] itemOutputs = new ItemJson[]{
                         new ItemJson(creature.id(), 1)
@@ -109,10 +109,10 @@ public class RecipeGenerator extends DataGenerator {
         String machineId = "slaughterhouse";
         String type = Biotech.MOD_ID + ":" + machineId;
 
-        List<Creature> creatures = Data.CREATURES;
+        List<Creature> creatures = CreatureData.CREATURES;
 
         for (Creature creature : creatures) {
-            List<Drop> drops = Data.DROPS.get(creature);
+            List<Drop> drops = CreatureData.DROPS.get(creature);
 
             for (Drop drop : drops) {
                 ItemJson[] itemInputs = new ItemJson[]{
@@ -122,9 +122,9 @@ public class RecipeGenerator extends DataGenerator {
                         true
                 };
                 FluidJson[] fluidInputs = new FluidJson[]{
-                        new FluidJson(Data.FLUID_WATER, 200)
+                        new FluidJson(CreatureData.FLUID_WATER, 200)
                 };
-                ItemJson[] itemOutputs = Data.DROPS.get(creature).stream()
+                ItemJson[] itemOutputs = CreatureData.DROPS.get(creature).stream()
                         .map(d -> new ItemJson(d.id(), d.count()))
                         .toArray(ItemJson[]::new);
                 FluidJson[] fluidOutputs = new FluidJson[]{};
@@ -146,7 +146,7 @@ public class RecipeGenerator extends DataGenerator {
         Path outputPath = Paths.get(GEN_RECIPES_PATH, recipeName + ".json");
         try {
             Files.createDirectories(outputPath.getParent());
-            System.out.println("Writing recipe to file: " + outputPath);
+            LOGGER.info("Generating recipe " + recipeName);
             try (FileWriter writer = new FileWriter(outputPath.toFile())) {
                 writer.write(json);
             }
@@ -200,10 +200,5 @@ public class RecipeGenerator extends DataGenerator {
             this.FluidName = fluidName;
             this.Amount = amount;
         }
-    }
-
-    public static void main(String[] args) {
-        RecipeGenerator recipeGenerator = new RecipeGenerator();
-        recipeGenerator.generate();
     }
 }

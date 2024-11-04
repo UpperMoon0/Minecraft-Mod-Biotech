@@ -2,7 +2,7 @@ package com.nhat.biotech.view.io_hatches.energy;
 
 import com.nhat.biotech.blocks.BlockRegistries;
 import com.nhat.biotech.blocks.block_entites.hatches.EnergyHatchBlockEntity;
-import com.nhat.biotech.view.BiotechMenu;
+import com.nhat.biotech.view.machines.menu.MachineMenu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 
-public class EnergyHatchMenu extends BiotechMenu {
+public class EnergyHatchMenu extends MachineMenu {
 
     private final EnergyHatchBlockEntity blockEntity;
     private final Level level;

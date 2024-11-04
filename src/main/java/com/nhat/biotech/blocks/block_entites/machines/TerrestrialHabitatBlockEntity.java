@@ -136,7 +136,7 @@ public class TerrestrialHabitatBlockEntity extends MachineBlockEntity {
     }
 
     @Override
-    protected StructurePattern getStructurePattern() {
+    public StructurePattern getStructurePattern() {
         Block a = Blocks.AIR,
                 b = BlockRegistries.BIOTECH_MACHINE_CASING.get(),
                 c = BlockRegistries.ITEM_INPUT_HATCH.get(),

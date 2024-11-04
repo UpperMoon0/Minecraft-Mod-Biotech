@@ -1,4 +1,4 @@
-package com.nhat.biotech.view;
+package com.nhat.biotech.view.machines.menu;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -7,8 +7,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class BiotechMenu extends AbstractContainerMenu {
-    protected BiotechMenu(@Nullable MenuType<?> pMenuType, int pContainerId) {
+public abstract class MachineMenu extends AbstractContainerMenu {
+    protected MachineMenu(@Nullable MenuType<?> pMenuType, int pContainerId) {
         super(pMenuType, pContainerId);
     }
 

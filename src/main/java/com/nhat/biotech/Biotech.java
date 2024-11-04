@@ -7,7 +7,7 @@ import com.nhat.biotech.blocks.block_entites.BlockEntityRegistries;
 import com.nhat.biotech.creative_tabs.ModCreativeTabs;
 import com.nhat.biotech.items.ItemRegistries;
 import com.nhat.biotech.networking.BiotechPackets;
-import com.nhat.biotech.view.BiotechMenus;
+import com.nhat.biotech.view.MenuRegistries;
 import com.nhat.biotech.view.io_hatches.energy.EnergyInputHatchScreen;
 import com.nhat.biotech.view.io_hatches.fluid.FluidInputHatchScreen;
 import com.nhat.biotech.view.io_hatches.fluid.FluidOutputHatchScreen;
@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 @Mod(Biotech.MOD_ID)
 public class Biotech
 {
+    public static final boolean isDevEnv = true;
+
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "biotech";
 
@@ -61,7 +63,7 @@ public class Biotech
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 
         // Register the Deferred Register to the mod event bus so menus get registered
-        BiotechMenus.MENUS.register(modEventBus);
+        MenuRegistries.MENUS.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -98,11 +100,11 @@ public class Biotech
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            MenuScreens.register(BiotechMenus.ITEM_INPUT_HATCH.get(), ItemInputHatchScreen::new);
-            MenuScreens.register(BiotechMenus.ITEM_OUTPUT_HATCH.get(), ItemOutputHatchScreen::new);
-            MenuScreens.register(BiotechMenus.FLUID_INPUT_HATCH.get(), FluidInputHatchScreen::new);
-            MenuScreens.register(BiotechMenus.FLUID_OUTPUT_HATCH.get(), FluidOutputHatchScreen::new);
-            MenuScreens.register(BiotechMenus.ENERGY_INPUT_HATCH.get(), EnergyInputHatchScreen::new);
+            MenuScreens.register(MenuRegistries.ITEM_INPUT_HATCH.get(), ItemInputHatchScreen::new);
+            MenuScreens.register(MenuRegistries.ITEM_OUTPUT_HATCH.get(), ItemOutputHatchScreen::new);
+            MenuScreens.register(MenuRegistries.FLUID_INPUT_HATCH.get(), FluidInputHatchScreen::new);
+            MenuScreens.register(MenuRegistries.FLUID_OUTPUT_HATCH.get(), FluidOutputHatchScreen::new);
+            MenuScreens.register(MenuRegistries.ENERGY_INPUT_HATCH.get(), EnergyInputHatchScreen::new);
         }
     }
 }

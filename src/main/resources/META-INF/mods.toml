@@ -17,7 +17,7 @@ license="${mod_license}"
 # The modid of the mod
 modId="biotech" #mandatory
 # The version number of the mod
-version="1.3" #mandatory
+version="1.5" #mandatory
 # A display name for the mod
 displayName="Biotech" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/

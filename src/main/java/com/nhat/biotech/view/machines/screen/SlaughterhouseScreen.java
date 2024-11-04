@@ -47,11 +47,16 @@ public class SlaughterhouseScreen extends AbstractContainerScreen<Slaughterhouse
             pGuiGraphics.drawCenteredString(font, animalName, 70, 76, 0xFFFFFF);
 
             String fluidName = recipe.getFluidIngredients()[0].getDisplayName().getString();
-            if (isHovering(31, 98, 20, 20, pMouseX, pMouseY)) {
+            if (isHovering(31, 100, 20, 20, pMouseX, pMouseY)) {
                 pGuiGraphics.renderTooltip(font, List.of(Component.literal(fluidName)), Optional.empty(), pMouseX - leftPos, pMouseY - topPos);
             }
             int fluidAmount = recipe.getFluidIngredients()[0].getAmount();
-            pGuiGraphics.drawCenteredString(font, fluidAmount + " mB", 95, 137, 0xFFFFFF);
+            pGuiGraphics.drawCenteredString(font, fluidAmount + " mB", 95, 104, 0xFFFFFF);
+
+            ItemStack[] outputs = menu.getRecipe().getItemOutputs();
+            for (int i = 0; i < outputs.length; i++) {
+                pGuiGraphics.drawString(font, String.valueOf(outputs[i].getCount()), 148, 29 + 18 * i, 0xFFFFFF);
+            }
         }
 
         if (isHovering(4, 43, 9, 76, pMouseX, pMouseY)) {
@@ -112,6 +117,7 @@ public class SlaughterhouseScreen extends AbstractContainerScreen<Slaughterhouse
         int x = 106 - font.width(machineName) / 2;
         pGuiGraphics.drawString(font, machineName, x, 3, 0x3F3F3F, false);
     }
+
     @Override
     protected void renderBg(@NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         renderBackground(graphics);
@@ -135,9 +141,15 @@ public class SlaughterhouseScreen extends AbstractContainerScreen<Slaughterhouse
                 ItemStack currentAnimal = menu.getRecipe().getItemIngredients()[0];
                 animalItemRenderer.render(graphics.pose(), leftPos + 46, topPos + 35, currentAnimal);
 
+                ItemStack[] outputs = menu.getRecipe().getItemOutputs();
+                for (int i = 0; i < outputs.length; i++) {
+                    BiotechItemRenderer outputItemRenderer = new BiotechItemRenderer(16,16);
+                    outputItemRenderer.render(graphics.pose(), leftPos + 125, topPos + 24 + 18 * i, outputs[i]);
+                }
+
                 FluidStack currentFluid = menu.getRecipe().getFluidIngredients()[0];
                 BiotechFluidRenderer fluidRenderer = new BiotechFluidRenderer();
-                fluidRenderer.renderFluid(graphics.pose(), leftPos + 31, topPos + 96, 20, 20, currentFluid);
+                fluidRenderer.renderFluid(graphics.pose(), leftPos + 31, topPos + 98, 20, 20, currentFluid);
             }
         }
     }

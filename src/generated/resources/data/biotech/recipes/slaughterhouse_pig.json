@@ -13,6 +13,10 @@
     {
       "id": "minecraft:porkchop",
       "Count": 4
+    },
+    {
+      "id": "minecraft:bone",
+      "Count": 2
     }
   ],
   "fluidInputs": [

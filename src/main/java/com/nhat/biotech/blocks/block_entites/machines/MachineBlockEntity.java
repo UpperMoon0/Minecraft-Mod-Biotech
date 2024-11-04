@@ -122,7 +122,7 @@ public abstract class MachineBlockEntity extends BlockEntity implements MenuProv
     }
 
     // Abstract method to define the pattern for the multiblock structure
-    protected abstract StructurePattern getStructurePattern();
+    public abstract StructurePattern getStructurePattern();
 
     public boolean checkMultiblock(Level level, BlockPos blockPos, BlockState blockState) {
         return structurePattern.check(level, blockPos, blockState, controllerHeight);

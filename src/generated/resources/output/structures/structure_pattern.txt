@@ -1,0 +1,79 @@
+@Override
+public StructurePattern getStructurePattern()
+{
+    Block a = Blocks.prismarine_brick_slab,
+            b = Blocks.lime_concrete,
+            c = Blocks.glowstone,
+            d = BlockRegistries.biotech_machine_casing,
+            e = Blocks.lime_stained_glass,
+            f = Blocks.diorite_wall,
+            g = Blocks.prismarine_brick_stairs[facing=west],
+            h = Blocks.prismarine_brick_stairs[facing=east],
+            i = Blocks.prismarine_brick_stairs[facing=north],
+            j = Blocks.prismarine_brick_stairs[facing=south],
+            k = BlockRegistries.fluid_input_hatch[facing=north],
+            l = BlockRegistries.energy_input_hatch[facing=north],
+            m = Blocks.farmland,
+            n = BlockRegistries.item_input_hatch[facing=west],
+            o = Blocks.water,
+            p = BlockRegistries.item_output_hatch[facing=east];
+
+    Block[][][] blockArray = new Block[][][]{
+        {
+            {a, a, a, a, a, a, a},
+            {a, a, a, a, a, a, a},
+            {a, a, b, b, b, a, a},
+            {a, a, b, c, b, a, a},
+            {a, a, b, b, b, a, a},
+            {a, a, a, a, a, a, a},
+            {a, a, a, a, a, a, a},
+        },
+        {
+            {a, a, a, a, a, a, a},
+            {a, d, d, d, d, d, a},
+            {a, d, a, a, a, d, a},
+            {a, d, a, a, a, d, a},
+            {a, d, a, a, a, d, a},
+            {a, d, d, d, d, d, a},
+            {a, a, a, a, a, a, a},
+        },
+        {
+            {a, a, a, a, a, a, a},
+            {a, d, e, e, e, d, a},
+            {a, e, a, a, a, e, a},
+            {a, e, a, a, a, e, a},
+            {a, e, a, a, a, e, a},
+            {a, d, e, e, e, d, a},
+            {a, a, a, a, a, a, a},
+        },
+        {
+            {f, a, a, a, a, a, f},
+            {a, d, e, e, e, d, a},
+            {a, e, a, a, a, e, a},
+            {a, e, a, a, a, e, a},
+            {a, e, a, a, a, e, a},
+            {a, d, e, e, e, d, a},
+            {f, a, a, a, a, a, f},
+        },
+        {
+            {b, g, a, a, a, h, b},
+            {i, d, e, e, e, d, i},
+            {a, e, a, a, a, e, a},
+            {a, e, a, a, a, e, a},
+            {a, e, a, a, a, e, a},
+            {j, d, e, e, e, d, j},
+            {b, g, a, a, a, h, b},
+        },
+        {
+            {d, k, d, l, d, d, d},
+            {d, d, d, d, d, d, d},
+            {d, d, m, m, m, d, d},
+            {n, d, m, o, m, d, p},
+            {d, d, m, m, m, d, d},
+            {d, d, d, d, d, d, d},
+            {d, d, d, d, d, d, d},
+        },
+    };
+
+    return new StructurePattern(blockArray, false);
+}

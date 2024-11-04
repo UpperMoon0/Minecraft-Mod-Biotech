@@ -46,10 +46,10 @@ public class RecipeSerializerFactory<T extends BiotechRecipe<T> & RecipeFactory<
                 writeItemStackArray(pBuffer, recipeContainer.getItemIngredients());
                 writeBooleanArray(pBuffer, recipeContainer.getIngredientsConsumable());
 
-                writeItemStackArray(pBuffer, recipeContainer.getItemResults());
+                writeItemStackArray(pBuffer, recipeContainer.getItemOutputs());
 
                 writeFluidStackArray(pBuffer, recipeContainer.getFluidIngredients());
-                writeFluidStackArray(pBuffer, recipeContainer.getFluidResults());
+                writeFluidStackArray(pBuffer, recipeContainer.getFluidOutputs());
 
                 pBuffer.writeInt(recipeContainer.getTotalEnergy());
             }
