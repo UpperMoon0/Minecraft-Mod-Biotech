@@ -3,7 +3,7 @@ package com.nhat.biotech.view.machines.screen;
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
 import com.nhat.biotech.recipes.BiotechRecipeData;
-import com.nhat.biotech.view.machines.menu.TerrestrialHabitatMenu;
+import com.nhat.biotech.view.machines.menu.GreenhouseMenu;
 import com.nhat.biotech.view.renderer.BiotechFluidRenderer;
 import com.nhat.biotech.view.renderer.BiotechFluidTankRenderer;
 import com.nhat.biotech.view.renderer.BiotechItemRenderer;
@@ -14,17 +14,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 
-public class TerrestrialHabitatScreen extends AbstractContainerScreen<TerrestrialHabitatMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/" + MachineRegistries.TERRESTRIAL_HABITAT.id() + ".png");
-    private static final int MAX_PROGRESS_WIDTH = 19;
-    private static final int PROGRESS_HEIGHT = 11;
+public class GreenhouseScreen extends AbstractContainerScreen<GreenhouseMenu> {
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/" + MachineRegistries.GREENHOUSE.id() + ".png");
+    private static final int MAX_PROGRESS_WIDTH = 24;
+    private static final int PROGRESS_HEIGHT = 24;
 
-    public TerrestrialHabitatScreen(TerrestrialHabitatMenu menu, Inventory inventory, Component component) {
+    public GreenhouseScreen(GreenhouseMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
     }
 
@@ -44,23 +45,19 @@ public class TerrestrialHabitatScreen extends AbstractContainerScreen<Terrestria
             BiotechRecipeData recipe = menu.getRecipe();
             String animalRawName = recipe.getItemIngredients()[0].getDisplayName().getString();
             String animalName = animalRawName.substring(1, animalRawName.length() - 1);
-            pGuiGraphics.drawCenteredString(font, animalName, 106, 76, 0xFFFFFF);
-
-            String foodRawName = recipe.getItemIngredients()[1].getDisplayName().getString();
-            String foodName = foodRawName.substring(1, foodRawName.length() - 1);
-            if (isHovering(31, 98, 20, 20, pMouseX, pMouseY)) {
-                pGuiGraphics.renderTooltip(font, List.of(Component.literal(foodName)), Optional.empty(), pMouseX - leftPos, pMouseY - topPos);
-            }
-            int foodCount = recipe.getItemIngredients()[1].getCount();
-            pGuiGraphics.drawCenteredString(font, String.valueOf(foodCount), 95, 104, 0xFFFFFF);
+            pGuiGraphics.drawCenteredString(font, animalName, 70, 76, 0xFFFFFF);
 
             String fluidName = recipe.getFluidIngredients()[0].getDisplayName().getString();
-            if (isHovering(31, 131, 20, 20, pMouseX, pMouseY)) {
+            if (isHovering(31, 100, 20, 20, pMouseX, pMouseY)) {
                 pGuiGraphics.renderTooltip(font, List.of(Component.literal(fluidName)), Optional.empty(), pMouseX - leftPos, pMouseY - topPos);
             }
-
             int fluidAmount = recipe.getFluidIngredients()[0].getAmount();
-            pGuiGraphics.drawCenteredString(font, fluidAmount + " mB", 95, 137, 0xFFFFFF);
+            pGuiGraphics.drawCenteredString(font, fluidAmount + " mB", 95, 104, 0xFFFFFF);
+
+            ItemStack[] outputs = menu.getRecipe().getItemOutputs();
+            for (int i = 0; i < outputs.length; i++) {
+                pGuiGraphics.drawString(font, String.valueOf(outputs[i].getCount()), 148, 29 + 18 * i, 0xFFFFFF);
+            }
         }
 
         if (isHovering(4, 43, 9, 76, pMouseX, pMouseY)) {
@@ -117,7 +114,7 @@ public class TerrestrialHabitatScreen extends AbstractContainerScreen<Terrestria
             }
         }
 
-        String machineName = Component.translatable("menu.title.biotech.terrestrial_habitat").toString();
+        String machineName = Component.translatable("menu.title.biotech.greenhouse").toString();
         int x = 106 - font.width(machineName) / 2;
         pGuiGraphics.drawString(font, machineName, x, 3, 0x3F3F3F, false);
     }
@@ -125,37 +122,35 @@ public class TerrestrialHabitatScreen extends AbstractContainerScreen<Terrestria
     @Override
     protected void renderBg(@NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         renderBackground(graphics);
-        graphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
         if (menu.getStructureValid())
         {
             if (menu.getEnergyStored() > 0) {
                 int energyHeight = getEnergyHeight();
-                graphics.blit(TEXTURE, leftPos + 4, topPos + 119 - energyHeight, 212, 95 - energyHeight, 9, energyHeight);
+                graphics.blit(TEXTURE, leftPos + 4, topPos + 119 - energyHeight, 212, 100 - energyHeight, 9, energyHeight);
             }
             if (!menu.getFluidStored().isEmpty())
             {
                 BiotechFluidTankRenderer fTankRenderer = new BiotechFluidTankRenderer(menu.getFluidCapacity(), 12, 75);
                 fTankRenderer.renderFluid(graphics.pose() , leftPos + 196, topPos + 28, menu.getFluidStored());
             }
-            if (this.menu.getIsOperating()) {
-                graphics.blit(TEXTURE, this.leftPos + 88, this.topPos + 32, 212, 0, getProgressWidth() + 1, PROGRESS_HEIGHT);
+            if (menu.getIsOperating()) {
+                graphics.blit(TEXTURE, leftPos + 86, topPos + 26, 212, 0, getProgressWidth() + 1, PROGRESS_HEIGHT);
 
-                BiotechItemRenderer animalItemRenderer = new BiotechItemRenderer(32, 32);
+                BiotechItemRenderer animalItemRenderer = new BiotechItemRenderer(48, 48);
                 ItemStack currentAnimal = menu.getRecipe().getItemIngredients()[0];
                 animalItemRenderer.render(graphics.pose(), leftPos + 46, topPos + 35, currentAnimal);
 
-                BiotechItemRenderer foodItemRenderer = new BiotechItemRenderer(20, 20);
-                ItemStack currentFood = menu.getRecipe().getItemIngredients()[1];
-                foodItemRenderer.render(graphics.pose(), this.leftPos + 33, this.topPos + 100, currentFood);
-
-                BiotechItemRenderer outputItemRenderer = new BiotechItemRenderer(32, 32);
-                ItemStack currentOutput = menu.getRecipe().getItemOutputs()[0];
-                outputItemRenderer.render(graphics.pose(), this.leftPos + 142, this.topPos + 33, currentOutput);
+                ItemStack[] outputs = menu.getRecipe().getItemOutputs();
+                for (int i = 0; i < outputs.length; i++) {
+                    BiotechItemRenderer outputItemRenderer = new BiotechItemRenderer(16,16);
+                    outputItemRenderer.render(graphics.pose(), leftPos + 125, topPos + 24 + 18 * i, outputs[i]);
+                }
 
                 FluidStack currentFluid = menu.getRecipe().getFluidIngredients()[0];
                 BiotechFluidRenderer fluidRenderer = new BiotechFluidRenderer();
-                fluidRenderer.renderFluid(graphics.pose(), this.leftPos + 31, this.topPos + 131, 20, 20, currentFluid);
+                fluidRenderer.renderFluid(graphics.pose(), leftPos + 31, topPos + 98, 20, 20, currentFluid);
             }
         }
     }

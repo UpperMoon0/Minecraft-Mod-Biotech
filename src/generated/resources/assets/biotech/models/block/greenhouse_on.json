@@ -1,6 +1,6 @@
 {
   "textures": {
-    "front": "biotech:block/slaughterhouse_on",
+    "front": "biotech:block/greenhouse_on",
     "top": "biotech:block/biotech_machine_casing",
     "side": "biotech:block/biotech_machine_casing"
   },

@@ -3,15 +3,10 @@ package com.nhat.biotech.blocks.block_entites.machines;
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.blocks.MachineBlock;
 import com.nhat.biotech.items.ItemRegistries;
-import com.nhat.biotech.recipes.BiotechRecipe;
-import com.nhat.biotech.recipes.BreedingChamberRecipe;
-import com.nhat.biotech.recipes.SlaughterhouseRecipe;
-import com.nhat.biotech.recipes.TerrestrialHabitatRecipe;
-import com.nhat.biotech.view.machines.menu.MachineMenu;
-import com.nhat.biotech.view.machines.menu.BreedingChamberMenu;
-import com.nhat.biotech.view.machines.menu.SlaughterhouseMenu;
+import com.nhat.biotech.recipes.*;
+import com.nhat.biotech.view.machines.menu.*;
 import com.nhat.biotech.view.machines.screen.BreedingChamberScreen;
-import com.nhat.biotech.view.machines.menu.TerrestrialHabitatMenu;
+import com.nhat.biotech.view.machines.screen.GreenhouseScreen;
 import com.nhat.biotech.view.machines.screen.SlaughterhouseScreen;
 import com.nhat.biotech.view.machines.screen.TerrestrialHabitatScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -68,6 +63,14 @@ public class MachineRegistries {
             SlaughterhouseMenu::new,
             SlaughterhouseScreen::new,
             SlaughterhouseRecipe.SERIALIZER
+    );
+
+    public static MachineRegistry<GreenhouseBlockEntity, GreenhouseMenu, GreenhouseRecipe> GREENHOUSE = register(
+            "greenhouse",
+            GreenhouseBlockEntity.class,
+            GreenhouseMenu::new,
+            GreenhouseScreen::new,
+            GreenhouseRecipe.SERIALIZER
     );
 
     public static <T extends MachineBlockEntity,

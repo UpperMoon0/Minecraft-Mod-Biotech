@@ -19,11 +19,9 @@ public class RecipeGenerator extends DataGenerator {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger LOGGER = Logger.getLogger(RecipeGenerator.class.getName());
-    private static final String GEN_RECIPES_PATH = GEN_DATA_PATH + "/recipes";
 
     @Override
     public void generate() {
-        clearDirectory(GEN_RECIPES_PATH);
         generateBreedingChamberRecipes();
         generateTerrestrialHabitatRecipes();
         generateSlaughterhouseRecipes();

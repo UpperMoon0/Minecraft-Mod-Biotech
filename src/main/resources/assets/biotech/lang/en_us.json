@@ -6,6 +6,7 @@
   "block.biotech.breeding_chamber": "Breeding Chamber",
   "block.biotech.terrestrial_habitat": "Terrestrial Habitat",
   "block.biotech.slaughterhouse": "Slaughterhouse",
+  "block.biotech.greenhouse": "Greenhouse",
 
   "block.biotech.item_input_hatch": "Item Input Hatch",
   "block.biotech.item_output_hatch": "Item Output Hatch",
@@ -30,6 +31,7 @@
   "menu.title.biotech.breeding_chamber": "Breeding Chamber",
   "menu.title.biotech.terrestrial_habitat": "Terrestrial Habitat",
   "menu.title.biotech.slaughterhouse": "Slaughterhouse",
+  "menu.title.biotech.greenhouse": "Greenhouse",
 
   "menu.title.biotech.item_input_hatch": "Item Input Hatch",
   "menu.title.biotech.item_output_hatch": "Item Output Hatch",

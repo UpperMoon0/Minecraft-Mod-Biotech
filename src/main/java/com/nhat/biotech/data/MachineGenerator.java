@@ -19,24 +19,16 @@ public class MachineGenerator extends DataGenerator {
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .create();
+
     private static final Logger LOGGER = Logger.getLogger(MachineGenerator.class.getName());
-    private static final String GEN_BLOCKSTATES_PATH = GEN_ASSETS_PATH + "/blockstates";
-    private static final String GEN_BLOCK_MODELS_PATH = GEN_ASSETS_PATH + "/models/block";
-    private static final String GEN_ITEM_MODELS_PATH = GEN_ASSETS_PATH + "/models/item";
-    private static final String TEXTURE_PATH = ASSETS_PATH + "/textures/block";
-    private static final String GEN_TEXTURE_PATH = GEN_ASSETS_PATH + "/textures/block";
 
     @Override
     public void generate() {
-        clearDirectory(GEN_BLOCKSTATES_PATH);
-        clearDirectory(GEN_BLOCK_MODELS_PATH);
-        clearDirectory(GEN_ITEM_MODELS_PATH);
-        clearDirectory(GEN_TEXTURE_PATH);
-
         List<String> machineIds = List.of(
             "breeding_chamber",
             "terrestrial_habitat",
-            "slaughterhouse"
+            "slaughterhouse",
+            "greenhouse"
         );
 
         for (String machineId : machineIds) {
@@ -44,20 +36,21 @@ public class MachineGenerator extends DataGenerator {
         }
     }
 
-    public void generateMachine(String machineId) {
+    private void generateMachine(String machineId) {
         generateTexture(machineId);
         generateModels(machineId);
         generateBlockstate(machineId);
+        generateLootTable(machineId);
     }
 
-    public void generateTexture(String machineId) {
+    private void generateTexture(String machineId) {
         try {
             LOGGER.info("Generating texture for machine " + machineId);
 
             // Load the base and overlay images
-            BufferedImage baseImage = ImageIO.read(new File(TEXTURE_PATH + "/biotech_machine_casing.png"));
-            BufferedImage overlayOffImage = ImageIO.read(new File(TEXTURE_PATH + "/" + machineId + "_off_overlay.png"));
-            BufferedImage overlayOnImage = ImageIO.read(new File(TEXTURE_PATH + "/" + machineId + "_on_overlay.png"));
+            BufferedImage baseImage = ImageIO.read(new File(BLOCK_TEXTURE_PATH + "/biotech_machine_casing.png"));
+            BufferedImage overlayOffImage = ImageIO.read(new File(BLOCK_TEXTURE_PATH + "/" + machineId + "_off_overlay.png"));
+            BufferedImage overlayOnImage = ImageIO.read(new File(BLOCK_TEXTURE_PATH + "/" + machineId + "_on_overlay.png"));
 
             // Create the combined images
             BufferedImage combinedOffImage = new BufferedImage(baseImage.getWidth(), baseImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -75,10 +68,7 @@ public class MachineGenerator extends DataGenerator {
             gOn.dispose();
 
             // Save the combined images
-            File outputDir = new File(GEN_TEXTURE_PATH);
-            if (!outputDir.exists()) {
-                outputDir.mkdirs();
-            }
+            File outputDir = new File(GEN_BLOCK_TEXTURE_PATH);
             ImageIO.write(combinedOffImage, "png", new File(outputDir, machineId + "_off.png"));
             ImageIO.write(combinedOnImage, "png", new File(outputDir, machineId + "_on.png"));
         } catch (IOException e) {
@@ -86,7 +76,7 @@ public class MachineGenerator extends DataGenerator {
         }
     }
 
-    public void generateModels(String machineId) {
+    private void generateModels(String machineId) {
         try {
             // Create the "on" model JSON
             Map<String, Object> onModel = Map.of(
@@ -118,11 +108,6 @@ public class MachineGenerator extends DataGenerator {
             File offModelFile = new File(GEN_BLOCK_MODELS_PATH, machineId + "_off.json");
             File itemModelFile = new File(GEN_ITEM_MODELS_PATH, machineId + ".json");
 
-            // Ensure directories exist
-            onModelFile.getParentFile().mkdirs();
-            offModelFile.getParentFile().mkdirs();
-            itemModelFile.getParentFile().mkdirs();
-
             // Write the JSON content to the files, overwriting if they exist
             try (FileWriter onWriter = new FileWriter(onModelFile);
                  FileWriter offWriter = new FileWriter(offModelFile);
@@ -138,7 +123,7 @@ public class MachineGenerator extends DataGenerator {
         }
     }
 
-    public void generateBlockstate(String machineId) {
+    private void generateBlockstate(String machineId) {
         try {
             // Create the blockstate JSON
             Map<String, Object> blockstate = Map.of(
@@ -157,9 +142,6 @@ public class MachineGenerator extends DataGenerator {
             // Write the JSON file to the appropriate path
             File blockstateFile = new File(GEN_BLOCKSTATES_PATH, machineId + ".json");
 
-            // Ensure directory exists
-            blockstateFile.getParentFile().mkdirs();
-
             // Write the JSON content to the file, overwriting if it exists
             try (FileWriter writer = new FileWriter(blockstateFile)) {
                 GSON.toJson(blockstate, writer);
@@ -168,6 +150,46 @@ public class MachineGenerator extends DataGenerator {
             LOGGER.info("Generated blockstate for machine " + machineId);
         } catch (IOException e) {
             LOGGER.severe("Failed to generate blockstate for machine " + machineId);
+        }
+    }
+
+    private void generateLootTable(String machineId) {
+        try {
+            // Create the loot table JSON structure
+            Map<String, Object> lootTable = Map.of(
+                    "type", "minecraft:block",
+                    "pools", List.of(
+                            Map.of(
+                                    "bonus_rolls", 0.0,
+                                    "conditions", List.of(
+                                            Map.of("condition", "minecraft:survives_explosion")
+                                    ),
+                                    "entries", List.of(
+                                            Map.of(
+                                                    "type", "minecraft:item",
+                                                    "name", "biotech:" + machineId
+                                            )
+                                    ),
+                                    "rolls", 1.0
+                            )
+                    ),
+                    "random_sequence", "biotech:blocks/" + machineId
+            );
+
+            // Define the file path
+            File lootTableFile = new File(GEN_BLOCK_LOOT_TABLES_PATH, machineId + ".json");
+
+            // Ensure the directory exists
+            lootTableFile.getParentFile().mkdirs();
+
+            // Write the JSON content to the file
+            try (FileWriter writer = new FileWriter(lootTableFile)) {
+                GSON.toJson(lootTable, writer);
+            }
+
+            LOGGER.info("Generated loot table for machine " + machineId);
+        } catch (IOException e) {
+            LOGGER.severe("Failed to generate loot table for machine " + machineId);
         }
     }
 }

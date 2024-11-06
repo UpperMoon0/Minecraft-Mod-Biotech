@@ -10,7 +10,6 @@ import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,10 +22,16 @@ import org.jetbrains.annotations.NotNull;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class DebugStructureAnalyzerScreen extends Screen {
 
+    private static final Logger LOGGER = Logger.getLogger(DebugStructureAnalyzerScreen.class.getName());
+
     private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/debug_structure_analyzer.png");
+
+    private static final String SCRIPT_OUTPUT_PATH = "D:\\Dev\\Workspace\\Java\\MCMods\\Biotech-Minecraft-Mod\\script-output";
 
     private final Level level;
 
@@ -101,16 +106,17 @@ public class DebugStructureAnalyzerScreen extends Screen {
         // Generate the pattern and mapping by iterating over the structure area
         for (int y = maxY; y >= minY; y--) {
             List<String> layer = new ArrayList<>();
-            for (int z = minZ - 1; z <= maxZ - 1; z++) {
+            for (int x = minX; x <= maxX; x++) {
                 StringBuilder row = new StringBuilder();
-                for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ - 1; z <= maxZ - 1; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
                     BlockState state = level.getBlockState(pos);
                     String blockKey = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(state.getBlock())).toString();
 
-                    if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
-                        Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-                        blockKey += "[facing=" + facing.getName() + "]";
+                    if (!state.getProperties().isEmpty()) {
+                        blockKey += state.getProperties().stream()
+                                .map(property -> property.getName() + "=" + state.getValue(property).toString())
+                                .collect(Collectors.joining(", ", "[", "]"));
                     }
 
                     if (blockKey.equals("minecraft:air")) {
@@ -154,16 +160,16 @@ public class DebugStructureAnalyzerScreen extends Screen {
         jsonData.put("multiblock", multiblockData);
 
         // Serialize to JSON and save to file
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter("D:\\Dev\\Workspace\\Java\\MCMods\\Biotech-Minecraft-Mod\\src\\generated\\resources\\output\\structures\\structure_patchouli.json")) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+        try (FileWriter writer = new FileWriter(SCRIPT_OUTPUT_PATH + "\\structure_patchouli.json")) {
             gson.toJson(jsonData, writer);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.severe("Failed to write JSON file: " + e.getMessage());
         }
     }
 
     private void writeTxt(List<List<String>> pattern, Map<String, String> mapping) {
-        try (FileWriter writer = new FileWriter("D:\\Dev\\Workspace\\Java\\MCMods\\Biotech-Minecraft-Mod\\src\\generated\\resources\\output\\structures\\structure_pattern.txt")) {
+        try (FileWriter writer = new FileWriter(SCRIPT_OUTPUT_PATH + "\\structure_pattern.txt")) {
             writer.write("@Override\n");
             writer.write("public StructurePattern getStructurePattern()\n{\n");
 
@@ -196,7 +202,7 @@ public class DebugStructureAnalyzerScreen extends Screen {
             writer.write("    return new StructurePattern(blockArray, false);\n}\n");
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.severe("Failed to write TXT file: " + e.getMessage());
         }
     }
 
