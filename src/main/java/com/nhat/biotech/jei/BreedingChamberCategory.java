@@ -24,8 +24,8 @@ import java.util.List;
 
 public class BreedingChamberCategory implements IRecipeCategory<BreedingChamberRecipe> {
 
-    public static final ResourceLocation UID = new ResourceLocation(Biotech.MOD_ID, "breeding_chamber");
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/jei/breeding_chamber.png");
+    public static final ResourceLocation UID = new ResourceLocation(Biotech.MOD_ID, MachineRegistries.BREEDING_CHAMBER.id());
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/jei/" + MachineRegistries.BREEDING_CHAMBER.id() + ".png");
 
     public static final RecipeType<BreedingChamberRecipe> TYPE = new RecipeType<>(UID, BreedingChamberRecipe.class);
 
@@ -44,7 +44,7 @@ public class BreedingChamberCategory implements IRecipeCategory<BreedingChamberR
 
     @Override
     public @NotNull Component getTitle() {
-        return Component.translatable("block.biotech.breeding_chamber");
+        return Component.translatable("block.biotech." + MachineRegistries.BREEDING_CHAMBER.id());
     }
 
     @Override

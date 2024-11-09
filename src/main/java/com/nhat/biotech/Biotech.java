@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 @Mod(Biotech.MOD_ID)
 public class Biotech
 {
-    public static final boolean isDevEnv = true;
+    public static final boolean isDevEnv = false;
 
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "biotech";

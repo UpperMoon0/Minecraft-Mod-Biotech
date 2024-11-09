@@ -116,7 +116,7 @@ public class BreedingChamberScreen extends AbstractContainerScreen<BreedingChamb
             }
         }
 
-        String machineName = Component.translatable("menu.title.biotech.breeding_chamber").toString();
+        String machineName = Component.translatable("menu.title.biotech." + MachineRegistries.BREEDING_CHAMBER.id()).getString();
         int x = 106 - font.width(machineName) / 2;
         pGuiGraphics.drawString(font, machineName, x, 3, 0x3F3F3F, false);
     }

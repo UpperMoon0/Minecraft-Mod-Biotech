@@ -2,7 +2,6 @@ package com.nhat.biotech.jei;
 
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
-import com.nhat.biotech.recipes.BreedingChamberRecipe;
 import com.nhat.biotech.recipes.TerrestrialHabitatRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -23,8 +22,8 @@ import java.util.List;
 
 public class TerrestrialHabitatCategory implements IRecipeCategory<TerrestrialHabitatRecipe> {
 
-    public static final ResourceLocation UID = new ResourceLocation(Biotech.MOD_ID, "terrestrial_habitat");
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/jei/terrestrial_habitat.png");
+    public static final ResourceLocation UID = new ResourceLocation(Biotech.MOD_ID, MachineRegistries.TERRESTRIAL_HABITAT.id());
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/jei/" + MachineRegistries.TERRESTRIAL_HABITAT.id() + ".png");
 
     public static final RecipeType<TerrestrialHabitatRecipe> TYPE = new RecipeType<>(UID, TerrestrialHabitatRecipe.class);
 
@@ -43,7 +42,7 @@ public class TerrestrialHabitatCategory implements IRecipeCategory<TerrestrialHa
 
     @Override
     public @NotNull Component getTitle() {
-        return Component.translatable("block.biotech.terrestrial_habitat");
+        return Component.translatable("block.biotech." + MachineRegistries.TERRESTRIAL_HABITAT.id());
     }
 
     @Override

@@ -71,7 +71,7 @@
  - 47.0.36 Bump Eventbus to address NullPointerException when classloading things on some threads. Closes #9570
  - 47.0.35 Try and be a bit nicer about handling bad [feature] definitions  (#9606)
            * Try and be a bit nicer about handling bad [feature] definitions - they're single square bracket defined and require strings for feature bound values.
-           * Some more tweaks to the feature system to output useful and well formatted error messages when bounds fail. Requires SPI 7.0.1 and the language string "fml.modloading.feature.missing" has changed.
+           * Some more tweaks to the feature system to cropId useful and well formatted error messages when bounds fail. Requires SPI 7.0.1 and the language string "fml.modloading.feature.missing" has changed.
            * Use immutable lists where possible and generally tidy things a bit
  - 47.0.34 [HotFix]: Somehow not caught by CI, but there was an issue in the SpawnUtils to handle.
  - 47.0.33 Remove amount from FluidStack hashCode to fix the equal/hashCode java contract (#9602)
@@ -430,7 +430,7 @@
  - 43.1.19 Create a Forge EntityType Tag for Bosses (#9017)
  - 43.1.18 Allow mods to specify shader import namespace (#9021)
  - 43.1.17 Grindstone Events (#8934)
-           One to modify the output, and one to modify the input.
+           One to modify the cropId, and one to modify the input.
  - 43.1.16 Fix the serialized names of the enum (#9014)
  - 43.1.15 Fix `tryEmptyContainerAndStow` duping fluids with stackable containers (#9004)
  - 43.1.14 Add mod mismatch event (#8989)
@@ -815,7 +815,7 @@
             required by Enum#valueOf, causing invalid suggestions (both in gui and
             through the error message).
  - 41.0.34  Jar-In-Jar (#8715)
- - 41.0.33  [1.19] Fix data-gen output path of custom data-pack registries (#8724)
+ - 41.0.33  [1.19] Fix data-gen cropId path of custom data-pack registries (#8724)
  - 41.0.32  Fix player dive and surface animations in custom fluids (#8738)
  - 41.0.31  [1.19.x] Affect ItemEntity Motion in Custom Fluids (#8737)
  - 41.0.30  [1.19] Add support for items to add enchantments without setting them in NBT (#8719)
@@ -903,7 +903,7 @@
             The task now uses a custom stylesheet with MCForge elements, and
             configured to combine the generation from the four FML subprojects
             (fmlloader, fmlcore, javafmllanguage, mclanguage) and the Forge project
-            into the javadoc output.
+            into the javadoc cropId.
             * Update docs/md files, for 1.19 update and the move away from IRC to Discord.
             * Make "Potentially dangerous alternative prefix" a debug warning, not info.
             Co-authored-by: Curle <curle@gemwire.uk>

@@ -1,0 +1,30 @@
+{
+  "type": "biotech:greenhouse",
+  "itemInputs": [
+    {
+      "id": "potato",
+      "Count": 1
+    }
+  ],
+  "itemConsumed": [
+    true
+  ],
+  "itemOutputs": [
+    {
+      "id": "potato",
+      "Count": 4
+    },
+    {
+      "id": "poisonous_potato",
+      "Count": 1
+    }
+  ],
+  "fluidInputs": [
+    {
+      "FluidName": "minecraft:water",
+      "Amount": 200
+    }
+  ],
+  "fluidOutputs": [],
+  "energy": 64000
+}

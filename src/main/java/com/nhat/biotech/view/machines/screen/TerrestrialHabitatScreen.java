@@ -117,7 +117,7 @@ public class TerrestrialHabitatScreen extends AbstractContainerScreen<Terrestria
             }
         }
 
-        String machineName = Component.translatable("menu.title.biotech.terrestrial_habitat").toString();
+        String machineName = Component.translatable("menu.title.biotech." + MachineRegistries.TERRESTRIAL_HABITAT.id()).getString();
         int x = 106 - font.width(machineName) / 2;
         pGuiGraphics.drawString(font, machineName, x, 3, 0x3F3F3F, false);
     }

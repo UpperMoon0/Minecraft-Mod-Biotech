@@ -86,7 +86,7 @@ public class DebugStructureAnalyzer extends Item {
                 for (int x = 0; x < blockArray[y][z].length; x++) {
                     Block block = blockArray[y][z][x];
                     if (block != null) {
-                        BlockPos targetPos = getRotatedPosition(controllerPos, controllerOffset, x, y, z, facing, blockArray.length);
+                        BlockPos targetPos = getRotatedPosition(controllerPos, controllerOffset, x, y, z, facing);
                         level.setBlock(targetPos, block.defaultBlockState(), 3);
                     }
                 }
@@ -94,7 +94,7 @@ public class DebugStructureAnalyzer extends Item {
         }
     }
 
-    private BlockPos getRotatedPosition(BlockPos controllerPos, BlockPos controllerOffset, int x, int y, int z, Direction facing, int height) {
+    private BlockPos getRotatedPosition(BlockPos controllerPos, BlockPos controllerOffset, int x, int y, int z, Direction facing) {
         int dx = x - controllerOffset.getX();
         int dy = - y + controllerOffset.getY();
         int dz = z - controllerOffset.getZ();

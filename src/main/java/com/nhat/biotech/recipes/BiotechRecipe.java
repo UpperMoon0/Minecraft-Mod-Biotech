@@ -95,8 +95,8 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
      *
      * @param inputSlots     The item input slots
      * @param inputTanks     The fluid input tanks
-     * @param outputSlots    The item output slots
-     * @param outputTanks    The fluid output tanks
+     * @param outputSlots    The item cropId slots
+     * @param outputTanks    The fluid cropId tanks
      * @return               True if the inputs match the recipe, false otherwise
      */
     public boolean recipeMatch(IItemHandler inputSlots, IFluidHandler inputTanks, IItemHandler outputSlots, IFluidHandler outputTanks) {
@@ -105,7 +105,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
         boolean itemsMatch = false;
         boolean fluidsMatch = false;
 
-        // Check if the output slots and tanks have enough space for the result
+        // Check if the cropId slots and tanks have enough space for the result
         if (!outputSpaceAvailable(outputSlots, outputTanks)) {
             return false;
         }
@@ -182,10 +182,10 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
     }
 
     /**
-     * Checks if the output slots and tanks have enough space for the recipe result.
+     * Checks if the cropId slots and tanks have enough space for the recipe result.
      *
-     * @param outputSlots The item output slots
-     * @param outputTanks The fluid output tanks
+     * @param outputSlots The item cropId slots
+     * @param outputTanks The fluid cropId tanks
      * @return            True if there is enough space for the result, false otherwise
      */
     private boolean outputSpaceAvailable(IItemHandler outputSlots, IFluidHandler outputTanks) {
@@ -201,7 +201,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
                 }
             }
 
-            // Check if the item output slots have enough space for the result
+            // Check if the item cropId slots have enough space for the result
             for (ItemStack result : recipe.getItemOutputs()) {
                 availableItemSpace = 0;
                 int maxStackSize = result.getMaxStackSize();
@@ -242,7 +242,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
                 }
             }
 
-            // Check if the fluid output tanks have enough space for the result
+            // Check if the fluid cropId tanks have enough space for the result
             for (FluidStack result : recipe.getFluidOutputs()) {
                 availableFluidSpace = 0;
 
@@ -270,7 +270,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
     }
 
     public void assemble(IItemHandler inputSlots, IFluidHandler inputTanks, IItemHandler outputSlots, IFluidHandler outputTanks) {
-        // Insert the item results into the output slots
+        // Insert the item results into the cropId slots
         if (recipe.getItemOutputs() != null) {
             for (ItemStack result : recipe.getItemOutputs()) {
                 for (int i = 0; i < outputSlots.getSlots(); i++) {
@@ -286,7 +286,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
             }
         }
 
-        // Insert the fluid results into the output tanks
+        // Insert the fluid results into the cropId tanks
         if (recipe.getFluidOutputs() != null) {
             for (FluidStack result : recipe.getFluidOutputs()) {
                 for (int i = 0; i < outputTanks.getTanks(); i++) {

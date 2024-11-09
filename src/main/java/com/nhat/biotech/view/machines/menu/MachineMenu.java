@@ -41,7 +41,7 @@ public abstract class MachineMenu extends AbstractContainerMenu {
                 return ItemStack.EMPTY;
             }
         }
-        // If the index is in the output slots of the container
+        // If the index is in the cropId slots of the container
         else if (pIndex >= outputIndexStart && pIndex < containerSlotsCount) {
             // Try to move the stack to the player inventory
             if (!this.moveItemStackTo(stack, containerSlotsCount, containerSlotsCount + 36, true)) {

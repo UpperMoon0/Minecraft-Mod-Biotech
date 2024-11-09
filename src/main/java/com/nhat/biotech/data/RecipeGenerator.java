@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.data.models.Creature;
+import com.nhat.biotech.data.models.Crop;
 import com.nhat.biotech.data.models.Drop;
 import com.nhat.biotech.data.models.Food;
 
@@ -25,6 +26,7 @@ public class RecipeGenerator extends DataGenerator {
         generateBreedingChamberRecipes();
         generateTerrestrialHabitatRecipes();
         generateSlaughterhouseRecipes();
+        generateGreenhouseRecipes();
     }
 
     public void generateBreedingChamberRecipes() {
@@ -110,31 +112,61 @@ public class RecipeGenerator extends DataGenerator {
         List<Creature> creatures = CreatureData.CREATURES;
 
         for (Creature creature : creatures) {
-            List<Drop> drops = CreatureData.DROPS.get(creature);
 
-            for (Drop drop : drops) {
-                ItemJson[] itemInputs = new ItemJson[]{
-                        new ItemJson(creature.id(), 1)
-                };
-                boolean[] itemConsumed = new boolean[]{
-                        true
-                };
-                FluidJson[] fluidInputs = new FluidJson[]{
-                        new FluidJson(CreatureData.FLUID_WATER, 200)
-                };
-                ItemJson[] itemOutputs = CreatureData.DROPS.get(creature).stream()
-                        .map(d -> new ItemJson(d.id(), d.count()))
-                        .toArray(ItemJson[]::new);
-                FluidJson[] fluidOutputs = new FluidJson[]{};
-                int energy = 16000;
+            ItemJson[] itemInputs = new ItemJson[]{
+                    new ItemJson(creature.id(), 1)
+            };
+            boolean[] itemConsumed = new boolean[]{
+                    true
+            };
+            FluidJson[] fluidInputs = new FluidJson[]{
+                    new FluidJson(CreatureData.FLUID_WATER, 200)
+            };
+            ItemJson[] itemOutputs = CreatureData.DROPS.get(creature).stream()
+                    .map(d -> new ItemJson(d.id(), d.count()))
+                    .toArray(ItemJson[]::new);
+            FluidJson[] fluidOutputs = new FluidJson[]{};
+            int energy = 16000;
 
-                String creatureName = creature.id().substring(creature.id().indexOf(":") + 1);
-                String recipeName = machineId + "_" + creatureName;
+            String creatureName = creature.id().substring(creature.id().indexOf(":") + 1);
+            String recipeName = machineId + "_" + creatureName;
 
-                RecipeJson recipeJson = new RecipeJson(type, itemInputs, itemConsumed, itemOutputs, fluidInputs, fluidOutputs, energy);
+            RecipeJson recipeJson = new RecipeJson(type, itemInputs, itemConsumed, itemOutputs, fluidInputs, fluidOutputs, energy);
 
-                generateRecipe(recipeName, recipeJson);
-            }
+            generateRecipe(recipeName, recipeJson);
+        }
+    }
+
+    public void generateGreenhouseRecipes() {
+        String machineId = "greenhouse";
+        String type = Biotech.MOD_ID + ":" + machineId;
+
+        List<Crop> crops = CropData.CROPS;
+
+        for (Crop crop : crops) {
+
+            ItemJson[] itemInputs = new ItemJson[]{
+                    new ItemJson(crop.seedId(), 1)
+            };
+            boolean[] itemConsumed = new boolean[]{
+                    true
+            };
+            FluidJson[] fluidInputs = new FluidJson[]{
+                    new FluidJson("minecraft:water", 200)
+            };
+            ItemJson[] itemOutputs = crop.yields().stream()
+                    .map(d -> new ItemJson(d.id(), d.count()))
+                    .toArray(ItemJson[]::new);
+            FluidJson[] fluidOutputs = new FluidJson[]{};
+            int energy = 64000;
+
+            String cropId =  crop.yields().get(0).id();
+            String cropName = cropId.substring( cropId.indexOf(":") + 1);
+            String recipeName = machineId + "_" + cropName;
+
+            RecipeJson recipeJson = new RecipeJson(type, itemInputs, itemConsumed, itemOutputs, fluidInputs, fluidOutputs, energy);
+
+            generateRecipe(recipeName, recipeJson);
         }
     }
 
@@ -150,10 +182,10 @@ public class RecipeGenerator extends DataGenerator {
             }
         } catch (IOException e) {
             LOGGER.severe("Failed to write recipe to file: " + outputPath);
-            e.printStackTrace();
         }
     }
 
+    @SuppressWarnings({"FieldCanBeLocal", "unused", "ClassCanBeRecord"})
     private static class RecipeJson {
         private final String type;
         private final ItemJson[] itemInputs;
@@ -180,6 +212,7 @@ public class RecipeGenerator extends DataGenerator {
         }
     }
 
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private static class ItemJson {
         private final String id;
         private final int Count;
@@ -190,6 +223,7 @@ public class RecipeGenerator extends DataGenerator {
         }
     }
 
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private static class FluidJson {
         private final String FluidName;
         private final int Amount;

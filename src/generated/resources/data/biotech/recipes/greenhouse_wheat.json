@@ -1,0 +1,30 @@
+{
+  "type": "biotech:greenhouse",
+  "itemInputs": [
+    {
+      "id": "wheat_seeds",
+      "Count": 1
+    }
+  ],
+  "itemConsumed": [
+    true
+  ],
+  "itemOutputs": [
+    {
+      "id": "wheat",
+      "Count": 2
+    },
+    {
+      "id": "wheat_seeds",
+      "Count": 3
+    }
+  ],
+  "fluidInputs": [
+    {
+      "FluidName": "minecraft:water",
+      "Amount": 200
+    }
+  ],
+  "fluidOutputs": [],
+  "energy": 64000
+}

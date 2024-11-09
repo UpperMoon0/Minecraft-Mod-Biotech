@@ -33,7 +33,7 @@ public class DebugStructureAnalyzerScreen extends Screen {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Biotech.MOD_ID, "textures/gui/debug_structure_analyzer.png");
 
-    private static final String SCRIPT_OUTPUT_PATH = "D:\\Dev\\Workspace\\Java\\MCMods\\Biotech-Minecraft-Mod\\script-output";
+    private static final String SCRIPT_OUTPUT_PATH = "D:\\Dev\\Workspace\\Java\\MCMods\\Biotech-Minecraft-Mod\\script-cropId";
 
     private final Level level;
 
