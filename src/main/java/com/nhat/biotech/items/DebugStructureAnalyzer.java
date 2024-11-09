@@ -96,8 +96,7 @@ public class DebugStructureAnalyzer extends Item {
 
     private BlockPos getRotatedPosition(BlockPos controllerPos, BlockPos controllerOffset, int x, int y, int z, Direction facing, int height) {
         int dx = x - controllerOffset.getX();
-        System.out.println("Controller offset y: " + controllerOffset.getY());
-        int dy = (height - 1 - y);
+        int dy = - y + controllerOffset.getY();
         int dz = z - controllerOffset.getZ();
 
         return switch (facing) {

@@ -109,9 +109,9 @@ public abstract class MachineBlockEntity extends BlockEntity implements MenuProv
     // Rotates the position offsets of hatches based on the block's facing direction
     protected Vec3i rotateHatchesOffset(Vec3i southOffset, Direction direction) {
         return switch (direction) {
-            case NORTH -> new BlockPos(-southOffset.getX(), southOffset.getY(), -southOffset.getZ());
-            case WEST -> new BlockPos(-southOffset.getZ(), southOffset.getY(), southOffset.getX());
-            case EAST -> new BlockPos(southOffset.getZ(), southOffset.getY(), southOffset.getX());
+            case NORTH -> new Vec3i(-southOffset.getX(), southOffset.getY(), -southOffset.getZ());
+            case WEST -> new Vec3i(-southOffset.getZ(), southOffset.getY(), southOffset.getX());
+            case EAST -> new Vec3i(southOffset.getZ(), southOffset.getY(), -southOffset.getX());
             default -> southOffset;
         };
     }
