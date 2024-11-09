@@ -23,6 +23,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DebugStructureAnalyzerScreen extends Screen {
@@ -176,10 +178,27 @@ public class DebugStructureAnalyzerScreen extends Screen {
             // Write block declarations
             writer.write("    Block ");
             List<String> blockVars = new ArrayList<>();
+            Map<String, String> uniqueMapping = new HashMap<>();
+            char currentChar = 'a';
+
             for (Map.Entry<String, String> entry : mapping.entrySet()) {
-                String var = entry.getKey();
-                String block = entry.getValue().replace("minecraft:", "Blocks.").replace("biotech:", "BlockRegistries.");
-                blockVars.add(var + " = " + block);
+                String block = entry.getValue().replaceAll("\\[.*?]", "").replace("minecraft:", "Blocks.").replace("biotech:", "BlockRegistries.");
+
+                // Use Pattern and Matcher to transform the part after the "."
+                Pattern stringPattern = Pattern.compile("(\\w+\\.)(\\w+)");
+                Matcher matcher = stringPattern.matcher(block);
+                if (matcher.find()) {
+                    block = matcher.group(1) + matcher.group(2).toUpperCase();
+                    if (block.startsWith("BlockRegistries.")) {
+                        block += ".get()";
+                    }
+                }
+
+                if (!uniqueMapping.containsValue(block)) {
+                    uniqueMapping.put(String.valueOf(currentChar), block);
+                    blockVars.add(currentChar + " = " + block);
+                    currentChar++;
+                }
             }
             writer.write(String.join(",\n            ", blockVars) + ";\n\n");
 
@@ -193,6 +212,7 @@ public class DebugStructureAnalyzerScreen extends Screen {
                     for (char symbol : row.toCharArray()) {
                         blockRow.add(symbol == ' ' ? "a" : String.valueOf(symbol));
                     }
+                    Collections.reverse(blockRow); // Reverse the row to fix the mirroring issue
                     writer.write(String.join(", ", blockRow));
                     writer.write("},\n");
                 }
