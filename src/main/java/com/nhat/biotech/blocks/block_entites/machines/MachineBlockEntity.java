@@ -17,8 +17,11 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public abstract class MachineBlockEntity extends BlockEntity implements MenuProvider {
+
+    protected static final Logger LOGGER = Logger.getLogger(MachineBlockEntity.class.getName());
 
     // Stores the structure pattern for the multiblock machine
     protected StructurePattern structurePattern;
@@ -126,5 +129,9 @@ public abstract class MachineBlockEntity extends BlockEntity implements MenuProv
 
     public boolean checkMultiblock(Level level, BlockPos blockPos, BlockState blockState) {
         return structurePattern.check(level, blockPos, blockState, controllerHeight);
+    }
+
+    public int getControllerHeight() {
+        return controllerHeight;
     }
 }

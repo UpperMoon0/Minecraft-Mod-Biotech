@@ -103,7 +103,7 @@ public class DebugStructureAnalyzerScreen extends Screen {
 
         List<List<String>> pattern = new ArrayList<>();
         Map<String, String> mapping = new HashMap<>();
-        char currentChar = 'a';
+        char currentChar = 'b';
 
         // Generate the pattern and mapping by iterating over the structure area
         for (int y = maxY; y >= minY; y--) {
@@ -117,7 +117,7 @@ public class DebugStructureAnalyzerScreen extends Screen {
 
                     if (!state.getProperties().isEmpty()) {
                         blockKey += state.getProperties().stream()
-                                .map(property -> property.getName() + "=" + state.getValue(property).toString())
+                                .map(property -> property.getName() + "=" + state.getValue(property))
                                 .collect(Collectors.joining(", ", "[", "]"));
                     }
 
@@ -171,6 +171,49 @@ public class DebugStructureAnalyzerScreen extends Screen {
     }
 
     private void writeTxt(List<List<String>> pattern, Map<String, String> mapping) {
+        // Filter out duplicate values and assign unique variables
+        Map<String, String> filteredMapping = new LinkedHashMap<>();
+        Map<String, String> charReplacementMap = new HashMap<>();
+        char varName = 'b';
+
+        // Loop through the mapping to ensure each unique block type has a variable
+        for (Map.Entry<String, String> entry : mapping.entrySet()) {
+            String block = entry.getValue()
+                    .replaceAll("\\[.*?]", "")
+                    .replace("minecraft:", "Blocks.")
+                    .replace("biotech:", "BlockRegistries.");
+
+            // Transform the part after the "."
+            Pattern stringPattern = Pattern.compile("(\\w+\\.)(\\w+)");
+            Matcher matcher = stringPattern.matcher(block);
+            if (matcher.find()) {
+                block = matcher.group(1) + matcher.group(2).toUpperCase();
+                if (block.startsWith("BlockRegistries.")) {
+                    block += ".get()";
+                }
+            }
+
+            // Check if this block type is already in filteredMapping
+            if (!filteredMapping.containsValue(block)) {
+                String variable = String.valueOf(varName++);
+                filteredMapping.put(variable, block);
+                charReplacementMap.put(entry.getKey(), variable); // Map original character to new variable
+            } else {
+                // Map duplicates to the first variable assigned to this block
+                String finalBlock = block;
+                String existingVariable = filteredMapping.entrySet().stream()
+                        .filter(e -> e.getValue().equals(finalBlock))
+                        .map(Map.Entry::getKey)
+                        .findFirst()
+                        .orElse(null);
+                charReplacementMap.put(entry.getKey(), existingVariable);
+            }
+        }
+
+        // Add Blocks.AIR mapping to a unique character "a"
+        filteredMapping.put("a", "Blocks.AIR");
+        charReplacementMap.put(" ", "a");
+
         try (FileWriter writer = new FileWriter(SCRIPT_OUTPUT_PATH + "\\structure_pattern.txt")) {
             writer.write("@Override\n");
             writer.write("public StructurePattern getStructurePattern()\n{\n");
@@ -178,31 +221,12 @@ public class DebugStructureAnalyzerScreen extends Screen {
             // Write block declarations
             writer.write("    Block ");
             List<String> blockVars = new ArrayList<>();
-            Map<String, String> uniqueMapping = new HashMap<>();
-            char currentChar = 'a';
-
-            for (Map.Entry<String, String> entry : mapping.entrySet()) {
-                String block = entry.getValue().replaceAll("\\[.*?]", "").replace("minecraft:", "Blocks.").replace("biotech:", "BlockRegistries.");
-
-                // Use Pattern and Matcher to transform the part after the "."
-                Pattern stringPattern = Pattern.compile("(\\w+\\.)(\\w+)");
-                Matcher matcher = stringPattern.matcher(block);
-                if (matcher.find()) {
-                    block = matcher.group(1) + matcher.group(2).toUpperCase();
-                    if (block.startsWith("BlockRegistries.")) {
-                        block += ".get()";
-                    }
-                }
-
-                if (!uniqueMapping.containsValue(block)) {
-                    uniqueMapping.put(String.valueOf(currentChar), block);
-                    blockVars.add(currentChar + " = " + block);
-                    currentChar++;
-                }
+            for (Map.Entry<String, String> entry : filteredMapping.entrySet()) {
+                blockVars.add(entry.getKey() + " = " + entry.getValue());
             }
             writer.write(String.join(",\n            ", blockVars) + ";\n\n");
 
-            // Write block array
+            // Write block array, replacing characters with mapped variables
             writer.write("    Block[][][] blockArray = new Block[][][]{\n");
             for (List<String> layer : pattern) {
                 writer.write("        {\n");
@@ -210,7 +234,8 @@ public class DebugStructureAnalyzerScreen extends Screen {
                     writer.write("            {");
                     List<String> blockRow = new ArrayList<>();
                     for (char symbol : row.toCharArray()) {
-                        blockRow.add(symbol == ' ' ? "a" : String.valueOf(symbol));
+                        // Replace removed characters with their valid counterparts
+                        blockRow.add(charReplacementMap.getOrDefault(String.valueOf(symbol), "a"));
                     }
                     Collections.reverse(blockRow); // Reverse the row to fix the mirroring issue
                     writer.write(String.join(", ", blockRow));

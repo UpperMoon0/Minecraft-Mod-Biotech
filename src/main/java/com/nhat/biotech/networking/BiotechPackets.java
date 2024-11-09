@@ -53,6 +53,12 @@ public class BiotechPackets {
                 .encoder(SlaughterhousePacket::toBytes)
                 .consumerMainThread(SlaughterhousePacket::handle)
                 .add();
+
+        net.messageBuilder(GreenhousePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(GreenhousePacket::new)
+                .encoder(GreenhousePacket::toBytes)
+                .consumerMainThread(GreenhousePacket::handle)
+                .add();
     }
     public static <MSG> void sendToClients(MSG message) {
         INSTANCE.send(PacketDistributor.ALL.noArg(), message);

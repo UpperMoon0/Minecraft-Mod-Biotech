@@ -50,7 +50,6 @@ public class GreenhouseBlockEntity extends MachineBlockEntity {
 
     @Override
     protected void processRecipe(Level level, BlockPos blockPos) {
-        System.out.println("Processing recipe of GreenhouseBlockEntity");
         IItemHandler combinedInputItemHandler = new CombinedInvWrapper(
                 (IItemHandlerModifiable) itemInputHatch.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(NullPointerException::new)
         );
@@ -85,7 +84,8 @@ public class GreenhouseBlockEntity extends MachineBlockEntity {
                 energyConsumed = 0;
                 recipeHandler.assemble(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null);
 
-                this.recipeHandler = level.getRecipeManager().getAllRecipesFor(GreenhouseRecipe.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
+                this.recipeHandler = level.getRecipeManager().getAllRecipesFor(GreenhouseRecipe.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();
+            }
         }
 
         BiotechPackets.sendToClients(new GreenhousePacket(
@@ -118,6 +118,7 @@ public class GreenhouseBlockEntity extends MachineBlockEntity {
         for (int i = 0; i < southOffset.length; i++) {
             Vec3i rotatedOffset = rotateHatchesOffset(southOffset[i], facing);
             BlockPos hatchPos = blockPos.offset(rotatedOffset);
+
             switch (i) {
                 case 0 -> itemInputHatch = (ItemInputHatchBlockEntity) level.getBlockEntity(hatchPos);
                 case 1 -> itemOutputHatch = (ItemOutputHatchBlockEntity) level.getBlockEntity(hatchPos);
@@ -130,78 +131,78 @@ public class GreenhouseBlockEntity extends MachineBlockEntity {
     @Override
     public StructurePattern getStructurePattern()
     {
-        Block a = Blocks.PRISMARINE_BRICK_SLAB,
-                b = Blocks.LIME_CONCRETE,
-                c = Blocks.GLOWSTONE,
-                d = BlockRegistries.BIOTECH_MACHINE_CASING.get(),
-                e = Blocks.PRISMARINE_BRICK_SLAB,
+        Block b = Blocks.PRISMARINE_BRICK_SLAB,
+                c = Blocks.LIME_CONCRETE,
+                d = Blocks.GLOWSTONE,
+                e = BlockRegistries.BIOTECH_MACHINE_CASING.get(),
                 f = Blocks.LIME_STAINED_GLASS,
                 g = Blocks.DIORITE_WALL,
                 h = Blocks.PRISMARINE_BRICK_STAIRS,
-                l = BlockRegistries.ENERGY_INPUT_HATCH.get(),
-                m = BlockRegistries.FLUID_INPUT_HATCH.get(),
-                n = Blocks.FARMLAND,
-                o = BlockRegistries.ITEM_OUTPUT_HATCH.get(),
-                p = Blocks.WATER,
-                q = BlockRegistries.ITEM_INPUT_HATCH.get();
+                i = BlockRegistries.ENERGY_INPUT_HATCH.get(),
+                j = BlockRegistries.FLUID_INPUT_HATCH.get(),
+                k = Blocks.FARMLAND,
+                l = BlockRegistries.ITEM_OUTPUT_HATCH.get(),
+                m = Blocks.WATER,
+                n = BlockRegistries.ITEM_INPUT_HATCH.get(),
+                a = Blocks.AIR;
 
         Block[][][] blockArray = new Block[][][]{
                 {
                         {a, a, a, a, a, a, a},
-                        {a, a, a, a, a, a, a},
-                        {a, a, b, b, b, a, a},
-                        {a, a, b, c, b, a, a},
-                        {a, a, b, b, b, a, a},
-                        {a, a, a, a, a, a, a},
-                        {a, a, a, a, a, a, a},
-                },
-                {
-                        {a, a, a, a, a, a, a},
-                        {a, d, d, d, d, d, a},
-                        {a, d, a, a, a, d, a},
-                        {a, d, a, a, a, d, a},
-                        {a, d, a, a, a, d, a},
-                        {a, d, d, d, d, d, a},
+                        {a, a, a, b, a, a, a},
+                        {a, a, c, c, c, a, a},
+                        {a, b, c, d, c, b, a},
+                        {a, a, c, c, c, a, a},
+                        {a, a, a, b, a, a, a},
                         {a, a, a, a, a, a, a},
                 },
                 {
-                        {a, e, a, a, a, e, a},
-                        {e, d, f, f, f, d, e},
+                        {a, a, b, b, b, a, a},
+                        {a, e, e, e, e, e, a},
+                        {b, e, a, a, a, e, b},
+                        {b, e, a, a, a, e, b},
+                        {b, e, a, a, a, e, b},
+                        {a, e, e, e, e, e, a},
+                        {a, a, b, b, b, a, a},
+                },
+                {
+                        {b, b, a, a, a, b, b},
+                        {b, e, f, f, f, e, b},
                         {a, f, a, a, a, f, a},
                         {a, f, a, a, a, f, a},
                         {a, f, a, a, a, f, a},
-                        {e, d, f, f, f, d, e},
-                        {a, e, a, a, a, e, a},
+                        {b, e, f, f, f, e, b},
+                        {b, b, a, a, a, b, b},
                 },
                 {
                         {g, a, a, a, a, a, g},
-                        {a, d, f, f, f, d, a},
+                        {a, e, f, f, f, e, a},
                         {a, f, a, a, a, f, a},
                         {a, f, a, a, a, f, a},
                         {a, f, a, a, a, f, a},
-                        {a, d, f, f, f, d, a},
+                        {a, e, f, f, f, e, a},
                         {g, a, a, a, a, a, g},
                 },
                 {
-                        {b, h, a, a, a, h, b},
-                        {h, d, f, f, f, d, h},
+                        {c, h, a, a, a, h, c},
+                        {h, e, f, f, f, e, h},
                         {a, f, a, a, a, f, a},
                         {a, f, a, a, a, f, a},
                         {a, f, a, a, a, f, a},
-                        {h, d, f, f, f, d, h},
-                        {b, h, a, a, a, h, b},
+                        {h, e, f, f, f, e, h},
+                        {c, h, a, a, a, h, c},
                 },
                 {
-                        {d, m, d, l, d, d, d},
-                        {d, d, d, d, d, d, d},
-                        {d, d, n, n, n, d, d},
-                        {q, d, n, p, n, d, o},
-                        {d, d, n, n, n, d, d},
-                        {d, d, d, d, d, d, d},
-                        {d, d, d, null, d, d, d},
+                        {e, j, e, i, e, e, e},
+                        {e, e, e, e, e, e, e},
+                        {e, e, k, k, k, e, e},
+                        {n, e, k, m, k, e, l},
+                        {e, e, k, k, k, e, e},
+                        {e, e, e, e, e, e, e},
+                        {e, e, e, null, e, e, e},
                 },
         };
 
-        return new StructurePattern(blockArray, true);
+        return new StructurePattern(blockArray, false);
     }
 }
