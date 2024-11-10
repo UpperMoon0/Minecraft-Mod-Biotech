@@ -64,12 +64,16 @@ public class BreedingChamberCategory implements IRecipeCategory<BreedingChamberR
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull BreedingChamberRecipe recipe, @NotNull IFocusGroup focuses) {
 
-        List<Ingredient> ingredients = recipe.getItemIngredients();
+        List<Ingredient> itemIngredients = recipe.getItemIngredients().stream()
+                .map(ingredientItem -> Ingredient.of(ingredientItem.getItemStack()))
+                .toList();
         FluidStack fluidIngredient = recipe.getFluidIngredients().get(0);
-        List<Ingredient> itemOutputs = recipe.getItemOutputs();
+        List<Ingredient> itemOutputs = recipe.getItemOutputs().stream()
+                .map(outputItem -> Ingredient.of(outputItem.getItemStack()))
+                .toList();
 
-        builder.addSlot(RecipeIngredientRole.INPUT, 23, 1).addIngredients(ingredients.get(0));
-        builder.addSlot(RecipeIngredientRole.INPUT, 41, 1).addIngredients(ingredients.get(1));
+        builder.addSlot(RecipeIngredientRole.INPUT, 23, 1).addIngredients(itemIngredients.get(0));
+        builder.addSlot(RecipeIngredientRole.INPUT, 41, 1).addIngredients(itemIngredients.get(1));
         builder.addSlot(RecipeIngredientRole.INPUT, 32, 21).addFluidStack(fluidIngredient.getFluid(), fluidIngredient.getAmount()).setFluidRenderer(fluidIngredient.getAmount(), false, 16, 16);
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 101, 11).addIngredients(itemOutputs.get(0));

@@ -62,9 +62,13 @@ public class TerrestrialHabitatCategory implements IRecipeCategory<TerrestrialHa
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull TerrestrialHabitatRecipe recipe, @NotNull IFocusGroup focuses) {
 
-        List<Ingredient> ingredients = recipe.getItemIngredients();
+        List<Ingredient> ingredients = recipe.getItemIngredients().stream()
+                .map(ingredientItem -> Ingredient.of(ingredientItem.getItemStack()))
+                .toList();
         FluidStack fluidIngredient = recipe.getFluidIngredients().get(0);
-        List<Ingredient> itemOutputs = recipe.getItemOutputs();
+        List<Ingredient> itemOutputs = recipe.getItemOutputs().stream()
+                .map(outputItem -> Ingredient.of(outputItem.getItemStack()))
+                .toList();
 
         builder.addSlot(RecipeIngredientRole.INPUT, 23, 1).addIngredients(ingredients.get(0));
         builder.addSlot(RecipeIngredientRole.INPUT, 41, 1).addIngredients(ingredients.get(1));

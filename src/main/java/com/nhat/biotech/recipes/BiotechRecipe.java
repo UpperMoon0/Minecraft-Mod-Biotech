@@ -61,26 +61,16 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
         return id;
     }
 
-    public List<Ingredient> getItemIngredients() {
-        IngredientItem[] ingredientItems = recipe.getIngredientItems();
-        List<Ingredient> ingredients = NonNullList.create();
-        for (IngredientItem ingredientItem : ingredientItems) {
-            ingredients.add(Ingredient.of(ingredientItem.getItemStack()));
-        }
-        return ingredients;
+    public List<IngredientItem> getItemIngredients() {
+        return List.of(recipe.getIngredientItems());
     }
 
     public List<FluidStack> getFluidIngredients() {
         return List.of(recipe.getFluidIngredients());
     }
 
-    public List<Ingredient> getItemOutputs() {
-        OutputItem[] outputItems = recipe.getOutputItems();
-        List<Ingredient> ingredients = NonNullList.create();
-        for (OutputItem outputItem : outputItems) {
-            ingredients.add(Ingredient.of(outputItem.getItemStack()));
-        }
-        return ingredients;
+    public List<OutputItem> getItemOutputs() {
+        return List.of(recipe.getOutputItems());
     }
 
     public List<FluidStack> getFluidOutputs() {

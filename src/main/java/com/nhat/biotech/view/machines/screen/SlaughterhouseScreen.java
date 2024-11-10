@@ -55,8 +55,13 @@ public class SlaughterhouseScreen extends AbstractContainerScreen<Slaughterhouse
             pGuiGraphics.drawCenteredString(font, fluidAmount + " mB", 95, 104, 0xFFFFFF);
 
             OutputItem[] outputItems = menu.getRecipe().getOutputItems();
+
             for (int i = 0; i < outputItems.length; i++) {
-                pGuiGraphics.drawString(font, String.valueOf(outputItems[i].getItemStack().getCount()), 148, 29 + 18 * i, 0xFFFFFF);
+                String chance = "";
+                if (outputItems[i].getChance() < 1) {
+                    chance = " (" + (int) (outputItems[i].getChance() * 100) + "%)";
+                }
+                pGuiGraphics.drawString(font, outputItems[i].getItemStack().getCount() + chance, 143, 29 + 18 * i, 0xFFFFFF);
             }
         }
 
@@ -145,7 +150,7 @@ public class SlaughterhouseScreen extends AbstractContainerScreen<Slaughterhouse
                 OutputItem[] outputItems = menu.getRecipe().getOutputItems();
                 for (int i = 0; i < outputItems.length; i++) {
                     BiotechItemRenderer outputItemRenderer = new BiotechItemRenderer(16,16);
-                    outputItemRenderer.render(graphics.pose(), leftPos + 125, topPos + 24 + 18 * i, outputItems[i].getItemStack());
+                    outputItemRenderer.render(graphics.pose(), leftPos + 123, topPos + 24 + 18 * i, outputItems[i].getItemStack());
                 }
 
                 FluidStack currentFluid = menu.getRecipe().getFluidIngredients()[0];

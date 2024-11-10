@@ -64,7 +64,11 @@ public class GreenhouseScreen extends AbstractContainerScreen<GreenhouseMenu> {
 
             OutputItem[] outputItems = menu.getRecipe().getOutputItems();
             for (int i = 0; i < outputItems.length; i++) {
-                pGuiGraphics.drawString(font, String.valueOf(outputItems[i].getItemStack().getCount()), 65 + i * 28, 123, 0xFFFFFF);
+                String chance = "";
+                if (outputItems[i].getChance() < 1) {
+                    chance = " (" + (int) (outputItems[i].getChance() * 100) + "%)";
+                }
+                pGuiGraphics.drawCenteredString(font, outputItems[i].getItemStack().getCount() + chance, 55 + i * 28, 136, 0xFFFFFF);
             }
         }
 
@@ -99,7 +103,7 @@ public class GreenhouseScreen extends AbstractContainerScreen<GreenhouseMenu> {
             }
         }
 
-        if (isHovering(88,28, 19, 19, pMouseX, pMouseY)) {
+        if (isHovering(97,85, 20, 19, pMouseX, pMouseY)) {
             if (menu.getStructureValid()) {
                 if (menu.getIsOperating()) {
                     int energyCost = menu.getRecipe().getTotalEnergy();
