@@ -8,6 +8,7 @@ import com.nhat.biotech.recipes.SlaughterhouseRecipe;
 import com.nhat.biotech.recipes.TerrestrialHabitatRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 @JeiPlugin
 public class BiotechJEIPlugin implements IModPlugin {
 
