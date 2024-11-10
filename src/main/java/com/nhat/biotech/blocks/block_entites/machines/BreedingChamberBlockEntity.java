@@ -86,7 +86,7 @@ public class BreedingChamberBlockEntity extends MachineBlockEntity {
 
             if (energyConsumed == recipeEnergyCost) {
                 energyConsumed = 0;
-                recipeHandler.assemble(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null);
+                recipeHandler.assemble(outputItemHandler, null);
 
                 this.recipeHandler = level.getRecipeManager().getAllRecipesFor(BreedingChamberRecipe.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
         }

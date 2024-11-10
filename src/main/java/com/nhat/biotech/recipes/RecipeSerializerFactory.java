@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -18,35 +19,31 @@ public class RecipeSerializerFactory<T extends BiotechRecipe<T> & RecipeFactory<
     public RecipeSerializer<T> createSerializer(RecipeFactory<T> factory) {
         return new RecipeSerializer<T>() {
             @Override
-            public T fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-                BiotechRecipeData recipeData = getRecipeDataFromJson(pSerializedRecipe);
+            public @NotNull T fromJson(@NotNull ResourceLocation pRecipeId, @NotNull JsonObject pSerializedRecipe) {
+                BiotechRecipeData recipeData = readRecipeDataFromJson(pSerializedRecipe);
                 return factory.create(pRecipeId, recipeData);
             }
 
             @Override
-            public T fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
-                ItemStack[] itemIngredients = readItemStackArray(pBuffer);
-                boolean[] ingredientsConsumable = readBooleanArray(pBuffer, itemIngredients.length);
-
-                ItemStack[] itemResults = readItemStackArray(pBuffer);
+            public T fromNetwork(@NotNull ResourceLocation pRecipeId, @NotNull FriendlyByteBuf pBuffer) {
+                IngredientItem[] itemIngredients = readItemIngredientArray(pBuffer);
+                OutputItem[] itemResults = readOutputItemArray(pBuffer);
 
                 FluidStack[] fluidIngredients = readFluidStackArray(pBuffer);
                 FluidStack[] fluidResults = readFluidStackArray(pBuffer);
 
                 int totalEnergy = pBuffer.readInt();
 
-                BiotechRecipeData recipeContainer = new BiotechRecipeData(itemIngredients, ingredientsConsumable, itemResults, fluidIngredients, fluidResults, totalEnergy);
-                return factory.create(pRecipeId, recipeContainer);
+                BiotechRecipeData recipeData = new BiotechRecipeData(itemIngredients, itemResults, fluidIngredients, fluidResults, totalEnergy);
+                return factory.create(pRecipeId, recipeData);
             }
 
             @Override
-            public void toNetwork(FriendlyByteBuf pBuffer, T pRecipe) {
+            public void toNetwork(@NotNull FriendlyByteBuf pBuffer, @NotNull T pRecipe) {
                 BiotechRecipeData recipeContainer = pRecipe.getRecipe();
 
-                writeItemStackArray(pBuffer, recipeContainer.getItemIngredients());
-                writeBooleanArray(pBuffer, recipeContainer.getIngredientsConsumable());
-
-                writeItemStackArray(pBuffer, recipeContainer.getItemOutputs());
+                writeIngredientItemArray(pBuffer, recipeContainer.getIngredientItems());
+                writeOutputItemArray(pBuffer, recipeContainer.getOutputItems());
 
                 writeFluidStackArray(pBuffer, recipeContainer.getFluidIngredients());
                 writeFluidStackArray(pBuffer, recipeContainer.getFluidOutputs());
@@ -56,33 +53,32 @@ public class RecipeSerializerFactory<T extends BiotechRecipe<T> & RecipeFactory<
         };
     }
 
-    private static BiotechRecipeData getRecipeDataFromJson(JsonObject pSerializedRecipe) {
-        ItemStack[] itemIngredients = readItemStackArrayFromJson(pSerializedRecipe.getAsJsonArray("itemInputs"));
-        boolean[] ingredientsConsumable = GSON.fromJson(pSerializedRecipe.getAsJsonArray("itemConsumed"), boolean[].class);
-
-        ItemStack[] itemResults = readItemStackArrayFromJson(pSerializedRecipe.getAsJsonArray("itemOutputs"));
+    private static BiotechRecipeData readRecipeDataFromJson(JsonObject pSerializedRecipe) {
+        IngredientItem[] ingredientItems = readIngredientItemArrayFromJson(pSerializedRecipe.getAsJsonArray("itemInputs"));
+        OutputItem[] outputItems = readOutputItemArrayFromJson(pSerializedRecipe.getAsJsonArray("itemOutputs"));
 
         FluidStack[] fluidIngredients = readFluidStackArrayFromJson(pSerializedRecipe.getAsJsonArray("fluidInputs"));
         FluidStack[] fluidResults = readFluidStackArrayFromJson(pSerializedRecipe.getAsJsonArray("fluidOutputs"));
 
         int totalEnergy = pSerializedRecipe.get("energy").getAsInt();
 
-        return new BiotechRecipeData(itemIngredients, ingredientsConsumable, itemResults, fluidIngredients, fluidResults, totalEnergy);
+        return new BiotechRecipeData(ingredientItems, outputItems, fluidIngredients, fluidResults, totalEnergy);
     }
 
-    private static ItemStack[] readItemStackArray(FriendlyByteBuf pBuffer) {
+    private static IngredientItem[] readItemIngredientArray(FriendlyByteBuf pBuffer) {
         int length = pBuffer.readInt();
-        ItemStack[] array = new ItemStack[length];
+        IngredientItem[] array = new IngredientItem[length];
         for (int i = 0; i < length; i++) {
-            array[i] = pBuffer.readItem();
+            array[i] = new IngredientItem(pBuffer.readItem(), pBuffer.readBoolean());
         }
         return array;
     }
 
-    private static boolean[] readBooleanArray(FriendlyByteBuf pBuffer, int length) {
-        boolean[] array = new boolean[length];
+    private static OutputItem[] readOutputItemArray(FriendlyByteBuf pBuffer) {
+        int length = pBuffer.readInt();
+        OutputItem[] array = new OutputItem[length];
         for (int i = 0; i < length; i++) {
-            array[i] = pBuffer.readBoolean();
+            array[i] = new OutputItem(pBuffer.readItem(), pBuffer.readFloat());
         }
         return array;
     }
@@ -96,16 +92,19 @@ public class RecipeSerializerFactory<T extends BiotechRecipe<T> & RecipeFactory<
         return array;
     }
 
-    private static void writeItemStackArray(FriendlyByteBuf pBuffer, ItemStack[] array) {
+    private static void writeIngredientItemArray(FriendlyByteBuf pBuffer, IngredientItem[] array) {
         pBuffer.writeInt(array.length);
-        for (ItemStack item : array) {
-            pBuffer.writeItem(item);
+        for (IngredientItem item : array) {
+            pBuffer.writeItem(item.getItemStack());
+            pBuffer.writeBoolean(item.isConsumable());
         }
     }
 
-    private static void writeBooleanArray(FriendlyByteBuf pBuffer, boolean[] array) {
-        for (boolean b : array) {
-            pBuffer.writeBoolean(b);
+    private static void writeOutputItemArray(FriendlyByteBuf pBuffer, OutputItem[] array) {
+        pBuffer.writeInt(array.length);
+        for (OutputItem item : array) {
+            pBuffer.writeItem(item.getItemStack());
+            pBuffer.writeFloat(item.getChance());
         }
     }
 
@@ -116,16 +115,36 @@ public class RecipeSerializerFactory<T extends BiotechRecipe<T> & RecipeFactory<
         }
     }
 
-    private static ItemStack[] readItemStackArrayFromJson(JsonArray jsonArray) {
-        return Optional.ofNullable(jsonArray)
+    private static IngredientItem[] readIngredientItemArrayFromJson(JsonArray ingredientArray) {
+        return Optional.ofNullable(ingredientArray)
                 .map(array -> {
-                    ItemStack[] itemStacks = new ItemStack[array.size()];
+                    IngredientItem[] ingredientItems = new IngredientItem[array.size()];
                     for (int i = 0; i < array.size(); i++) {
-                        itemStacks[i] = readItemStack(array.get(i).getAsJsonObject());
+                        JsonObject ingredientObject = array.get(i).getAsJsonObject();
+                        JsonObject itemStackObject = ingredientObject.getAsJsonObject("itemStack");
+                        ItemStack itemStack = readItemStack(itemStackObject);
+                        boolean isConsumable = ingredientObject.has("isConsumable") && ingredientObject.get("isConsumable").getAsBoolean();
+                        ingredientItems[i] = new IngredientItem(itemStack, isConsumable);
                     }
-                    return itemStacks;
+                    return ingredientItems;
                 })
-                .orElse(new ItemStack[0]);
+                .orElse(new IngredientItem[0]);
+    }
+
+    private static OutputItem[] readOutputItemArrayFromJson(JsonArray outputArray) {
+        return Optional.ofNullable(outputArray)
+                .map(array -> {
+                    OutputItem[] outputItems = new OutputItem[array.size()];
+                    for (int i = 0; i < array.size(); i++) {
+                        JsonObject outputObject = array.get(i).getAsJsonObject();
+                        JsonObject itemStackObject = outputObject.getAsJsonObject("itemStack");
+                        ItemStack itemStack = readItemStack(itemStackObject);
+                        float chance = outputObject.has("chance") ? outputObject.get("chance").getAsFloat() : 1.0f;
+                        outputItems[i] = new OutputItem(itemStack, chance);
+                    }
+                    return outputItems;
+                })
+                .orElse(new OutputItem[0]);
     }
 
     private static FluidStack[] readFluidStackArrayFromJson(JsonArray jsonArray) {

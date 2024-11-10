@@ -1,5 +1,6 @@
 package com.nhat.biotech.recipes;
 
+import lombok.Getter;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recipe<Container>, RecipeFactory<T> {
     protected final ResourceLocation id;
+    @Getter
     protected final BiotechRecipeData recipe;
     private final RecipeSerializer<T> serializer;
     private final RecipeType<T> type;
@@ -59,15 +61,11 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
         return id;
     }
 
-    public BiotechRecipeData getRecipe() {
-        return recipe;
-    }
-
     public List<Ingredient> getItemIngredients() {
-        ItemStack[] items = recipe.getItemIngredients();
+        IngredientItem[] ingredientItems = recipe.getIngredientItems();
         List<Ingredient> ingredients = NonNullList.create();
-        for (ItemStack itemStack : items) {
-            ingredients.add(Ingredient.of(itemStack));
+        for (IngredientItem ingredientItem : ingredientItems) {
+            ingredients.add(Ingredient.of(ingredientItem.getItemStack()));
         }
         return ingredients;
     }
@@ -77,10 +75,10 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
     }
 
     public List<Ingredient> getItemOutputs() {
-        ItemStack[] items = recipe.getItemOutputs();
+        OutputItem[] outputItems = recipe.getOutputItems();
         List<Ingredient> ingredients = NonNullList.create();
-        for (ItemStack itemStack : items) {
-            ingredients.add(Ingredient.of(itemStack));
+        for (OutputItem outputItem : outputItems) {
+            ingredients.add(Ingredient.of(outputItem.getItemStack()));
         }
         return ingredients;
     }
@@ -111,7 +109,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
         }
 
         // Validate item ingredients
-        if (recipe.getItemIngredients() != null) {
+        if (recipe.getIngredientItems() != null) {
             // Store input items in a map to count quantities
             for (int i = 0; i < inputSlots.getSlots(); i++) {
                 ItemStack stack = inputSlots.getStackInSlot(i);
@@ -119,7 +117,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
                 inputItems.put(stack.getItem(), newQuantity);
             }
             // Check if the input slots have enough of the required items
-            itemsMatch = itemsMatch(recipe.getItemIngredients(), inputItems);
+            itemsMatch = itemsMatch(recipe.getIngredientItems(), inputItems);
         }
 
         // Validate fluid ingredients
@@ -140,14 +138,15 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
     /**
      * Helper method to check if input items match the recipe's required items.
      *
-     * @param itemIngredients The required item ingredients
+     * @param ingredientItems The required item ingredients
      * @param slotItems       The items present in the input slots
      * @return                True if the input items match the required items, false otherwise
      */
-    private boolean itemsMatch(ItemStack[] itemIngredients, Map<Item, Integer> slotItems) {
+    private boolean itemsMatch(IngredientItem[] ingredientItems, Map<Item, Integer> slotItems) {
         Map<Item, Integer> requiredItems = new HashMap<>();
-        for (ItemStack entry : itemIngredients) {
-            requiredItems.put(entry.getItem(), requiredItems.getOrDefault(entry.getItem(), 0) + entry.getCount());
+        for (IngredientItem ingredientItem : ingredientItems) {
+            ItemStack itemStack = ingredientItem.getItemStack();
+            requiredItems.put(itemStack.getItem(), requiredItems.getOrDefault(itemStack.getItem(), 0) + itemStack.getCount());
         }
 
         for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
@@ -202,14 +201,15 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
             }
 
             // Check if the item cropId slots have enough space for the result
-            for (ItemStack result : recipe.getItemOutputs()) {
+            for (OutputItem outputItem : recipe.getOutputItems()) {
                 availableItemSpace = 0;
-                int maxStackSize = result.getMaxStackSize();
+                ItemStack itemStack = outputItem.getItemStack();
+                int maxStackSize = itemStack.getMaxStackSize();
 
                 // Calculate the available space in non-empty slots for the current result item
                 for (int i = 0; i < outputSlots.getSlots(); i++) {
                     ItemStack slot = outputSlots.getStackInSlot(i);
-                    if (!slot.isEmpty() && slot.getItem().equals(result.getItem())) {
+                    if (!slot.isEmpty() && slot.getItem().equals(itemStack.getItem())) {
                         availableItemSpace += (maxStackSize - slot.getCount());
                     }
                 }
@@ -218,12 +218,12 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
                 int totalAvailableSpace = availableItemSpace + (availableEmptyItemSlots * maxStackSize);
 
                 // Check if the total available space is sufficient for the result item
-                if (totalAvailableSpace < result.getCount()) {
+                if (totalAvailableSpace < itemStack.getCount()) {
                     return false;
                 }
 
                 // Update the remaining empty slots for the next result item
-                int remainingCount = result.getCount() - availableItemSpace;
+                int remainingCount = itemStack.getCount() - availableItemSpace;
                 if (remainingCount > 0) {
                     availableEmptyItemSlots -= (int) Math.ceil((double) remainingCount / maxStackSize);
                 }
@@ -269,17 +269,27 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
         return true;
     }
 
-    public void assemble(IItemHandler inputSlots, IFluidHandler inputTanks, IItemHandler outputSlots, IFluidHandler outputTanks) {
+    public void assemble(IItemHandler outputSlots, IFluidHandler outputTanks) {
         // Insert the item results into the cropId slots
-        if (recipe.getItemOutputs() != null) {
-            for (ItemStack result : recipe.getItemOutputs()) {
+        if (recipe.getOutputItems() != null) {
+            for (OutputItem outputItem : recipe.getOutputItems()) {
                 for (int i = 0; i < outputSlots.getSlots(); i++) {
-                    ItemStack slotStack = outputSlots.getStackInSlot(i);
-                    if (slotStack.isEmpty()) {
-                        outputSlots.insertItem(i, result.copy(), false);
+                    ItemStack slotItemStack = outputSlots.getStackInSlot(i);
+                    ItemStack outputItemStack = outputItem.getItemStack();
+                    float chance = outputItem.getChance();
+                    boolean createItem = false;
+
+                    if (chance < 1.0f) {
+                        createItem = Math.random() < chance;
+                    }
+
+                    if (slotItemStack.isEmpty() && createItem) {
+                        outputSlots.insertItem(i, outputItemStack.copy(), false);
                         break;
-                    } else if (slotStack.getItem().equals(result.getItem()) && slotStack.getCount() < slotStack.getMaxStackSize()) {
-                        slotStack.grow(result.getCount());
+                    } else if (slotItemStack.getItem().equals(outputItemStack.getItem())
+                            && slotItemStack.getCount() < slotItemStack.getMaxStackSize()
+                            && createItem) {
+                        slotItemStack.grow(outputItemStack.getCount());
                         break;
                     }
                 }
@@ -305,10 +315,11 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
 
     public void consumeIngredients(IItemHandler inputSlots, IFluidHandler inputTanks) {
         // Consume the required items
-        if (recipe.getItemIngredients() != null) {
+        if (recipe.getIngredientItems() != null) {
             Map<Item, Integer> requiredItems = new HashMap<>();
-            for (ItemStack entry : recipe.getItemIngredients()) {
-                requiredItems.put(entry.getItem(), requiredItems.getOrDefault(entry.getItem(), 0) + entry.getCount());
+            for (IngredientItem ingredientItem : recipe.getIngredientItems()) {
+                ItemStack itemStack = ingredientItem.getItemStack();
+                requiredItems.put(itemStack.getItem(), requiredItems.getOrDefault(itemStack.getItem(), 0) + itemStack.getCount());
             }
 
             for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
@@ -317,7 +328,7 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
                     ItemStack slotStack = inputSlots.getStackInSlot(i);
                     if (slotStack.getItem().equals(entry.getKey())) {
                         int ingredientIndex = recipe.getIngredientIndex(slotStack.getItem());
-                        if (ingredientIndex != -1 && !recipe.getIngredientsConsumable()[ingredientIndex]) {
+                        if (ingredientIndex != -1 && !recipe.getIngredientItems()[ingredientIndex].isConsumable()) {
                             continue;
                         }
                         if (slotStack.getCount() <= remaining) {
@@ -368,17 +379,19 @@ public abstract class BiotechRecipe<T extends BiotechRecipe<T>> implements Recip
 
     // Methods not used by BiotechRecipe, overridden to return default values
     @Override
-    public boolean matches(Container pContainer, Level pLevel) {
+    public boolean matches(@NotNull Container pContainer, @NotNull Level pLevel) {
         return false;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
-    public ItemStack assemble(Container pContainer, RegistryAccess pRegistryAccess) {
+    public  ItemStack assemble(@NotNull Container pContainer, @NotNull RegistryAccess pRegistryAccess) {
         return null;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+    public ItemStack getResultItem(@NotNull RegistryAccess pRegistryAccess) {
         return null;
     }
 

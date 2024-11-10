@@ -84,7 +84,7 @@ public class SlaughterhouseBlockEntity extends MachineBlockEntity {
 
             if (energyConsumed == recipeEnergyCost) {
                 energyConsumed = 0;
-                recipeHandler.assemble(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null);
+                recipeHandler.assemble(outputItemHandler, null);
 
                 this.recipeHandler = level.getRecipeManager().getAllRecipesFor(SlaughterhouseRecipe.TYPE).stream().filter(r -> r.recipeMatch(combinedInputItemHandler, inputFluidHandler, outputItemHandler, null)).findFirst();            }
         }

@@ -2,25 +2,34 @@
   "type": "biotech:slaughterhouse",
   "itemInputs": [
     {
-      "id": "biotech:chicken",
-      "Count": 1
+      "itemStack": {
+        "id": "biotech:chicken",
+        "Count": 1
+      },
+      "isConsumable": true
     }
-  ],
-  "itemConsumed": [
-    true
   ],
   "itemOutputs": [
     {
-      "id": "minecraft:chicken",
-      "Count": 2
+      "itemStack": {
+        "id": "minecraft:chicken",
+        "Count": 2
+      },
+      "chance": 1.0
     },
     {
-      "id": "minecraft:bone",
-      "Count": 1
+      "itemStack": {
+        "id": "minecraft:bone",
+        "Count": 1
+      },
+      "chance": 1.0
     },
     {
-      "id": "minecraft:feather",
-      "Count": 3
+      "itemStack": {
+        "id": "minecraft:feather",
+        "Count": 3
+      },
+      "chance": 1.0
     }
   ],
   "fluidInputs": [

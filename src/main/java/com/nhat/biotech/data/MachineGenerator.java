@@ -100,7 +100,7 @@ public class MachineGenerator extends DataGenerator {
 
             // Create the block item model JSON
             Map<String, Object> itemModel = Map.of(
-                    "parent", "biotech:block/" + machineId + "_off"
+                    "parent", "biotech:block/" + machineId + "_on"
             );
 
             // Write the JSON files to the appropriate paths

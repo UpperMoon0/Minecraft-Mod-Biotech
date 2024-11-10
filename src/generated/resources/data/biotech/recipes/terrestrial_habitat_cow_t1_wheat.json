@@ -2,22 +2,27 @@
   "type": "biotech:terrestrial_habitat",
   "itemInputs": [
     {
-      "id": "biotech:baby_cow",
-      "Count": 1
+      "itemStack": {
+        "id": "biotech:baby_cow",
+        "Count": 2
+      },
+      "isConsumable": true
     },
     {
-      "id": "minecraft:wheat",
-      "Count": 4
+      "itemStack": {
+        "id": "minecraft:wheat",
+        "Count": 4
+      },
+      "isConsumable": true
     }
-  ],
-  "itemConsumed": [
-    true,
-    true
   ],
   "itemOutputs": [
     {
-      "id": "biotech:cow",
-      "Count": 1
+      "itemStack": {
+        "id": "biotech:cow",
+        "Count": 1
+      },
+      "chance": 1.0
     }
   ],
   "fluidInputs": [

@@ -2,21 +2,27 @@
   "type": "biotech:greenhouse",
   "itemInputs": [
     {
-      "id": "potato",
-      "Count": 1
+      "itemStack": {
+        "id": "potato",
+        "Count": 1
+      },
+      "isConsumable": true
     }
-  ],
-  "itemConsumed": [
-    true
   ],
   "itemOutputs": [
     {
-      "id": "potato",
-      "Count": 4
+      "itemStack": {
+        "id": "potato",
+        "Count": 4
+      },
+      "chance": 1.0
     },
     {
-      "id": "poisonous_potato",
-      "Count": 1
+      "itemStack": {
+        "id": "poisonous_potato",
+        "Count": 1
+      },
+      "chance": 0.02
     }
   ],
   "fluidInputs": [

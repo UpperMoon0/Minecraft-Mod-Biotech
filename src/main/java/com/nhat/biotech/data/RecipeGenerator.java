@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.data.models.Creature;
 import com.nhat.biotech.data.models.Crop;
-import com.nhat.biotech.data.models.Drop;
 import com.nhat.biotech.data.models.Food;
 
 import java.io.FileWriter;
@@ -39,28 +38,24 @@ public class RecipeGenerator extends DataGenerator {
             List<Food> foods = CreatureData.FOODS.get(creature);
 
             for (Food food : foods) {
-                ItemJson[] itemInputs = new ItemJson[]{
-                        new ItemJson(creature.id(), 2),
-                        new ItemJson(food.id(), 2)
+                IngredientItemJsonObj[] ingredientItems = new IngredientItemJsonObj[]{
+                        new IngredientItemJsonObj(new ItemStackJsonObj(creature.id(), 2), false),
+                        new IngredientItemJsonObj(new ItemStackJsonObj(food.id(), 2), true)
                 };
-                boolean[] itemConsumed = new boolean[]{
-                        false,
-                        true
+                FluidJsonObj[] fluidInputs = new FluidJsonObj[]{
+                        new FluidJsonObj(CreatureData.FLUID_WATER, 200)
                 };
-                FluidJson[] fluidInputs = new FluidJson[]{
-                        new FluidJson(CreatureData.FLUID_WATER, 200)
+                OutputItemJsonObj[] outputItems = new OutputItemJsonObj[]{
+                        new OutputItemJsonObj(new ItemStackJsonObj(creature.babyId(), 1))
                 };
-                ItemJson[] itemOutputs = new ItemJson[]{
-                        new ItemJson(creature.babyId(), 1)
-                };
-                FluidJson[] fluidOutputs = new FluidJson[]{};
+                FluidJsonObj[] fluidOutputs = new FluidJsonObj[]{};
                 int energy = 20000;
 
                 String creatureName = creature.id().substring(creature.id().indexOf(":") + 1);
                 String foodName = food.id().substring(food.id().indexOf(":") + 1);
                 String recipeName = machineId + "_" + creatureName + "_t" + food.tier() + "_" + foodName;
 
-                RecipeJson recipeJson = new RecipeJson(type, itemInputs, itemConsumed, itemOutputs, fluidInputs, fluidOutputs, energy);
+                RecipeJson recipeJson = new RecipeJson(type, ingredientItems, outputItems, fluidInputs, fluidOutputs, energy);
 
                 generateRecipe(recipeName, recipeJson);
             }
@@ -77,28 +72,24 @@ public class RecipeGenerator extends DataGenerator {
             List<Food> foods = CreatureData.FOODS.get(creature);
 
             for (Food food : foods) {
-                ItemJson[] itemInputs = new ItemJson[]{
-                        new ItemJson(creature.babyId(), 1),
-                        new ItemJson(food.id(), 4)
+                IngredientItemJsonObj[] itemInputs = new IngredientItemJsonObj[]{
+                        new IngredientItemJsonObj(new ItemStackJsonObj(creature.babyId(), 2), true),
+                        new IngredientItemJsonObj(new ItemStackJsonObj(food.id(), 4), true)
                 };
-                boolean[] itemConsumed = new boolean[]{
-                        true,
-                        true
+                FluidJsonObj[] fluidInputs = new FluidJsonObj[]{
+                        new FluidJsonObj(CreatureData.FLUID_WATER, 500)
                 };
-                FluidJson[] fluidInputs = new FluidJson[]{
-                        new FluidJson(CreatureData.FLUID_WATER, 500)
+                OutputItemJsonObj[] itemOutputs = new OutputItemJsonObj[]{
+                        new OutputItemJsonObj(new ItemStackJsonObj(creature.id(), 1))
                 };
-                ItemJson[] itemOutputs = new ItemJson[]{
-                        new ItemJson(creature.id(), 1)
-                };
-                FluidJson[] fluidOutputs = new FluidJson[]{};
+                FluidJsonObj[] fluidOutputs = new FluidJsonObj[]{};
                 int energy = 48000;
 
                 String creatureName = creature.id().substring(creature.id().indexOf(":") + 1);
                 String foodName = food.id().substring(food.id().indexOf(":") + 1);
                 String recipeName = machineId + "_" + creatureName + "_t" + food.tier() + "_" + foodName;
 
-                RecipeJson recipeJson = new RecipeJson(type, itemInputs, itemConsumed, itemOutputs, fluidInputs, fluidOutputs, energy);
+                RecipeJson recipeJson = new RecipeJson(type, itemInputs, itemOutputs, fluidInputs, fluidOutputs, energy);
 
                 generateRecipe(recipeName, recipeJson);
             }
@@ -112,26 +103,21 @@ public class RecipeGenerator extends DataGenerator {
         List<Creature> creatures = CreatureData.CREATURES;
 
         for (Creature creature : creatures) {
-
-            ItemJson[] itemInputs = new ItemJson[]{
-                    new ItemJson(creature.id(), 1)
+            IngredientItemJsonObj[] ingredientItems = new IngredientItemJsonObj[]{
+                    new IngredientItemJsonObj(new ItemStackJsonObj(creature.id(), 1), true)
             };
-            boolean[] itemConsumed = new boolean[]{
-                    true
+            FluidJsonObj[] fluidInputs = new FluidJsonObj[]{
+                    new FluidJsonObj(CreatureData.FLUID_WATER, 200)
             };
-            FluidJson[] fluidInputs = new FluidJson[]{
-                    new FluidJson(CreatureData.FLUID_WATER, 200)
-            };
-            ItemJson[] itemOutputs = CreatureData.DROPS.get(creature).stream()
-                    .map(d -> new ItemJson(d.id(), d.count()))
-                    .toArray(ItemJson[]::new);
-            FluidJson[] fluidOutputs = new FluidJson[]{};
+            OutputItemJsonObj[] outputItems = CreatureData.DROPS.get(creature).stream()
+                    .map(d -> new OutputItemJsonObj(new ItemStackJsonObj(d.id(), d.count()), d.chance())).toArray(OutputItemJsonObj[]::new);
+            FluidJsonObj[] fluidOutputs = new FluidJsonObj[]{};
             int energy = 16000;
 
             String creatureName = creature.id().substring(creature.id().indexOf(":") + 1);
             String recipeName = machineId + "_" + creatureName;
 
-            RecipeJson recipeJson = new RecipeJson(type, itemInputs, itemConsumed, itemOutputs, fluidInputs, fluidOutputs, energy);
+            RecipeJson recipeJson = new RecipeJson(type, ingredientItems, outputItems, fluidInputs, fluidOutputs, energy);
 
             generateRecipe(recipeName, recipeJson);
         }
@@ -145,26 +131,22 @@ public class RecipeGenerator extends DataGenerator {
 
         for (Crop crop : crops) {
 
-            ItemJson[] itemInputs = new ItemJson[]{
-                    new ItemJson(crop.seedId(), 1)
+            IngredientItemJsonObj[] ingredientItems = new IngredientItemJsonObj[]{
+                    new IngredientItemJsonObj(new ItemStackJsonObj(crop.seedId(), 1), true)
             };
-            boolean[] itemConsumed = new boolean[]{
-                    true
+            FluidJsonObj[] fluidInputs = new FluidJsonObj[]{
+                    new FluidJsonObj("minecraft:water", 200)
             };
-            FluidJson[] fluidInputs = new FluidJson[]{
-                    new FluidJson("minecraft:water", 200)
-            };
-            ItemJson[] itemOutputs = crop.yields().stream()
-                    .map(d -> new ItemJson(d.id(), d.count()))
-                    .toArray(ItemJson[]::new);
-            FluidJson[] fluidOutputs = new FluidJson[]{};
+            OutputItemJsonObj[] outputItems = crop.yields().stream()
+                    .map(y -> new OutputItemJsonObj(new ItemStackJsonObj(y.id(), y.count()), y.chance())).toArray(OutputItemJsonObj[]::new);
+            FluidJsonObj[] fluidOutputs = new FluidJsonObj[]{};
             int energy = 64000;
 
             String cropId =  crop.yields().get(0).id();
             String cropName = cropId.substring( cropId.indexOf(":") + 1);
             String recipeName = machineId + "_" + cropName;
 
-            RecipeJson recipeJson = new RecipeJson(type, itemInputs, itemConsumed, itemOutputs, fluidInputs, fluidOutputs, energy);
+            RecipeJson recipeJson = new RecipeJson(type, ingredientItems, outputItems, fluidInputs, fluidOutputs, energy);
 
             generateRecipe(recipeName, recipeJson);
         }
@@ -188,23 +170,20 @@ public class RecipeGenerator extends DataGenerator {
     @SuppressWarnings({"FieldCanBeLocal", "unused", "ClassCanBeRecord"})
     private static class RecipeJson {
         private final String type;
-        private final ItemJson[] itemInputs;
-        private final boolean[] itemConsumed;
-        private final ItemJson[] itemOutputs;
-        private final FluidJson[] fluidInputs;
-        private final FluidJson[] fluidOutputs;
+        private final IngredientItemJsonObj[] itemInputs;
+        private final OutputItemJsonObj[] itemOutputs;
+        private final FluidJsonObj[] fluidInputs;
+        private final FluidJsonObj[] fluidOutputs;
         private final int energy;
 
         public RecipeJson(String type,
-                          ItemJson[] itemInputs,
-                          boolean[] itemConsumed,
-                          ItemJson[] itemOutputs,
-                          FluidJson[] fluidInputs,
-                          FluidJson[] fluidOutputs,
+                          IngredientItemJsonObj[] itemInputs,
+                          OutputItemJsonObj[] itemOutputs,
+                          FluidJsonObj[] fluidInputs,
+                          FluidJsonObj[] fluidOutputs,
                           int energy) {
             this.type = type;
             this.itemInputs = itemInputs;
-            this.itemConsumed = itemConsumed;
             this.itemOutputs = itemOutputs;
             this.fluidInputs = fluidInputs;
             this.fluidOutputs = fluidOutputs;
@@ -213,22 +192,49 @@ public class RecipeGenerator extends DataGenerator {
     }
 
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private static class ItemJson {
+    private static class ItemStackJsonObj {
         private final String id;
         private final int Count;
 
-        public ItemJson(String id, int count) {
+        public ItemStackJsonObj(String id, int count) {
             this.id = id;
             this.Count = count;
         }
     }
 
+    @SuppressWarnings({"FieldCanBeLocal", "unused", "ClassCanBeRecord"})
+    private static class IngredientItemJsonObj {
+        private final ItemStackJsonObj itemStack;
+        private final boolean isConsumable;
+
+        public IngredientItemJsonObj(ItemStackJsonObj itemStack, boolean isConsumable) {
+            this.itemStack = itemStack;
+            this.isConsumable = isConsumable;
+        }
+    }
+
+    @SuppressWarnings({"FieldCanBeLocal", "unused", "ClassCanBeRecord"})
+    private static class OutputItemJsonObj {
+        private final ItemStackJsonObj itemStack;
+        private final float chance;
+
+        public OutputItemJsonObj(ItemStackJsonObj itemStack, float chance) {
+            this.itemStack = itemStack;
+            this.chance = chance;
+        }
+
+        public OutputItemJsonObj(ItemStackJsonObj itemStack) {
+            this.itemStack = itemStack;
+            this.chance = 1.0f;
+        }
+    }
+
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private static class FluidJson {
+    private static class FluidJsonObj {
         private final String FluidName;
         private final int Amount;
 
-        public FluidJson(String fluidName, int amount) {
+        public FluidJsonObj(String fluidName, int amount) {
             this.FluidName = fluidName;
             this.Amount = amount;
         }

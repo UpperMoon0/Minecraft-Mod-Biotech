@@ -2,17 +2,20 @@
   "type": "biotech:greenhouse",
   "itemInputs": [
     {
-      "id": "melon_seeds",
-      "Count": 1
+      "itemStack": {
+        "id": "melon_seeds",
+        "Count": 1
+      },
+      "isConsumable": true
     }
-  ],
-  "itemConsumed": [
-    true
   ],
   "itemOutputs": [
     {
-      "id": "melon",
-      "Count": 1
+      "itemStack": {
+        "id": "melon",
+        "Count": 1
+      },
+      "chance": 1.0
     }
   ],
   "fluidInputs": [

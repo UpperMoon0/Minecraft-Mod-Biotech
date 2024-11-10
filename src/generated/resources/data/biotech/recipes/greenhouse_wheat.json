@@ -2,21 +2,27 @@
   "type": "biotech:greenhouse",
   "itemInputs": [
     {
-      "id": "wheat_seeds",
-      "Count": 1
+      "itemStack": {
+        "id": "wheat_seeds",
+        "Count": 1
+      },
+      "isConsumable": true
     }
-  ],
-  "itemConsumed": [
-    true
   ],
   "itemOutputs": [
     {
-      "id": "wheat",
-      "Count": 2
+      "itemStack": {
+        "id": "wheat",
+        "Count": 2
+      },
+      "chance": 1.0
     },
     {
-      "id": "wheat_seeds",
-      "Count": 3
+      "itemStack": {
+        "id": "wheat_seeds",
+        "Count": 3
+      },
+      "chance": 1.0
     }
   ],
   "fluidInputs": [

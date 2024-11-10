@@ -3,6 +3,7 @@ package com.nhat.biotech.view.machines.screen;
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
 import com.nhat.biotech.recipes.BiotechRecipeData;
+import com.nhat.biotech.recipes.OutputItem;
 import com.nhat.biotech.view.machines.menu.GreenhouseMenu;
 import com.nhat.biotech.view.renderer.BiotechFluidRenderer;
 import com.nhat.biotech.view.renderer.BiotechFluidTankRenderer;
@@ -42,7 +43,7 @@ public class GreenhouseScreen extends AbstractContainerScreen<GreenhouseMenu> {
             energyConsumeRate = menu.getEnergyConsumeRate();
 
             BiotechRecipeData recipe = menu.getRecipe();
-            String seedRawName = recipe.getItemIngredients()[0].getDisplayName().getString();
+            String seedRawName = recipe.getIngredientItems()[0].getItemStack().getDisplayName().getString();
             String seedName = seedRawName.substring(1, seedRawName.length() - 1);
             pGuiGraphics.drawCenteredString(font, seedName, 106, 25, 0xFFFFFF);
 
@@ -61,9 +62,9 @@ public class GreenhouseScreen extends AbstractContainerScreen<GreenhouseMenu> {
                 );
             }
 
-            ItemStack[] outputs = menu.getRecipe().getItemOutputs();
-            for (int i = 0; i < outputs.length; i++) {
-                pGuiGraphics.drawString(font, String.valueOf(outputs[i].getCount()), 65 + i * 28, 123, 0xFFFFFF);
+            OutputItem[] outputItems = menu.getRecipe().getOutputItems();
+            for (int i = 0; i < outputItems.length; i++) {
+                pGuiGraphics.drawString(font, String.valueOf(outputItems[i].getItemStack().getCount()), 65 + i * 28, 123, 0xFFFFFF);
             }
         }
 
@@ -146,13 +147,13 @@ public class GreenhouseScreen extends AbstractContainerScreen<GreenhouseMenu> {
                 graphics.blit(TEXTURE, leftPos + 94, topPos + 87, 212, 0, getProgressWidth() + 1, PROGRESS_HEIGHT);
 
                 BiotechItemRenderer seedItemRenderer = new BiotechItemRenderer(22, 22);
-                ItemStack currentSeed = menu.getRecipe().getItemIngredients()[0];
+                ItemStack currentSeed = menu.getRecipe().getIngredientItems()[0].getItemStack();
                 seedItemRenderer.render(graphics.pose(), leftPos + 96, topPos + 49, currentSeed);
 
-                ItemStack[] outputs = menu.getRecipe().getItemOutputs();
-                for (int i = 0; i < outputs.length; i++) {
+                OutputItem[] outputItems = menu.getRecipe().getOutputItems();
+                for (int i = 0; i < outputItems.length; i++) {
                     BiotechItemRenderer outputItemRenderer = new BiotechItemRenderer(16,16);
-                    outputItemRenderer.render(graphics.pose(), leftPos + 47 + 28 * i, topPos + 118, outputs[i]);
+                    outputItemRenderer.render(graphics.pose(), leftPos + 47 + 28 * i, topPos + 118, outputItems[i].getItemStack());
                 }
 
                 FluidStack currentFluid = menu.getRecipe().getFluidIngredients()[0];

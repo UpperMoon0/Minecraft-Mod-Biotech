@@ -3,6 +3,7 @@ package com.nhat.biotech.view.machines.screen;
 import com.nhat.biotech.Biotech;
 import com.nhat.biotech.blocks.block_entites.machines.MachineRegistries;
 import com.nhat.biotech.recipes.BiotechRecipeData;
+import com.nhat.biotech.recipes.OutputItem;
 import com.nhat.biotech.view.machines.menu.SlaughterhouseMenu;
 import com.nhat.biotech.view.renderer.BiotechFluidRenderer;
 import com.nhat.biotech.view.renderer.BiotechFluidTankRenderer;
@@ -42,7 +43,7 @@ public class SlaughterhouseScreen extends AbstractContainerScreen<Slaughterhouse
             energyConsumeRate = menu.getEnergyConsumeRate();
 
             BiotechRecipeData recipe = menu.getRecipe();
-            String animalRawName = recipe.getItemIngredients()[0].getDisplayName().getString();
+            String animalRawName = recipe.getIngredientItems()[0].getItemStack().getDisplayName().getString();
             String animalName = animalRawName.substring(1, animalRawName.length() - 1);
             pGuiGraphics.drawCenteredString(font, animalName, 70, 76, 0xFFFFFF);
 
@@ -53,9 +54,9 @@ public class SlaughterhouseScreen extends AbstractContainerScreen<Slaughterhouse
             int fluidAmount = recipe.getFluidIngredients()[0].getAmount();
             pGuiGraphics.drawCenteredString(font, fluidAmount + " mB", 95, 104, 0xFFFFFF);
 
-            ItemStack[] outputs = menu.getRecipe().getItemOutputs();
-            for (int i = 0; i < outputs.length; i++) {
-                pGuiGraphics.drawString(font, String.valueOf(outputs[i].getCount()), 148, 29 + 18 * i, 0xFFFFFF);
+            OutputItem[] outputItems = menu.getRecipe().getOutputItems();
+            for (int i = 0; i < outputItems.length; i++) {
+                pGuiGraphics.drawString(font, String.valueOf(outputItems[i].getItemStack().getCount()), 148, 29 + 18 * i, 0xFFFFFF);
             }
         }
 
@@ -138,13 +139,13 @@ public class SlaughterhouseScreen extends AbstractContainerScreen<Slaughterhouse
                 graphics.blit(TEXTURE, leftPos + 86, topPos + 26, 212, 0, getProgressWidth() + 1, PROGRESS_HEIGHT);
 
                 BiotechItemRenderer animalItemRenderer = new BiotechItemRenderer(48, 48);
-                ItemStack currentAnimal = menu.getRecipe().getItemIngredients()[0];
+                ItemStack currentAnimal = menu.getRecipe().getIngredientItems()[0].getItemStack();
                 animalItemRenderer.render(graphics.pose(), leftPos + 46, topPos + 35, currentAnimal);
 
-                ItemStack[] outputs = menu.getRecipe().getItemOutputs();
-                for (int i = 0; i < outputs.length; i++) {
+                OutputItem[] outputItems = menu.getRecipe().getOutputItems();
+                for (int i = 0; i < outputItems.length; i++) {
                     BiotechItemRenderer outputItemRenderer = new BiotechItemRenderer(16,16);
-                    outputItemRenderer.render(graphics.pose(), leftPos + 125, topPos + 24 + 18 * i, outputs[i]);
+                    outputItemRenderer.render(graphics.pose(), leftPos + 125, topPos + 24 + 18 * i, outputItems[i].getItemStack());
                 }
 
                 FluidStack currentFluid = menu.getRecipe().getFluidIngredients()[0];
