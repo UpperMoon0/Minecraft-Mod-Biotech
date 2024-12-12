@@ -140,6 +140,9 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        url "file://${rootProject.projectDir}/../MC-Mod-NsTut-Lib/mcmodsrepo"
+    }
 }
 
 dependencies {
@@ -149,13 +152,18 @@ dependencies {
     implementation fg.deobf("curse.maven:itank-256991:4647928")
     implementation fg.deobf("curse.maven:generatorgalore-691049:4661531")
     implementation fg.deobf("curse.maven:patchouli-306770:4966125")
+    implementation 'com.nstut.nstutlib:MC-Mod-NsTut-Lib:0.3'
     implementation 'com.google.code.gson:gson:2.11.0'
 
     // compile against the JEI API but do not include it at runtime
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -192,7 +200,7 @@ tasks.named('jar', Jar).configure {
     }
 
     // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
+    // finalizedBy 'reobfJar'
 }
 
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing:

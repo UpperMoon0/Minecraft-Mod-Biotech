@@ -2,17 +2,20 @@
   "type": "biotech:greenhouse",
   "itemInputs": [
     {
-      "id": "pumpkin_seeds",
-      "Count": 1
+      "itemStack": {
+        "id": "pumpkin_seeds",
+        "Count": 1
+      },
+      "isConsumable": true
     }
-  ],
-  "itemConsumed": [
-    true
   ],
   "itemOutputs": [
     {
-      "id": "pumpkin",
-      "Count": 1
+      "itemStack": {
+        "id": "pumpkin",
+        "Count": 1
+      },
+      "chance": 1.0
     }
   ],
   "fluidInputs": [

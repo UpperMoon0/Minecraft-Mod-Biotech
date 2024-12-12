@@ -1,20 +1,5 @@
 {
   "variants": {
-    "facing=east,operating=false": {
-      "model": "biotech:block/terrestrial_habitat_off",
-      "y": 90
-    },
-    "facing=south,operating=true": {
-      "model": "biotech:block/terrestrial_habitat_on",
-      "y": 180
-    },
-    "facing=north,operating=false": {
-      "model": "biotech:block/terrestrial_habitat_off"
-    },
-    "facing=west,operating=false": {
-      "model": "biotech:block/terrestrial_habitat_off",
-      "y": 270
-    },
     "facing=north,operating=true": {
       "model": "biotech:block/terrestrial_habitat_on"
     },
@@ -28,6 +13,21 @@
     },
     "facing=west,operating=true": {
       "model": "biotech:block/terrestrial_habitat_on",
+      "y": 270
+    },
+    "facing=east,operating=false": {
+      "model": "biotech:block/terrestrial_habitat_off",
+      "y": 90
+    },
+    "facing=south,operating=true": {
+      "model": "biotech:block/terrestrial_habitat_on",
+      "y": 180
+    },
+    "facing=north,operating=false": {
+      "model": "biotech:block/terrestrial_habitat_off"
+    },
+    "facing=west,operating=false": {
+      "model": "biotech:block/terrestrial_habitat_off",
       "y": 270
     }
   }

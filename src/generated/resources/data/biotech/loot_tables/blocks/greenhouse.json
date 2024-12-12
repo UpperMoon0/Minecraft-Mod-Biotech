@@ -1,4 +1,5 @@
 {
+  "random_sequence": "biotech:blocks/greenhouse",
   "pools": [
     {
       "bonus_rolls": 0.0,
@@ -10,12 +11,11 @@
       ],
       "entries": [
         {
-          "name": "biotech:greenhouse",
-          "type": "minecraft:item"
+          "type": "minecraft:item",
+          "name": "biotech:greenhouse"
         }
       ]
     }
   ],
-  "type": "minecraft:block",
-  "random_sequence": "biotech:blocks/greenhouse"
+  "type": "minecraft:block"
 }

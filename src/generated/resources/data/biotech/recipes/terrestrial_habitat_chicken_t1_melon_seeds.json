@@ -2,22 +2,27 @@
   "type": "biotech:terrestrial_habitat",
   "itemInputs": [
     {
-      "id": "biotech:baby_chicken",
-      "Count": 1
+      "itemStack": {
+        "id": "biotech:baby_chicken",
+        "Count": 2
+      },
+      "isConsumable": true
     },
     {
-      "id": "minecraft:melon_seeds",
-      "Count": 4
+      "itemStack": {
+        "id": "minecraft:melon_seeds",
+        "Count": 4
+      },
+      "isConsumable": true
     }
-  ],
-  "itemConsumed": [
-    true,
-    true
   ],
   "itemOutputs": [
     {
-      "id": "biotech:chicken",
-      "Count": 1
+      "itemStack": {
+        "id": "biotech:chicken",
+        "Count": 1
+      },
+      "chance": 1.0
     }
   ],
   "fluidInputs": [

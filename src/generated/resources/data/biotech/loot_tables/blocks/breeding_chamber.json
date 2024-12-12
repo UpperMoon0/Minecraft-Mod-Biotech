@@ -1,4 +1,5 @@
 {
+  "random_sequence": "biotech:blocks/breeding_chamber",
   "pools": [
     {
       "bonus_rolls": 0.0,
@@ -10,12 +11,11 @@
       ],
       "entries": [
         {
-          "name": "biotech:breeding_chamber",
-          "type": "minecraft:item"
+          "type": "minecraft:item",
+          "name": "biotech:breeding_chamber"
         }
       ]
     }
   ],
-  "type": "minecraft:block",
-  "random_sequence": "biotech:blocks/breeding_chamber"
+  "type": "minecraft:block"
 }

@@ -2,17 +2,20 @@
   "type": "biotech:greenhouse",
   "itemInputs": [
     {
-      "id": "carrot",
-      "Count": 1
+      "itemStack": {
+        "id": "carrot",
+        "Count": 1
+      },
+      "isConsumable": true
     }
-  ],
-  "itemConsumed": [
-    true
   ],
   "itemOutputs": [
     {
-      "id": "carrot",
-      "Count": 4
+      "itemStack": {
+        "id": "carrot",
+        "Count": 4
+      },
+      "chance": 1.0
     }
   ],
   "fluidInputs": [

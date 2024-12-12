@@ -2,21 +2,27 @@
   "type": "biotech:greenhouse",
   "itemInputs": [
     {
-      "id": "beetroot_seeds",
-      "Count": 1
+      "itemStack": {
+        "id": "beetroot_seeds",
+        "Count": 1
+      },
+      "isConsumable": true
     }
-  ],
-  "itemConsumed": [
-    true
   ],
   "itemOutputs": [
     {
-      "id": "beetroot",
-      "Count": 2
+      "itemStack": {
+        "id": "beetroot",
+        "Count": 2
+      },
+      "chance": 1.0
     },
     {
-      "id": "beetroot_seeds",
-      "Count": 3
+      "itemStack": {
+        "id": "beetroot_seeds",
+        "Count": 3
+      },
+      "chance": 1.0
     }
   ],
   "fluidInputs": [
