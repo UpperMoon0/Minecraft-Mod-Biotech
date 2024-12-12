@@ -140,6 +140,9 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        url "file://${rootProject.projectDir}/../MC-Mod-NsTut-Lib/mcmodsrepo"
+    }
 }
 
 dependencies {
@@ -149,6 +152,7 @@ dependencies {
     implementation fg.deobf("curse.maven:itank-256991:4647928")
     implementation fg.deobf("curse.maven:generatorgalore-691049:4661531")
     implementation fg.deobf("curse.maven:patchouli-306770:4966125")
+    implementation 'com.nstut.nstutlib:MC-Mod-NsTut-Lib:0.3'
     implementation 'com.google.code.gson:gson:2.11.0'
 
     // compile against the JEI API but do not include it at runtime
@@ -196,7 +200,7 @@ tasks.named('jar', Jar).configure {
     }
 
     // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
+    // finalizedBy 'reobfJar'
 }
 
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing:

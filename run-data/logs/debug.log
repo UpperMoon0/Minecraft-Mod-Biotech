@@ -352,7 +352,7 @@
 [16Oct2024 00:45:55.022] [main/DEBUG] [net.minecraftforge.fml.javafmlmod.FMLJavaModLanguageProvider/LOADING]: Loading FMLModContainer from classloader cpw.mods.modlauncher.TransformingClassLoader@6e3ecf5c - got cpw.mods.cl.ModuleClassLoader@5e3a39cd
 [16Oct2024 00:45:55.023] [main/DEBUG] [net.minecraftforge.fml.javafmlmod.FMLModContainer/LOADING]: Creating FMLModContainer instance for mezz.jei.forge.JustEnoughItems
 [16Oct2024 00:45:55.023] [main/DEBUG] [net.minecraftforge.fml.javafmlmod.FMLJavaModLanguageProvider/LOADING]: Loading FMLModContainer from classloader cpw.mods.modlauncher.TransformingClassLoader@6e3ecf5c - got cpw.mods.cl.ModuleClassLoader@5e3a39cd
-[16Oct2024 00:45:55.023] [main/DEBUG] [net.minecraftforge.fml.javafmlmod.FMLModContainer/LOADING]: Creating FMLModContainer instance for com.nhat.biotech.Biotech
+[16Oct2024 00:45:55.023] [main/DEBUG] [net.minecraftforge.fml.javafmlmod.FMLModContainer/LOADING]: Creating FMLModContainer instance for com.nstut.biotech.Biotech
 [16Oct2024 00:45:55.065] [modloading-worker-0/DEBUG] [net.minecraftforge.versions.forge.ForgeVersion/CORE]: Forge Version package package net.minecraftforge.versions.forge, Forge, version 47.3 from cpw.mods.modlauncher.TransformingClassLoader@6e3ecf5c
 [16Oct2024 00:45:55.065] [modloading-worker-0/DEBUG] [net.minecraftforge.versions.forge.ForgeVersion/CORE]: Found Forge version 47.3.11
 [16Oct2024 00:45:55.065] [modloading-worker-0/DEBUG] [net.minecraftforge.versions.forge.ForgeVersion/CORE]: Found Forge spec 47.3
@@ -491,9 +491,9 @@ java.lang.IllegalAccessException: class io.netty.util.internal.PlatformDependent
 [16Oct2024 00:45:55.538] [modloading-worker-0/DEBUG] [io.netty.util.internal.PlatformDependent/]: -Dio.netty.noPreferDirect: false
 [16Oct2024 00:45:55.614] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.config.ConfigTracker/CONFIG]: Config file biotech-common.toml for biotech tracking
 [16Oct2024 00:45:55.614] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Attempting to inject @EventBusSubscriber classes into the eventbus for biotech
-[16Oct2024 00:45:55.615] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Auto-subscribing com.nhat.biotech.Biotech$ClientModEvents to MOD
-[16Oct2024 00:45:55.616] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Auto-subscribing com.nhat.biotech.Biotech$ModEvents to MOD
-[16Oct2024 00:45:55.631] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Auto-subscribing com.nhat.biotech.Config to MOD
+[16Oct2024 00:45:55.615] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Auto-subscribing com.nstut.biotech.Biotech$ClientModEvents to MOD
+[16Oct2024 00:45:55.616] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Auto-subscribing com.nstut.biotech.Biotech$ModEvents to MOD
+[16Oct2024 00:45:55.631] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Auto-subscribing com.nstut.biotech.Config to MOD
 [16Oct2024 00:45:55.885] [modloading-worker-0/DEBUG] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Loading Network data for FML net version: FML3
 [16Oct2024 00:45:55.979] [modloading-worker-0/DEBUG] [mixin/]: Mixing client.MixinInventoryScreen from patchouli_xplat.mixins.json into net.minecraft.client.gui.screens.inventory.InventoryScreen
 [16Oct2024 00:45:56.319] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.config.ConfigTracker/CONFIG]: Config file forge-client.toml for forge tracking
